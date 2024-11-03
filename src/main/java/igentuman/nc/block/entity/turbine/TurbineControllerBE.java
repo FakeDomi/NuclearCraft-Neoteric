@@ -306,7 +306,6 @@ public class TurbineControllerBE<RECIPE extends TurbineControllerBE.Recipe> exte
 
     private void handleValidation() {
         if(multiblock == null) return;
-        multiblock().tick();
         ValidationResult wasResult = validationResult;
         boolean wasFormed = multiblock().isFormed();
         if (!wasFormed || !isInternalValid || !isCasingValid) {

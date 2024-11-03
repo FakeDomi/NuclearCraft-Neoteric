@@ -70,7 +70,7 @@ public class FissionReactor {
                     FISSION_BLOCKS.put(key, BLOCKS.register(key, () -> new FissionCasingBlock(props)));
                 }
                 if(key.matches(".*cell")) {
-                    FISSION_BLOCKS.put(key, BLOCKS.register(key, () -> new FissionBlock(props)));
+                    FISSION_BLOCKS.put(key, BLOCKS.register(key, () -> new FissionFuelCellBlock(props)));
                 }
             }
             FISSION_BLOCK_ITEMS.put(key, fromMultiblock(FISSION_BLOCKS.get(key)));

@@ -2,7 +2,9 @@ package igentuman.nc.multiblock;
 
 import net.minecraft.core.BlockPos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MultiblockHandler {
 
@@ -27,12 +29,22 @@ public class MultiblockHandler {
         }
     }
 
+    private static List<String> toRemove = new ArrayList<>();
+
     public static void tick() {
         for(String id: multiblocks.keySet()) {
             AbstractNCMultiblock multiblock = multiblocks.get(id);
             if(multiblock == null) {
+                toRemove.add(id);
+                continue;
+            }
+            multiblock.tick();
+        }
+        if(!toRemove.isEmpty()) {
+            for(String id: toRemove) {
                 multiblocks.remove(id);
             }
+            toRemove.clear();
         }
     }
 

@@ -128,7 +128,6 @@ public class HeatSinkDef {
 
     public static class Validator {
 
-
         private HashMap<String[], List<String>> blockLines = new HashMap<>();
         private HashMap<String[], List<Block>> blocks = new HashMap<>();
 
@@ -139,7 +138,7 @@ public class HeatSinkDef {
                 result = switch (condition[0]) {
                     case ">" -> isMoreThan(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
                     case "<" -> isLessThan(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
-                    case "-" -> isBetween(2, blocks().get(condition), level, pos);
+                    case "-" -> isBetween(blocks().get(condition), level, pos);
                     case "=" -> isExact(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
                     case "^" -> inCorner(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
                     default -> result;
@@ -153,7 +152,6 @@ public class HeatSinkDef {
 
         public boolean validateFuelCellAttachment(BlockPos pos)
         {
-
             return true;
         }
 
@@ -191,7 +189,7 @@ public class HeatSinkDef {
             return counter == s;
         }
 
-        private boolean isBetween(int s, List<Block> blocks, Level level, BlockPos pos) {
+        private boolean isBetween(List<Block> blocks, Level level, BlockPos pos) {
             for (Direction dir: Direction.values()) {
                 if(
                         blocks.contains(level.getBlockState(pos.relative(dir)).getBlock()) &&

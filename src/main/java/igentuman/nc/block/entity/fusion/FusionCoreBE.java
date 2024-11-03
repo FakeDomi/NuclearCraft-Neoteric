@@ -367,7 +367,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
             block.placeProxyBlocks(getBlockState(), level, worldPosition, this);
         }
         super.tickServer();
-        multiblock().tick();
+
         handleValidation();
         periodicalUpdate();
 

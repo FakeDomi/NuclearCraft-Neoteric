@@ -14,10 +14,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,8 +29,11 @@ import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.handler.event.client.InputEvents.DESCRIPTIONS_SHOW;
 import static igentuman.nc.util.TextUtils.convertToName;
 
-public class HeatSinkBlock extends Block {
+public class HeatSinkBlock extends FissionBlock {
 
+    public double heat = 0;
+    public String type = "";
+    public HeatSinkDef def;
 
     public HeatSinkBlock() {
         this(Properties.of()
@@ -40,11 +41,6 @@ public class HeatSinkBlock extends Block {
                 .strength(2.0f)
                 .requiresCorrectToolForDrops());
     }
-
-    public boolean isValid = false;
-    public double heat = 0;
-    public String type = "";
-    public HeatSinkDef def;
 
     public HeatSinkBlock(Properties pProperties) {
         super(pProperties.sound(SoundType.METAL));
@@ -127,11 +123,6 @@ public class HeatSinkBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState();
-    }
-
-    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if(!player.getItemInHand(hand).isEmpty()) return InteractionResult.FAIL;
         if (!level.isClientSide()) {
@@ -159,11 +150,6 @@ public class HeatSinkBlock extends Block {
         } else {
             list.add(TextUtils.applyFormat(Component.translatable("tooltip.toggle_description_keys"), ChatFormatting.GRAY));
         }
-    }
-
-    @Override
-    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor){
-        MultiblockHandler.trackBlockChange(pos);
     }
 
     public boolean isValid(Level level, BlockPos pos) {

@@ -20,6 +20,16 @@ import static igentuman.nc.util.TagUtil.getBlocksByTagKey;
 public class FissionReactorMultiblock extends AbstractNCMultiblock {
 
     private int irradiationConnections = 0;
+    private final List<Block> validModerators;
+    public HashMap<BlockPos, HeatSinkBlock> activeHeatSinks = new HashMap<>();
+    private List<BlockPos> moderators = new ArrayList<>();
+    private List<BlockPos> irradiators = new ArrayList<>();
+    public List<BlockPos> heatSinks = new ArrayList<>();
+    public List<BlockPos> fuelCells = new ArrayList<>();
+    private double heatSinkCooling = 0;
+    private FissionControllerBE<?> controllerBe;
+    private List<BlockPos> directFuelCellConnectionPos = new ArrayList<>();
+    private List<BlockPos> secondFuelCellConnectionPos = new ArrayList<>();
 
     @Override
     public int maxHeight() {
@@ -47,15 +57,6 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     @Override
     public int minDepth() { return FISSION_CONFIG.MIN_SIZE.get(); }
 
-    private final List<Block> validModerators;
-
-    public HashMap<BlockPos, HeatSinkBlock> activeHeatSinks = new HashMap<>();
-    private List<BlockPos> moderators = new ArrayList<>();
-    private List<BlockPos> irradiators = new ArrayList<>();
-    public List<BlockPos> heatSinks = new ArrayList<>();
-    public List<BlockPos> fuelCells = new ArrayList<>();
-    private double heatSinkCooling = 0;
-
     public FissionReactorMultiblock(FissionControllerBE<?> fissionControllerBE) {
         super(
                 getBlocksByTagKey(FissionBlocks.CASING_BLOCKS.location().toString()),
@@ -65,9 +66,10 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         validModerators = getBlocksByTagKey(FissionBlocks.MODERATORS_BLOCKS.location().toString());
         MultiblockHandler.addMultiblock(this);
         controller = new FissionReactorController(fissionControllerBE);
+        controllerBe = fissionControllerBE;
     }
 
-    public Map<BlockPos, HeatSinkBlock> activeHeatSinks() {
+    public Map<BlockPos, HeatSinkBlock> validHeatSinks() {
         if(activeHeatSinks.isEmpty()) {
             for(BlockPos hpos: heatSinks) {
                 Block block = getBlockState(hpos).getBlock();
@@ -78,7 +80,7 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
                 }
             }
         }
-        ((FissionControllerBE<?>)controller().controllerBE()).heatSinksCount = activeHeatSinks.size();
+        controllerBE().heatSinksCount = activeHeatSinks.size();
         return activeHeatSinks;
     }
 
@@ -103,11 +105,12 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     }
 
     private boolean isAttachedToFuelCell(BlockPos toCheck) {
+        if (directFuelCellConnectionPos.contains(toCheck)) {
+            return true;
+        }
         for(Direction d : Direction.values()) {
-            if(toCheck instanceof NCBlockPos) {
-                ((NCBlockPos) toCheck).revert();
-            }
             if(isFuelCell(toCheck.relative(d))) {
+                addDirectFuelCellConnection((toCheck.relative(d)));
                 return true;
             }
         }
@@ -117,21 +120,31 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     public void validateInner()
     {
         super.validateInner();
-        heatSinkCooling = getHeatSinkCooling(true);
-        FissionControllerBE<?> controller = (FissionControllerBE<?>) controller().controllerBE();
-        controller.fuelCellsCount = fuelCells.size();
-        controller.moderatorsCount = moderators.size();
-        controller.irradiationConnections = irradiationConnections;
+        heatSinkCooling = countCooling(true);
+        controllerBE().fuelCellsCount = fuelCells.size();
+        controllerBE().moderatorsCount = moderators.size();
+        controllerBE().irradiationConnections = irradiationConnections;
+    }
+
+    private FissionControllerBE<?> controllerBE() {
+        if (controllerBe == null) {
+            controllerBe = (FissionControllerBE<?>) controller().controllerBE();
+        }
+        return controllerBe;
     }
 
     @Override
     protected boolean processInnerBlock(BlockPos toCheck) {
         if(isFuelCell(toCheck)) {
+            if(toCheck instanceof NCBlockPos) {
+                toCheck = new BlockPos(toCheck);
+            }
             fuelCells.add(toCheck);
-            int moderatorAttachments = getAttachedModeratorsToFuelCell(toCheck);
-            ((FissionControllerBE<?>)controller().controllerBE()).fuelCellMultiplier += countAdjuscentFuelCells((NCBlockPos) toCheck, 3);
-            ((FissionControllerBE<?>)controller().controllerBE()).moderatorCellMultiplier += (countAdjuscentFuelCells((NCBlockPos) toCheck, 1)+1)*moderatorAttachments;
-            ((FissionControllerBE<?>)controller().controllerBE()).moderatorAttachments += moderatorAttachments;
+            addDirectFuelCellConnection(toCheck);
+            int moderatorAttachments = countAttachedModeratorsToFuelCell(toCheck);
+            controllerBE().fuelCellMultiplier += countAdjacentFuelCells(NCBlockPos.of(toCheck), 3);
+            controllerBE().moderatorCellMultiplier += (countAdjacentFuelCells(NCBlockPos.of(toCheck), 1)+1)*moderatorAttachments;
+            controllerBE().moderatorAttachments += moderatorAttachments;
         }
         if(isModerator(toCheck)) {
             if(isAttachedToFuelCell(toCheck)) {
@@ -143,12 +156,20 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         }
         if(isIrradiator(toCheck)) {
             irradiators.add(toCheck);
-            countIrradiationConnections(toCheck);
         }
         return true;
     }
 
-    private int getAttachedModeratorsToFuelCell(BlockPos toCheck) {
+    private void addDirectFuelCellConnection(BlockPos toCheck) {
+        directFuelCellConnectionPos.add(toCheck.relative(Direction.UP));
+        directFuelCellConnectionPos.add(toCheck.relative(Direction.DOWN));
+        directFuelCellConnectionPos.add(toCheck.relative(Direction.NORTH));
+        directFuelCellConnectionPos.add(toCheck.relative(Direction.SOUTH));
+        directFuelCellConnectionPos.add(toCheck.relative(Direction.WEST));
+        directFuelCellConnectionPos.add(toCheck.relative(Direction.EAST));
+    }
+
+    private int countAttachedModeratorsToFuelCell(BlockPos toCheck) {
         int count = 0;
         for(Direction d : Direction.values()) {
             if(isModerator(toCheck.relative(d))) {
@@ -169,7 +190,7 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         }
     }
 
-    private int countAdjuscentFuelCells(NCBlockPos toCheck, int step) {
+    private int countAdjacentFuelCells(NCBlockPos toCheck, int step) {
         int count = 0;
         for (Direction d : Direction.values()) {
             if (isFuelCell(toCheck.revert().relative(d))) {
@@ -193,17 +214,19 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         fuelCells.clear();
         heatSinks.clear();
         activeHeatSinks.clear();
+        directFuelCellConnectionPos.clear();
+        secondFuelCellConnectionPos.clear();
         irradiationConnections = 0;
     }
 
     protected Direction getFacing() {
-        return ((FissionControllerBE<?>)controller().controllerBE()).getFacing();
+        return controllerBE().getFacing();
     }
 
-    public double getHeatSinkCooling(boolean forceCheck) {
+    public double countCooling(boolean forceCheck) {
         if(refreshInnerCacheFlag || forceCheck) {
             heatSinkCooling = 0;
-            for (HeatSinkBlock hs : activeHeatSinks().values()) {
+            for (HeatSinkBlock hs : validHeatSinks().values()) {
                 heatSinkCooling += hs.heat;
             }
         }

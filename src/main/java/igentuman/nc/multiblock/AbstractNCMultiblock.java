@@ -1,5 +1,8 @@
 package igentuman.nc.multiblock;
 
+import igentuman.nc.block.entity.fission.FissionControllerBE;
+import igentuman.nc.block.entity.fission.FissionPortBE;
+import igentuman.nc.block.entity.processor.IrradiatorBE;
 import igentuman.nc.util.NCBlockPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -285,21 +288,19 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
         attachMultiblock(pos);
         if(topRight == null) {
             topRight = new NCBlockPos(pos);
-            topRight.offset(1,1,1);
         }
         if(bottomLeft == null) {
             bottomLeft = new NCBlockPos(pos);
-            topRight.offset(-1,-1,-1);
         }
         if(pos.getX() <= bottomLeft.getX() && pos.getY() <= bottomLeft.getY() && pos.getZ() <= bottomLeft.getZ()) {
-            bottomLeft.x(pos.getX()-1);
-            bottomLeft.y(pos.getY()-1);
-            bottomLeft.z(pos.getZ()-1);
+            bottomLeft.x(pos.getX());
+            bottomLeft.y(pos.getY());
+            bottomLeft.z(pos.getZ());
         }
         if(pos.getX() >= topRight.getX() && pos.getY() >= topRight.getY() && pos.getZ() >= topRight.getZ()) {
-            topRight.x(pos.getX()+1);
-            topRight.y(pos.getY()+1);
-            topRight.z(pos.getZ()+1);
+            topRight.x(pos.getX());
+            topRight.y(pos.getY());
+            topRight.z(pos.getZ());
         }
         allBlocks.add(new NCBlockPos(pos));
         if(getBlockState(pos).getBlock().asItem().toString().contains("controller")) {
@@ -398,7 +399,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
 
     @Override
     public void validate() {
-        validationResult = ValidationResult.VALID;
+        validationResult = ValidationResult.INCOMPLETE;
         refreshOuterCacheFlag = true;
         refreshInnerCacheFlag = true;
         allBlocks.clear();
@@ -410,6 +411,9 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
         }
         innerValid = validationResult.isValid;
         isFormed = outerValid && innerValid;
+        if(isFormed) {
+            validationResult = ValidationResult.VALID;
+        }
     }
 
     public boolean isInnerValid() {
@@ -460,6 +464,9 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
                 refreshCooldown = 10;
                 refreshOuterCacheFlag = true;
                 refreshInnerCacheFlag = true;
+                validationResult = ValidationResult.INCOMPLETE;
+                innerValid = false;
+                outerValid = false;
                 isFormed = false;
                 hasToRefresh = false;
                 beCache = new HashMap<>();
@@ -474,6 +481,12 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
 
     public boolean onBlockChange(BlockPos pos) {
         if(allBlocks.contains(pos)) {
+            BlockEntity targetBlock = getBlockEntity(pos);
+            if(targetBlock instanceof FissionControllerBE<?>
+                    || targetBlock instanceof FissionPortBE
+                    || targetBlock instanceof IrradiatorBE) {
+                return true;
+            }
             hasToRefresh = true;
             controller.clearStats();
             return true;

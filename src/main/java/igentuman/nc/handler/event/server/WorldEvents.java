@@ -1,18 +1,13 @@
 package igentuman.nc.handler.event.server;
 
-
-import igentuman.nc.block.entity.turbine.TurbineBladeBE;
 import igentuman.nc.block.turbine.TurbineBladeBlock;
-import igentuman.nc.block.turbine.TurbineRotorBlock;
 import igentuman.nc.item.HEVItem;
 import igentuman.nc.item.HazmatItem;
+import igentuman.nc.multiblock.MultiblockHandler;
 import igentuman.nc.radiation.data.RadiationEvents;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.DirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
@@ -75,7 +70,7 @@ public class WorldEvents {
     @SubscribeEvent
     public void onTick(ServerTickEvent event) {
         if (event.side.isServer() && event.phase == Phase.END) {
-
+            MultiblockHandler.tick();
         }
     }
 
