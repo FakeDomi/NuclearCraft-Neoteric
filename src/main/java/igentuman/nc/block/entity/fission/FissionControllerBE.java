@@ -638,9 +638,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         recipe = getRecipe();
         if (recipe != null) {
             recipeInfo.setRecipe(recipe);
-            recipeInfo.ticks = ((RECIPE) recipeInfo.recipe()).getDepletionTime();
+            recipeInfo.ticks = recipeInfo.recipe().getDepletionTime();
             recipeInfo.energy = recipeInfo.recipe.getEnergy();
-            recipeInfo.heat = ((RECIPE) recipeInfo.recipe()).getHeat();
+            recipeInfo.heat = recipeInfo.recipe().getHeat();
             recipeInfo.radiation = recipeInfo.recipe().getRadiation();
             recipeInfo.be = this;
             recipe.consumeInputs(contentHandler);
@@ -910,6 +910,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
                 if(item1 instanceof ItemFuel) {
                     fuelItem  = (ItemFuel) item1;
                 }
+            }
+            if(fuelItem.def == null) {
+                fuelItem.initDefinition();
             }
             return fuelItem;
         }
