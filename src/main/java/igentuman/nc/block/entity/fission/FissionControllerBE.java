@@ -612,7 +612,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     private double calculateHeat() {
-        return heatPerTick() * Math.min(0.5D, reactivityLevel / 100D);
+        return heatPerTick() * Math.max(0.5D, reactivityLevel / 100D);
     }
 
     private int calculateEnergy() {
@@ -639,7 +639,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         if (recipe != null) {
             recipeInfo.setRecipe(recipe);
             recipeInfo.ticks = recipeInfo.recipe().getDepletionTime();
-            recipeInfo.energy = recipeInfo.recipe.getEnergy();
+            recipeInfo.energy = recipeInfo.recipe().getEnergy();
             recipeInfo.heat = recipeInfo.recipe().getHeat();
             recipeInfo.radiation = recipeInfo.recipe().getRadiation();
             recipeInfo.be = this;
