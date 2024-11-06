@@ -1,6 +1,5 @@
 package igentuman.nc.block.fission;
 
-import igentuman.nc.multiblock.MultiblockHandler;
 import igentuman.nc.util.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

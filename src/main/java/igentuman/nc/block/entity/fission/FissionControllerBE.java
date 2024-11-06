@@ -440,7 +440,8 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
 
     private void handleValidation() {
         boolean wasFormed = multiblock().isFormed();
-        if (!wasFormed || !isInternalValid || !isCasingValid || getLevel().getGameTime() % 40 == 0) {
+        boolean assembled = wasFormed && isInternalValid && isCasingValid;
+        if ((!assembled && getLevel().getGameTime() % 40 == 0) || getLevel().getGameTime() % 200 == 0) {
             multiblock().validate();
             isCasingValid = multiblock().isOuterValid();
             if(isCasingValid) {
@@ -448,14 +449,18 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
             }
             powered = false;
             changed = true;
+            height = multiblock().height();
+            width = multiblock().width();
+            depth = multiblock().depth();
+            if(
+                    multiblock().isFormed()
+                    && contentHandler.fluidCapability.tanks.get(0).getCapacity() != 5000*height*width*depth
+            ) {
+                contentHandler.fluidCapability.tanks.get(0).setCapacity(5000*height*width*depth);
+                contentHandler.fluidCapability.tanks.get(1).setCapacity(5000*height*width*depth);
+            }
         }
-        height = multiblock().height();
-        width = multiblock().width();
-        depth = multiblock().depth();
-        if(multiblock().isFormed()) {
-            contentHandler.fluidCapability.tanks.get(0).setCapacity(5000*height*width*depth);
-            contentHandler.fluidCapability.tanks.get(1).setCapacity(5000*height*width*depth);
-        }
+
         trackChanges(wasFormed, multiblock().isFormed());
     }
 

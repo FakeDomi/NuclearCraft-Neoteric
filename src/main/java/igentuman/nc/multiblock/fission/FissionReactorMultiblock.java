@@ -156,6 +156,7 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         }
         if(isIrradiator(toCheck)) {
             irradiators.add(toCheck);
+            countIrradiationConnections(toCheck);
         }
         return true;
     }
