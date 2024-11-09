@@ -441,7 +441,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     private void handleValidation() {
         boolean wasFormed = multiblock().isFormed();
         boolean assembled = wasFormed && isInternalValid && isCasingValid;
-        if ((!assembled && getLevel().getGameTime() % 40 == 0) || getLevel().getGameTime() % 200 == 0) {
+        if ((!assembled && getLevel().getGameTime() % 40 == 0) || (getLevel().getGameTime() % 200 == 0 && hasRecipe())) {
             multiblock().validate();
             isCasingValid = multiblock().isOuterValid();
             if(isCasingValid) {

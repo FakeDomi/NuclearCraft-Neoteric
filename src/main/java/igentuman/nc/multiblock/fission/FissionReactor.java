@@ -21,7 +21,6 @@ import java.util.List;
 import static igentuman.nc.multiblock.fission.FissionBlocks.REACTOR_BLOCKS_PROPERTIES;
 import static igentuman.nc.setup.registration.NCItems.ALL_NC_ITEMS;
 import static igentuman.nc.setup.registration.Registries.*;
-import static igentuman.nc.util.NcUtils.getNCBlock;
 
 public class FissionReactor {
     public static final Item.Properties FISSION_ITEM_PROPS = new Item.Properties();

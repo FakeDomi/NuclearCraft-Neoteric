@@ -461,7 +461,6 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
         if(hasToRefresh) {
             refreshCooldown--;
             if(refreshCooldown <= 0) {
-                refreshCooldown = 10;
                 refreshOuterCacheFlag = true;
                 refreshInnerCacheFlag = true;
                 validationResult = ValidationResult.INCOMPLETE;
@@ -471,6 +470,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
                 hasToRefresh = false;
                 beCache = new HashMap<>();
                 bsCache = new HashMap<>();
+                refreshCooldown = 50;
             }
         }
     }
