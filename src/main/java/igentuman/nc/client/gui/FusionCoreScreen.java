@@ -1,7 +1,6 @@
 package igentuman.nc.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.nc.client.gui.element.NCGuiElement;
 import igentuman.nc.client.gui.element.bar.VerticalBar;
 import igentuman.nc.client.gui.element.button.Checkbox;
@@ -78,8 +77,8 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
         energyBar = new VerticalBar.EnergyLong(16, 5,  this, container().getMaxEnergy());
         coolantBar = new VerticalBar.CoolantLong(26, 5,  this, 1000000);
         plasmaHeatBar = new VerticalBar.HeatLong(36, 5,  this, (long) (container().getOptimalTemp()*2), () -> container().getPlasmaHeat());
-        rfAmplifierSlider = new SliderHorizontal(64, 30, 119, this, menu.getBlockPos());
-        rfAmplifierSlider.slideTo(container().getRfAmplifiersPowerRatio());
+        rfAmplifierSlider = new SliderHorizontal(64, 40, 119, this, menu.getBlockPos());
+        rfAmplifierSlider.slideTo(container().getAmlificationAdjustment());
         widgets.add(rfAmplifierSlider);
         widgets.add(heatBar);
         widgets.add(plasmaHeatBar);
@@ -175,21 +174,26 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
     @Override
     protected void renderLabels(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawCenteredString(font, Component.translatable("nc_jei_cat.fusion_core"), 125, 10, 0xFFFFFF);
-        graphics.drawCenteredString( font, Component.translatable("fusion_core.rf_amplifiers.power", getRfAmplifiersPowerRatio()), 125, 20, 0xFFFFFF);
+        graphics.drawCenteredString( font, Component.translatable("fusion_core.rf_amplifiers.power", getAmplification()), 125, 20, 0xFFFFFF);
+        graphics.drawCenteredString( font, Component.translatable("fusion_core.rf_amplifiers.adjustment", getAmplificationAdjustment()), 125, 30, 0xFFFFFF);
         if(container().getCharge() < 100) {
-            graphics.drawCenteredString( font, Component.translatable("fusion_core.charge", container().getCharge()), 125, 40, 0xFFFFFF);
+            graphics.drawCenteredString( font, Component.translatable("fusion_core.charge", container().getCharge()), 125, 50, 0xFFFFFF);
         }
         casingTootip = Component.empty();
 
         if(container().isRunning()) {
-            graphics.drawCenteredString(font, Component.translatable("fusion_core.efficiency", container().getEfficiency()), 125, 50, 0xFFFFFF);
-            graphics.drawCenteredString(font, Component.translatable("fusion_core.stability", container().getPlasmaStability()), 125, 40, 0xFFFFFF);
+            graphics.drawCenteredString(font, Component.translatable("fusion_core.efficiency", container().getEfficiency()), 125, 60, 0xFFFFFF);
+            graphics.drawCenteredString(font, Component.translatable("fusion_core.stability", container().getPlasmaStability()), 125, 50, 0xFFFFFF);
         }
         renderTooltips(graphics, mouseX-relX, mouseY-relY);
     }
 
-    private String getRfAmplifiersPowerRatio() {
-        return numberFormat(container().getRfAmplifiersPowerRatio());
+    private String getAmplification() {
+        return numberFormat(container().getAmplification());
+    }
+
+    private String getAmplificationAdjustment() {
+        return numberFormat(container().getAmlificationAdjustment());
     }
 
     private Object getValidationResultData() {

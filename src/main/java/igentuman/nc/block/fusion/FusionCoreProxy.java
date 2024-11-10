@@ -4,9 +4,7 @@ import igentuman.nc.block.entity.fusion.FusionBE;
 import igentuman.nc.block.entity.fusion.FusionCoreBE;
 import igentuman.nc.block.entity.fusion.FusionCoreProxyBE;
 import igentuman.nc.container.FusionCoreContainer;
-import igentuman.nc.multiblock.fusion.FusionReactor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -19,8 +17,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -33,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_PROXY_BE;
 
-public class FusionCoreProxy extends FusionBlock {
+public class FusionCoreProxy extends FusionBeBlock {
 
     public FusionCoreProxy(Properties pProperties) {
         super(pProperties.sound(SoundType.METAL));

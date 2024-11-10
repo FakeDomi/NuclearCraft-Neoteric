@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static igentuman.nc.compat.oc2.NCFusionReactorDevice.DEVICE_CAPABILITY;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_PROXY_BE;
@@ -51,9 +52,7 @@ public class FusionCoreProxyBE extends FusionBE {
         }
         if(!(core instanceof FusionCoreBE)) {
             level.removeBlock(worldPosition, false);
-            return;
         }
-        core.inputRedstoneSignal = getLevel().hasNeighborSignal(worldPosition) ? 1: core.inputRedstoneSignal;
     }
 
     public void setCore(FusionCoreBE<?> core) {
@@ -142,7 +141,6 @@ public class FusionCoreProxyBE extends FusionBE {
 
     public void sendOutEnergy() {
         int required = getCoreBE().rfAmplifiersPower + getCoreBE().magnetsPower;
-
         for(Direction side: List.of(Direction.UP, Direction.DOWN)) {
             if(getCoreBE().energyStorage.getEnergyStored() > required) {
                 BlockEntity be = getLevel().getBlockEntity(getBlockPos().relative(side));
@@ -156,5 +154,11 @@ public class FusionCoreProxyBE extends FusionBE {
                 }
             }
         }
+    }
+
+    public void forceTickServer(FusionCoreBE<?> core) {
+        this.core = core;
+        core.inputRedstoneSignal =  Math.max(getLevel().getBestNeighborSignal(getBlockPos()), core.inputRedstoneSignal);
+        core.rfAmplificationRatio = (int)((double)core.inputRedstoneSignal / 0.15D);
     }
 }

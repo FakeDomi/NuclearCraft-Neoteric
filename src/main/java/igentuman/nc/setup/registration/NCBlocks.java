@@ -1,6 +1,5 @@
 package igentuman.nc.setup.registration;
 
-import igentuman.nc.block.fission.FissionBlock;
 import igentuman.nc.content.Electromagnets;
 import igentuman.nc.content.RFAmplifier;
 import igentuman.nc.content.materials.Materials;

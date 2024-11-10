@@ -1,5 +1,6 @@
 package igentuman.nc.block.fission;
 
+import igentuman.nc.block.MultiblockBlock;
 import igentuman.nc.multiblock.MultiblockHandler;
 import igentuman.nc.multiblock.fission.FissionBlocks;
 import igentuman.nc.multiblock.fission.HeatSinkDef;
@@ -29,7 +30,7 @@ import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.handler.event.client.InputEvents.DESCRIPTIONS_SHOW;
 import static igentuman.nc.util.TextUtils.convertToName;
 
-public class HeatSinkBlock extends FissionBlock {
+public class HeatSinkBlock extends MultiblockBlock {
 
     public double heat = 0;
     public String type = "";

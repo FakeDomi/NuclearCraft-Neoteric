@@ -4,7 +4,6 @@ import igentuman.nc.block.entity.fusion.FusionBE;
 import igentuman.nc.multiblock.fusion.FusionReactor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,22 +19,21 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class FusionBlock extends Block implements EntityBlock {
+public class FusionBeBlock extends Block implements EntityBlock {
 
-    public FusionBlock() {
+    public FusionBeBlock() {
         this(Properties.of()
                 .sound(SoundType.METAL)
                 .strength(2.0f)
                 .noOcclusion()
                 .requiresCorrectToolForDrops());
     }
-    public FusionBlock(Properties pProperties) {
+    public FusionBeBlock(Properties pProperties) {
         super(pProperties.sound(SoundType.METAL));
         this.registerDefaultState(
                 this.stateDefinition.any()

@@ -1,4 +1,4 @@
-package igentuman.nc.block.fission;
+package igentuman.nc.block;
 
 import igentuman.nc.multiblock.MultiblockHandler;
 import net.minecraft.core.BlockPos;
@@ -10,11 +10,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import net.minecraftforge.registries.ForgeRegistries;
 
-public class FissionBlock extends Block {
+public class MultiblockBlock extends Block {
 
-    public FissionBlock(Properties pProperties) {
+    public MultiblockBlock(Properties pProperties) {
         super(pProperties.sound(SoundType.METAL));
     }
 

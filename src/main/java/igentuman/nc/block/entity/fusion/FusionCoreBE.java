@@ -92,6 +92,8 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     @NBTField
     public int rfAmplificationRatio = 0;
     @NBTField
+    public int amplificationAdjustment = 50;
+    @NBTField
     public int functionalBlocksCharge = 0;
     @NBTField
     public long plasmaTemperature = 0;
@@ -104,6 +106,8 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     protected double lastKnownOptimalTemp = 1000000;
     @NBTField
     protected boolean isInternalValid = false;
+    protected int updateSpan = 20;
+
     public List<FusionCoolantRecipe> getCoolantRecipes() {
         if(coolantRecipes == null) {
             coolantRecipes = (List<FusionCoolantRecipe>) NcRecipeType.ALL_RECIPES.get("fusion_coolant").getRecipeType().getRecipes(getLevel());
@@ -164,6 +168,12 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
         contentHandler.fluidCapability.setGlobalMode(6, SlotModePair.SlotMode.OUTPUT);
         //hot coolant
         contentHandler.fluidCapability.setGlobalMode(7, SlotModePair.SlotMode.OUTPUT);
+        contentHandler.setAllowedInputFluids(0, getAllowedInputFluids());
+        contentHandler.setAllowedInputFluids(1, getAllowedInputFluids());
+        contentHandler.setAllowedInputFluids(2, getAllowedCoolants());
+        contentHandler.setAllowedInputFluids(7, getAllowedCoolantsOutput());
+        contentHandler.fluidCapability.tanks.get(2).setCapacity(100000);
+        contentHandler.fluidCapability.tanks.get(7).setCapacity(100000);
     }
 
     protected LazyOptional<NCFusionReactorPeripheral> peripheralCap;
@@ -180,7 +190,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
 
     @Nonnull
     @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return LazyOptional.empty();
         }
@@ -236,6 +246,8 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     {
         boolean wasFormed = multiblock().isFormed();
         boolean wasPowered = powered;
+        isCasingValid = multiblock().isOuterValid();
+        isInternalValid = multiblock().isInnerValid();
 
         if (!wasFormed) {
             reValidateCounter++;
@@ -246,18 +258,17 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
             multiblock().validate();
             powered = false;
         }
-        isCasingValid = multiblock().isOuterValid();
-        isInternalValid = multiblock().isInnerValid();
+
         changed = wasPowered != powered || wasFormed != multiblock().isFormed();
         trackChanges(updateCharacteristics());
         size = multiblock().isFormed() ? multiblock.width() : 0;
         refreshCacheFlag = !multiblock().isFormed();
-        if(multiblock().isFormed()) {
+        if(multiblock().isFormed() != wasFormed) {
             contentHandler.fluidCapability.tanks.get(2).setCapacity(50000*size);
             contentHandler.fluidCapability.tanks.get(7).setCapacity(50000*size);
         }
     }
-    protected int updateSpan = 20;
+
     protected void periodicalUpdate()
     {
         updateSpan--;
@@ -359,6 +370,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
 
     @Override
     public void tickServer() {
+        tickProxyBlocks();
         changed = false;
         if(NuclearCraft.instance.isNcBeStopped || isRemoved()) return;
         if(!initialized) {
@@ -374,12 +386,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
         simulateReaction();
         sendOutPower();
         handleMeltdown();
-        contentHandler.setAllowedInputFluids(0, getAllowedInputFluids());
-        contentHandler.setAllowedInputFluids(1, getAllowedInputFluids());
-        contentHandler.setAllowedInputFluids(2, getAllowedCoolants());
-        contentHandler.setAllowedInputFluids(7, getAllowedCoolantsOutput());
-        contentHandler.fluidCapability.tanks.get(2).setCapacity(100000);
-        contentHandler.fluidCapability.tanks.get(7).setCapacity(100000);
+
         if(refreshCacheFlag || changed) {
             try {
                 assert level != null;
@@ -388,6 +395,14 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
             } catch (NullPointerException ignore) {}
         }
         controllerEnabled = false;
+        inputRedstoneSignal = 0;
+    }
+
+    private void tickProxyBlocks() {
+        for(FusionCoreProxyBE proxy: getProxies()) {
+            if(proxy == null) continue;
+            proxy.forceTickServer(this);
+        }
     }
 
     protected List<FluidStack> getAllowedCoolantsOutput() {
@@ -593,8 +608,9 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     }
 
     protected double rfAmplifierRatio() {
-        return Math.max(((double)rfAmplificationRatio/100), 1D);
+        return Math.max(0, Math.min((((double)rfAmplificationRatio/100)*(double)amplificationAdjustment/100), 1D));
     }
+
     protected void coolantCoolDown()
     {
         if(hasCoolant()) {
@@ -840,7 +856,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     public void handleSliderUpdate(int buttonId, int ratio)
     {
         if(buttonId == 0) {
-            rfAmplificationRatio = Math.min(100, Math.max(ratio, 1));
+            amplificationAdjustment = Math.min(100, Math.max(ratio, 1));
             changed = updateCharacteristics();
         }
     }

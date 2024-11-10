@@ -14,7 +14,7 @@ import java.util.List;
 import static igentuman.nc.util.TextUtils.applyFormat;
 import static net.minecraft.network.chat.Component.translatable;
 
-public class RFAmplifierBlock extends Block {
+public class RFAmplifierBlock extends MultiblockBlock {
     public RFAmplifierBlock(Properties pProperties) {
         super(pProperties);
     }

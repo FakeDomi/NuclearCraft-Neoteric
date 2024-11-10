@@ -13,7 +13,7 @@ import java.util.List;
 import static igentuman.nc.util.TextUtils.numberFormat;
 import static net.minecraft.network.chat.Component.translatable;
 
-public class ElectromagnetBlock extends Block {
+public class ElectromagnetBlock extends MultiblockBlock {
 
     public ElectromagnetBlock(Properties pProperties) {
         super(pProperties);

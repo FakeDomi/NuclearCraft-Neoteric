@@ -151,7 +151,7 @@ public class FusionCoreContainer extends AbstractContainerMenu {
         return blockEntity.getFluidTank(i);
     }
 
-    public int getRfAmplifiersPowerRatio() {
+    public int getAmplification() {
         return blockEntity.rfAmplificationRatio;
     }
 
@@ -207,5 +207,9 @@ public class FusionCoreContainer extends AbstractContainerMenu {
 
     public int getPlasmaStability() {
         return (int) (blockEntity.getPlasmaStability()*100);
+    }
+
+    public int getAmlificationAdjustment() {
+        return blockEntity.amplificationAdjustment;
     }
 }
