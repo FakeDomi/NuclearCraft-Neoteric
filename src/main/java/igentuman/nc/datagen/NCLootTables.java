@@ -67,6 +67,7 @@ public class NCLootTables extends BaseLootTableProvider {
         for(String name: NC_RF_AMPLIFIERS.keySet()) {
             add(NC_RF_AMPLIFIERS.get(name).get(), block -> createSimpleTable("block", NC_RF_AMPLIFIERS.get(name).get()));
         }
+      //  add(REDSTONE_DIMMER_BLOCK.get(), block -> createSimpleTable("block", REDSTONE_DIMMER_BLOCK.get()));
     }
 
     @Override

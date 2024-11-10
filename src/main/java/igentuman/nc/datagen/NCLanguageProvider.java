@@ -242,6 +242,7 @@ public class NCLanguageProvider extends LanguageProvider {
         add("gui.nc.reactor_mode.timer","Changing mode in: %s sec");
         add("reactor.steam_per_tick","Boiling rate: %s mB/t");
 
+        add("nc.redstone_dimmer.description", "Adjusts redstone output power based on impulses received from the left or right sides.");
         add("tooltip.nc.fusion_connector.descr", "Used to connect fusion core and toroidal reactor chamber");
         add("tooltip.nc.fusion_casing.descr", "Used to build toroidal fusion reactor chamber");
         add("tooltip.nc.rf_amplifier.not_found","No RF Amplifiers attached");
@@ -556,5 +557,6 @@ public class NCLanguageProvider extends LanguageProvider {
         for(String name: NCBlocks.NC_RF_AMPLIFIERS.keySet()) {
             add(NCBlocks.NC_RF_AMPLIFIERS.get(name).get(), convertToName(name));
         }
+        add("block."+MODID+".redstone_dimmer", "Redstone Dimmer");
     }
 }

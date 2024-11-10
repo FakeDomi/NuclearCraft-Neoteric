@@ -59,6 +59,18 @@ public class NCRecipes extends RecipeProvider {
     }
 
     private void fusionBlocks(Consumer<FinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, REDSTONE_DIMMER_BLOCK.get())
+                .pattern("LPL")
+                .pattern("CMC")
+                .pattern("LPL")
+                .define('C', COMPARATOR)
+                .define('M', NCItems.NC_PARTS.get("chassis").get())
+                .define('P', REPEATER)
+                .define('L',  NCItems.NC_PARTS.get("plate_basic").get())
+                .group(MODID+"_dimmer")
+                .unlockedBy("item", has(NCItems.NC_PARTS.get("chassis").get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FUSION_BLOCKS.get("fusion_core").get())
                 .pattern("LPL")
                 .pattern("CMC")

@@ -1,12 +1,16 @@
 package igentuman.nc.setup.registration;
 
+import igentuman.nc.block.entity.RedstoneDimmerBE;
+import igentuman.nc.container.RedstoneDImmerContainer;
 import igentuman.nc.content.Electromagnets;
 import igentuman.nc.content.RFAmplifier;
+import igentuman.nc.content.energy.SolarPanels;
 import igentuman.nc.content.materials.Materials;
 import igentuman.nc.content.materials.Blocks;
 import igentuman.nc.content.materials.Ores;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -15,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import igentuman.nc.block.*;
@@ -43,10 +48,15 @@ public class NCBlocks {
     public static final Item.Properties ORE_ITEM_PROPERTIES = new Item.Properties();
     public static final Item.Properties MULTIBLOCK_ITEM_PROPERTIES = new Item.Properties();
     public static final RegistryObject<Block> PORTAL_BLOCK = BLOCKS.register("portal", PortalBlock::new);
+    public static final RegistryObject<Block> REDSTONE_DIMMER_BLOCK = BLOCKS.register("redstone_dimmer", RedstoneDimmerBlock::new);
+    public static final RegistryObject<Item> REDSTONE_DIMMER_ITEM_BLOCK = fromBlock(REDSTONE_DIMMER_BLOCK);
+    public static final RegistryObject<BlockEntityType<RedstoneDimmerBE>> REDSTONE_DIMMER_BE = BLOCK_ENTITIES.register("redstone_dimmer",
+            () -> BlockEntityType.Builder.of(RedstoneDimmerBE::new, REDSTONE_DIMMER_BLOCK.get()).build(null));
     public static final RegistryObject<Block> MUSHROOM_BLOCK = BLOCKS.register("glowing_mushroom", () -> new GrassBlock(
             BlockBehaviour.Properties.of().sound(SoundType.GRASS).noCollission().instabreak().randomTicks().lightLevel($ -> 10)
             ));
-    public static HashMap<String, RegistryObject<BlockEntityType<? extends BlockEntity>>> NC_BE = new HashMap<>();
+    public static final RegistryObject<MenuType<RedstoneDImmerContainer>> REDSTONE_DIMMER_CONTAINER = CONTAINERS.register("redstone_dimmer",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new RedstoneDImmerContainer(windowId, data.readBlockPos(), inv)));
     public static final RegistryObject<Item> MUSHROOM_ITEM = fromBlock(MUSHROOM_BLOCK);
     public static final RegistryObject<Item> PORTAL_ITEM = fromBlock(PORTAL_BLOCK);
     public static TagKey<Block> DECAY_GEN_BLOCK = blockTag("decay_gen_block");
