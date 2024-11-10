@@ -17,6 +17,6 @@ public class FissionFuelCellBlock extends MultiblockBlock {
     @Override
     @Deprecated
     public boolean skipRendering(@NotNull BlockState state, @NotNull BlockState adjacentBlockState, @NotNull Direction side) {
-        return true;
+        return adjacentBlockState.getBlock().equals(this);
     }
 }
