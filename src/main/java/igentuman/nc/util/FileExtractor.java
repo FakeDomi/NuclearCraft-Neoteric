@@ -34,7 +34,7 @@ public class FileExtractor {
         // Check if the target folder already exists
         if (targetFolder.exists()) {
             System.out.println("Folder " + targetFolderName + " already exists in config folder, skipping extraction.");
-            return;
+           // return;
         }
 
         // If the folder doesn't exist, create it
@@ -44,9 +44,10 @@ public class FileExtractor {
         }
         // Find the JAR file where the resources are packaged
         String jarPath = FileExtractor.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
         jarPath = jarPath.replace("file:", "").replace("!/", ""); // Clean the path
         jarPath = jarPath.replaceAll("(.+\\.jar|/)(%23\\d+)?$", "$1");        // Locate the JAR that contains the mod's resources
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+
         try {
 
             File jarFile = new File(jarPath);
