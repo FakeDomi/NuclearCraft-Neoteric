@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -42,9 +44,9 @@ public class FileExtractor {
         }
         // Find the JAR file where the resources are packaged
         String jarPath = FileExtractor.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
         jarPath = jarPath.replace("file:", "").replace("!/", ""); // Clean the path
-        jarPath = jarPath.replaceAll("(.+\\.jar|/)(%23\\d+)?$", "$1");
-        // Locate the JAR that contains the mod's resources
+        jarPath = jarPath.replaceAll("(.+\\.jar|/)(%23\\d+)?$", "$1");        // Locate the JAR that contains the mod's resources
         try {
 
             File jarFile = new File(jarPath);

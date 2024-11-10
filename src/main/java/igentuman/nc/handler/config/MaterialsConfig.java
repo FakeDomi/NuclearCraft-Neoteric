@@ -94,7 +94,7 @@ public class MaterialsConfig {
             builder.comment("Settings for ore generation").push("ores").pop();
             ORES = new HashMap<>();
             for(String name: Ores.all().keySet()) {
-             //   ORES.put(name, buildOreConfig(builder, name));
+                ORES.put(name, buildOreConfig(builder, name));
             }
         }
 
