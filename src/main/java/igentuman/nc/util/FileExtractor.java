@@ -32,13 +32,13 @@ public class FileExtractor {
         // Check if the target folder already exists
         if (targetFolder.exists()) {
             System.out.println("Folder " + targetFolderName + " already exists in config folder, skipping extraction.");
-          //  return;
+            return;
         }
 
         // If the folder doesn't exist, create it
         if (!targetFolder.mkdirs()) {
             System.err.println("Failed to create target folder: " + targetFolderName);
-           // return;
+           return;
         }
         // Find the JAR file where the resources are packaged
         String jarPath = FileExtractor.class.getProtectionDomain().getCodeSource().getLocation().getPath();
