@@ -3,6 +3,7 @@ package igentuman.nc.multiblock.fission;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import igentuman.nc.NuclearCraft;
+import igentuman.nc.block.fission.FissionFuelCellBlock;
 import igentuman.nc.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -150,9 +152,14 @@ public class HeatSinkDef {
             return result;
         }
 
-        public boolean validateFuelCellAttachment(BlockPos pos)
+        public boolean validateFuelCellAttachment(BlockPos pos, Level level)
         {
-            return true;
+            for(Direction dir: Direction.values()) {
+                if(level.getBlockState(pos.relative(dir)).getBlock() instanceof FissionFuelCellBlock) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private boolean inCorner(int qty, List<Block> blocks, Level level, BlockPos pos) {
@@ -179,7 +186,7 @@ public class HeatSinkDef {
             int counter = 0;
             for (Direction dir: Direction.values()) {
                 if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
-                    if(!validateFuelCellAttachment(pos.relative(dir))) {
+                    if(!validateFuelCellAttachment(pos.relative(dir), level)) {
                         continue;
                     }
                     counter++;
@@ -194,8 +201,8 @@ public class HeatSinkDef {
                 if(
                         blocks.contains(level.getBlockState(pos.relative(dir)).getBlock()) &&
                                 blocks.contains(level.getBlockState(pos.relative(dir.getOpposite())).getBlock()) &&
-                                validateFuelCellAttachment(pos.relative(dir)) &&
-                                validateFuelCellAttachment(pos.relative(dir.getOpposite()))
+                                validateFuelCellAttachment(pos.relative(dir), level) &&
+                                validateFuelCellAttachment(pos.relative(dir.getOpposite()), level)
                 ) {
                     return true;
                 }
@@ -207,7 +214,7 @@ public class HeatSinkDef {
             int counter = 0;
             for (Direction dir: Direction.values()) {
                 if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
-                    if(!validateFuelCellAttachment(pos.relative(dir))) {
+                    if(!validateFuelCellAttachment(pos.relative(dir), level)) {
                         continue;
                     }
                     counter++;
@@ -221,7 +228,7 @@ public class HeatSinkDef {
             int counter = 0;
             for (Direction dir: Direction.values()) {
                 if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
-                    if(!validateFuelCellAttachment(pos.relative(dir))) {
+                    if(!validateFuelCellAttachment(pos.relative(dir), level)) {
                         continue;
                     }
                     counter++;
