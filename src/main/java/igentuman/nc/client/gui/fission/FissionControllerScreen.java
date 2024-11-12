@@ -238,16 +238,16 @@ public class FissionControllerScreen extends AbstractContainerScreen<FissionCont
         if(!container().getMode()) {
             energyBar.clearTooltips();
             energyBar.addTooltip(Component.translatable("reactor.forge_energy_per_tick", container().energyPerTick()));
-            if(energyBar.isMouseOver(pMouseX, pMouseY)) {
+            if(energyBar.isMouseOver(pMouseX, pMouseY+10)) {
                 graphics.renderTooltip(font, energyBar.getTooltips(),
                         Optional.empty(), pMouseX, pMouseY);
             }
         } else {
-            if(coolantTank.isMouseOver(pMouseX, pMouseY)) {
+            if(coolantTank.isMouseOver(pMouseX, pMouseY+10)) {
                 graphics.renderTooltip(font, coolantTank.getTooltips(),
                         Optional.empty(), pMouseX, pMouseY);
             }
-            if(steamTank.isMouseOver(pMouseX, pMouseY)) {
+            if(steamTank.isMouseOver(pMouseX, pMouseY+10)) {
                 List<Component> tooltips = steamTank.getTooltips();
                 tooltips.add(Component.translatable("reactor.steam_per_tick", container().getSteamPerTick()));
                 graphics.renderTooltip(font, tooltips,

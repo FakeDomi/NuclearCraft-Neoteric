@@ -154,9 +154,7 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     {
         invalidateStats();
         if(!outerValid) return;
-        resolveHeight();
-        resolveWidth();
-        resolveDepth();
+        resolveDimensions();
         collectFuelCells();
         for(int y = 1; y < height-1; y++) {
             for(int x = 1; x < width-1; x++) {
@@ -185,8 +183,8 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
                     NCBlockPos toCheck = new NCBlockPos(getSidePos(x - leftCasing).above(y - bottomCasing).relative(getFacing(), -z));
                     if (isFuelCell(toCheck)) {
                         addDirectFuelCellConnection(new BlockPos(toCheck));
-                        fuelCells.add(new BlockPos(toCheck));
-                        int moderatorAttachments = countAttachedModeratorsToFuelCell(toCheck);
+                        addIfNotExists(new BlockPos(toCheck), fuelCells);
+                        int moderatorAttachments = countAttachedModeratorsToFuelCell(new BlockPos(toCheck));
                         controllerBE().fuelCellMultiplier += countAdjacentFuelCells(NCBlockPos.of(toCheck), 3);
                         controllerBE().moderatorCellMultiplier += (countAdjacentFuelCells(NCBlockPos.of(toCheck), 1)+1)*moderatorAttachments;
                         controllerBE().moderatorAttachments += moderatorAttachments;
@@ -210,21 +208,17 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
             return true;
         }
         if(isModerator(toCheck)) {
-            if(isAttachedToFuelCell(toCheck)) {
-                moderators.add(toCheck);
-                addSecondConnectionsToFuelCell(toCheck);
-                return true;
-            }
+            return true;
         }
         if(isHeatSink(toCheck)) {
             if(isAttachedToFuelCell(toCheck)) {
-                heatSinks.add(toCheck);
-                addSecondConnectionsToFuelCell(toCheck);
+                addIfNotExists(new BlockPos(toCheck), heatSinks);
+                addSecondConnectionsToFuelCell(new BlockPos(toCheck));
                 return true;
             }
         }
         if(isIrradiator(toCheck)) {
-            irradiators.add(toCheck);
+            addIfNotExists(new BlockPos(toCheck), irradiators);
             countIrradiationConnections(toCheck);
             return true;
         }
@@ -268,6 +262,8 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         int count = 0;
         for(Direction d : Direction.values()) {
             if(isModerator(toCheck.relative(d))) {
+                addIfNotExists(new BlockPos(toCheck.relative(d)), moderators);
+                addSecondConnectionsToFuelCell(new BlockPos(toCheck.relative(d)));
                 count++;
             }
         }

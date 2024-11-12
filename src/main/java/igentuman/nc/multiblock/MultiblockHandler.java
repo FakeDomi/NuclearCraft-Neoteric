@@ -37,7 +37,7 @@ public class MultiblockHandler {
     public static void tick() {
         for(String id: multiblocks.keySet()) {
             AbstractNCMultiblock multiblock = multiblocks.get(id);
-            if(multiblock == null) {
+            if(multiblock == null || multiblock.controller().controllerBE() == null) {
                 toRemove.add(id);
                 continue;
             }

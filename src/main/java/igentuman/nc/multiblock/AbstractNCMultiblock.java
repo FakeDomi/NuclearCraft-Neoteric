@@ -497,6 +497,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
             controller.clearStats();
             return true;
         }
+        resolveDimensions();
         if(bottomLeft == null || topRight == null) return false;
         if(pos.getX() >= bottomLeft.getX() && pos.getY() >= bottomLeft.getY() && pos.getZ() >= bottomLeft.getZ()
                 && pos.getX() <= topRight.getX() && pos.getY() <= topRight.getY() && pos.getZ() <= topRight.getZ()) {
