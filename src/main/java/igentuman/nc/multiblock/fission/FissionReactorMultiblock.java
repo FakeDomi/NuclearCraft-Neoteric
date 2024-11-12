@@ -1,11 +1,14 @@
 package igentuman.nc.multiblock.fission;
 
 import igentuman.nc.block.entity.fission.*;
+import igentuman.nc.block.fission.FissionCasingBlock;
 import igentuman.nc.block.fission.FissionFuelCellBlock;
 import igentuman.nc.block.fission.HeatSinkBlock;
 import igentuman.nc.block.fission.IrradiationChamberBlock;
+import igentuman.nc.handler.event.server.WorldEvents;
 import igentuman.nc.multiblock.MultiblockHandler;
 import igentuman.nc.multiblock.AbstractNCMultiblock;
+import igentuman.nc.multiblock.ValidationResult;
 import igentuman.nc.util.NCBlockPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -64,6 +67,19 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         );
         id = "fission_reactor_"+fissionControllerBE.getBlockPos().toShortString();
         validModerators = getBlocksByTagKey(FissionBlocks.MODERATORS_BLOCKS.location().toString());
+        for(Block b: validModerators) {
+            if(!WorldEvents.trackingBlocks.contains(b)) {
+                WorldEvents.trackingBlocks.add(b);
+            }
+        }
+        for(Block b: validOuterBlocks()) {
+            if(b instanceof FissionCasingBlock) {
+                continue;
+            }
+            if(!WorldEvents.trackingBlocks.contains(b)) {
+                WorldEvents.trackingBlocks.add(b);
+            }
+        }
         MultiblockHandler.addMultiblock(this);
         controller = new FissionReactorController(fissionControllerBE);
         controllerBe = fissionControllerBE;
@@ -104,26 +120,81 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         return getBlockState(pos).getBlock() instanceof FissionFuelCellBlock;
     }
 
+    private void addIfNotExists(BlockPos pos, List<BlockPos> list) {
+        if(!list.contains(pos)) {
+            list.add(pos);
+        }
+    }
+
     private boolean isAttachedToFuelCell(BlockPos toCheck) {
         if (directFuelCellConnectionPos.contains(toCheck)) {
             return true;
         }
+        if (secondFuelCellConnectionPos.contains(toCheck)) {
+            return true;
+        }
+
         for(Direction d : Direction.values()) {
             if(isFuelCell(toCheck.relative(d))) {
                 addDirectFuelCellConnection((toCheck.relative(d)));
+                return true;
+            }
+            if (directFuelCellConnectionPos.contains(toCheck)) {
+                return true;
+            }
+            if (secondFuelCellConnectionPos.contains(toCheck)) {
                 return true;
             }
         }
         return false;
     }
 
+    @Override
     public void validateInner()
     {
-        super.validateInner();
+        invalidateStats();
+        if(!outerValid) return;
+        resolveHeight();
+        resolveWidth();
+        resolveDepth();
+        collectFuelCells();
+        for(int y = 1; y < height-1; y++) {
+            for(int x = 1; x < width-1; x++) {
+                for (int z = 1; z < depth-1; z++) {
+                    NCBlockPos toCheck = new NCBlockPos(getSidePos(x - leftCasing).above(y - bottomCasing).relative(getFacing(), -z));
+                    if (!isValidForInner(toCheck)) {
+                        validationResult = ValidationResult.WRONG_INNER;
+                        controller().addErroredBlock(new BlockPos(toCheck));
+                        return;
+                    }
+                    processInnerBlock(new BlockPos(toCheck));
+                }
+            }
+        }
+
+        validationResult =  ValidationResult.VALID;
         heatSinkCooling = countCooling(true);
-        controllerBE().fuelCellsCount = fuelCells.size();
         controllerBE().moderatorsCount = moderators.size();
         controllerBE().irradiationConnections = irradiationConnections;
+    }
+
+    private void collectFuelCells() {
+        for(int y = 1; y < height-1; y++) {
+            for(int x = 1; x < width-1; x++) {
+                for (int z = 1; z < depth-1; z++) {
+                    NCBlockPos toCheck = new NCBlockPos(getSidePos(x - leftCasing).above(y - bottomCasing).relative(getFacing(), -z));
+                    if (isFuelCell(toCheck)) {
+                        addDirectFuelCellConnection(new BlockPos(toCheck));
+                        fuelCells.add(new BlockPos(toCheck));
+                        int moderatorAttachments = countAttachedModeratorsToFuelCell(toCheck);
+                        controllerBE().fuelCellMultiplier += countAdjacentFuelCells(NCBlockPos.of(toCheck), 3);
+                        controllerBE().moderatorCellMultiplier += (countAdjacentFuelCells(NCBlockPos.of(toCheck), 1)+1)*moderatorAttachments;
+                        controllerBE().moderatorAttachments += moderatorAttachments;
+                    }
+                }
+            }
+        }
+        controllerBE().fuelCellsCount = fuelCells.size();
     }
 
     private FissionControllerBE<?> controllerBE() {
@@ -136,38 +207,61 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     @Override
     protected boolean processInnerBlock(BlockPos toCheck) {
         if(isFuelCell(toCheck)) {
-            if(toCheck instanceof NCBlockPos) {
-                toCheck = new BlockPos(toCheck);
-            }
-            fuelCells.add(toCheck);
-            addDirectFuelCellConnection(toCheck);
-            int moderatorAttachments = countAttachedModeratorsToFuelCell(toCheck);
-            controllerBE().fuelCellMultiplier += countAdjacentFuelCells(NCBlockPos.of(toCheck), 3);
-            controllerBE().moderatorCellMultiplier += (countAdjacentFuelCells(NCBlockPos.of(toCheck), 1)+1)*moderatorAttachments;
-            controllerBE().moderatorAttachments += moderatorAttachments;
+            return true;
         }
         if(isModerator(toCheck)) {
             if(isAttachedToFuelCell(toCheck)) {
                 moderators.add(toCheck);
+                addSecondConnectionsToFuelCell(toCheck);
+                return true;
             }
         }
         if(isHeatSink(toCheck)) {
-            heatSinks.add(toCheck);
+            if(isAttachedToFuelCell(toCheck)) {
+                heatSinks.add(toCheck);
+                addSecondConnectionsToFuelCell(toCheck);
+                return true;
+            }
         }
         if(isIrradiator(toCheck)) {
             irradiators.add(toCheck);
             countIrradiationConnections(toCheck);
+            return true;
         }
         return true;
     }
 
+    private void addSecondConnectionsToFuelCell(BlockPos toCheck) {
+        addIfNotExists(toCheck, secondFuelCellConnectionPos);
+        for(Direction d : Direction.values()) {
+            addIfNotExists(toCheck.relative(d), secondFuelCellConnectionPos);
+        }
+    }
+
     private void addDirectFuelCellConnection(BlockPos toCheck) {
-        directFuelCellConnectionPos.add(toCheck.relative(Direction.UP));
-        directFuelCellConnectionPos.add(toCheck.relative(Direction.DOWN));
-        directFuelCellConnectionPos.add(toCheck.relative(Direction.NORTH));
-        directFuelCellConnectionPos.add(toCheck.relative(Direction.SOUTH));
-        directFuelCellConnectionPos.add(toCheck.relative(Direction.WEST));
-        directFuelCellConnectionPos.add(toCheck.relative(Direction.EAST));
+        addIfNotExists(toCheck, directFuelCellConnectionPos);
+        for(Direction d : Direction.values()) {
+            addIfNotExists(toCheck.relative(d), directFuelCellConnectionPos);
+        }
+    }
+
+    public boolean checkAttachmentToBlock(Class<?> toCheck, Level level, BlockPos pos, Direction dir) {
+        if (
+                getBottomLeftBlock().getX() >= pos.getX()
+                && getBottomLeftBlock().getY() >= pos.getX()
+                && getBottomLeftBlock().getZ() >= pos.getZ()
+                && getTopRightBlock().getX() <= pos.getX()
+                && getTopRightBlock().getY() <= pos.getY()
+                && getTopRightBlock().getZ() <= pos.getZ()
+                && !allBlocks.contains(pos)
+        ) {
+            return false;
+        }
+
+        if (toCheck.equals(FissionFuelCellBlock.class)) {
+            return directFuelCellConnectionPos.contains(pos) || secondFuelCellConnectionPos.contains(pos);
+        }
+        return false;
     }
 
     private int countAttachedModeratorsToFuelCell(BlockPos toCheck) {

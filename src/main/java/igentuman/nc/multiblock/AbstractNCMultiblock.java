@@ -306,7 +306,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
     protected void processOuterBlock(BlockPos pos) {
         attachMultiblock(pos);
         updateDimensions(pos);
-        allBlocks.add(new NCBlockPos(pos));
+        allBlocks.add(new BlockPos(pos));
         if(getBlockState(pos).getBlock().asItem().toString().contains("controller")) {
             controllers.add(pos);
         }
@@ -333,7 +333,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
     }
 
     protected boolean processInnerBlock(BlockPos toCheck) {
-        allBlocks.add(new NCBlockPos(toCheck));
+        allBlocks.add(new BlockPos(toCheck));
         attachMultiblock(toCheck);
         return true;
     }
@@ -509,5 +509,9 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
 
     public String getId() {
         return id;
+    }
+
+    public boolean checkAttachmentToBlock(Class<?> toCheck, Level level, BlockPos pos, Direction dir) {
+        return false;
     }
 }

@@ -1,6 +1,9 @@
 package igentuman.nc.multiblock;
 
+import igentuman.nc.block.fission.FissionFuelCellBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,5 +53,18 @@ public class MultiblockHandler {
 
     public static void removeMultiblock(AbstractNCMultiblock multiblock) {
         multiblocks.remove(multiblock.getId());
+    }
+
+
+    public static boolean checkAttachmentToBlock(Class<?> toCheck, Level level, BlockPos pos, Direction dir) {
+        for(AbstractNCMultiblock multiblock: multiblocks.values()) {
+            if(multiblock == null) {
+                continue;
+            }
+            if(multiblock.checkAttachmentToBlock(toCheck, level, pos, dir)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

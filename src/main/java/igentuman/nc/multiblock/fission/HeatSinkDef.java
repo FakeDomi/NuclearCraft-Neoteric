@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import igentuman.nc.NuclearCraft;
 import igentuman.nc.block.fission.FissionFuelCellBlock;
+import igentuman.nc.multiblock.MultiblockHandler;
 import igentuman.nc.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -136,13 +137,14 @@ public class HeatSinkDef {
         public boolean isValid(Level level, BlockPos pos)
         {
             boolean result = false;
+            BlockPos p = new BlockPos(pos);
             for(String[] condition: blocks().keySet()) {
                 result = switch (condition[0]) {
-                    case ">" -> isMoreThan(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
-                    case "<" -> isLessThan(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
-                    case "-" -> isBetween(blocks().get(condition), level, pos);
-                    case "=" -> isExact(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
-                    case "^" -> inCorner(Integer.parseInt(condition[1]), blocks().get(condition), level, pos);
+                    case ">" -> isMoreThan(Integer.parseInt(condition[1]), condition, level, p);
+                    case "<" -> isLessThan(Integer.parseInt(condition[1]), condition, level, p);
+                    case "-" -> isBetween(condition, level, p);
+                    case "=" -> isExact(Integer.parseInt(condition[1]), condition, level, p);
+                    case "^" -> inCorner(Integer.parseInt(condition[1]), condition, level, p);
                     default -> result;
                 };
                 if(!result) {
@@ -152,23 +154,29 @@ public class HeatSinkDef {
             return result;
         }
 
-        public boolean validateFuelCellAttachment(BlockPos pos, Level level)
+        public boolean validateFuelCellAttachment(Level level, BlockPos...pos)
         {
-            for(Direction dir: Direction.values()) {
-                if(level.getBlockState(pos.relative(dir)).getBlock() instanceof FissionFuelCellBlock) {
-                    return true;
+            for(BlockPos p: pos) {
+                for(Direction dir: Direction.values()) {
+                    if(MultiblockHandler.checkAttachmentToBlock(FissionFuelCellBlock.class, level, p, dir)) {
+                        return true;
+                    }
+                    if(level.getBlockState(p.relative(dir)).getBlock() instanceof FissionFuelCellBlock) {
+                        return true;
+                    }
                 }
             }
+
             return false;
         }
 
-        private boolean inCorner(int qty, List<Block> blocks, Level level, BlockPos pos) {
-            int initial = blocks.contains(level.getBlockState(pos.above(1)).getBlock()) ? 1 : 0;
-            initial = blocks.contains(level.getBlockState(pos.below(1)).getBlock()) ? 1 : initial;
+        private boolean inCorner(int qty, String[] condition, Level level, BlockPos pos) {
+            int initial = blocks.get(condition).contains(level.getBlockState(pos.above(1)).getBlock()) ? 1 : 0;
+            initial = blocks.get(condition).contains(level.getBlockState(pos.below(1)).getBlock()) ? 1 : initial;
             int[] matches = new int[4];
             int i = 0;
             for (Direction dir: List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)) {
-                if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
+                if(blocks.get(condition).contains(level.getBlockState(pos.relative(dir)).getBlock())) {
                     if(1+initial >= qty) return true;
                     matches[i] = 1;
                 }
@@ -182,11 +190,11 @@ public class HeatSinkDef {
             return false;
         }
 
-        private boolean isExact(int s, List<Block> blocks, Level level, BlockPos pos) {
+        private boolean isExact(int s, String[] condition, Level level, BlockPos pos) {
             int counter = 0;
             for (Direction dir: Direction.values()) {
-                if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
-                    if(!validateFuelCellAttachment(pos.relative(dir), level)) {
+                if(blocks.get(condition).contains(level.getBlockState(pos.relative(dir)).getBlock())) {
+                    if(mustCheckFuelCellConnection(condition) && !validateFuelCellAttachment(level, pos, pos.relative(dir) )) {
                         continue;
                     }
                     counter++;
@@ -196,13 +204,13 @@ public class HeatSinkDef {
             return counter == s;
         }
 
-        private boolean isBetween(List<Block> blocks, Level level, BlockPos pos) {
+        private boolean isBetween(String[] condition, Level level, BlockPos pos) {
             for (Direction dir: Direction.values()) {
                 if(
-                        blocks.contains(level.getBlockState(pos.relative(dir)).getBlock()) &&
-                                blocks.contains(level.getBlockState(pos.relative(dir.getOpposite())).getBlock()) &&
-                                validateFuelCellAttachment(pos.relative(dir), level) &&
-                                validateFuelCellAttachment(pos.relative(dir.getOpposite()), level)
+                        blocks.get(condition).contains(level.getBlockState(pos.relative(dir)).getBlock()) &&
+                                blocks.get(condition).contains(level.getBlockState(pos.relative(dir.getOpposite())).getBlock()) &&
+                                validateFuelCellAttachment(level, pos, pos.relative(dir)) &&
+                                validateFuelCellAttachment(level, pos, pos.relative(dir.getOpposite()))
                 ) {
                     return true;
                 }
@@ -210,11 +218,11 @@ public class HeatSinkDef {
             return false;
         }
 
-        private boolean isLessThan(int s, List<Block> blocks, Level level, BlockPos pos) {
+        private boolean isLessThan(int s, String[] condition, Level level, BlockPos pos) {
             int counter = 0;
             for (Direction dir: Direction.values()) {
-                if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
-                    if(!validateFuelCellAttachment(pos.relative(dir), level)) {
+                if(blocks.get(condition).contains(level.getBlockState(pos.relative(dir)).getBlock())) {
+                    if(mustCheckFuelCellConnection(condition) && !validateFuelCellAttachment(level, pos, pos.relative(dir))) {
                         continue;
                     }
                     counter++;
@@ -224,11 +232,16 @@ public class HeatSinkDef {
             return counter < s;
         }
 
-        private boolean isMoreThan(int s, List<Block> blocks, Level level, BlockPos pos) {
+        private boolean mustCheckFuelCellConnection(String[] condition) {
+            return !condition[2].contains("casing");
+        }
+
+        private boolean isMoreThan(int s, String[] condition, Level level, BlockPos pos) {
             int counter = 0;
             for (Direction dir: Direction.values()) {
-                if(blocks.contains(level.getBlockState(pos.relative(dir)).getBlock())) {
-                    if(!validateFuelCellAttachment(pos.relative(dir), level)) {
+                Block target = level.getBlockState(pos.relative(dir)).getBlock();
+                if(blocks.get(condition).contains(target)) {
+                    if(mustCheckFuelCellConnection(condition) && !validateFuelCellAttachment(level, pos, pos.relative(dir))) {
                         continue;
                     }
                     counter++;
