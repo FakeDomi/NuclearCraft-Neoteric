@@ -1,5 +1,6 @@
 package igentuman.nc.block.fusion;
 
+import igentuman.nc.block.entity.fission.FissionPortBE;
 import igentuman.nc.block.entity.fusion.FusionBE;
 import igentuman.nc.block.entity.fusion.FusionCoreBE;
 import igentuman.nc.block.entity.fusion.FusionCoreProxyBE;
@@ -29,9 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_PROXY_BE;
 
-public class FusionCoreProxy extends FusionBeBlock {
+public class FusionCoreProxyBlock extends FusionBeBlock {
 
-    public FusionCoreProxy(Properties pProperties) {
+    public FusionCoreProxyBlock(Properties pProperties) {
         super(pProperties.sound(SoundType.METAL));
         this.registerDefaultState(
                 this.stateDefinition.any()
@@ -107,5 +108,15 @@ public class FusionCoreProxy extends FusionBeBlock {
                 tile.tickServer();
             }
         };
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState pState) {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+        return pLevel.getBlockEntity(pPos) instanceof FusionCoreProxyBE be ? be.getAnalogSignal() : 0;
     }
 }

@@ -1,5 +1,6 @@
 package igentuman.nc.block.entity.fusion;
 
+import igentuman.nc.util.annotation.NBTField;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +17,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 import static igentuman.nc.compat.oc2.NCFusionReactorDevice.DEVICE_CAPABILITY;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_PROXY_BE;
@@ -27,7 +27,7 @@ public class FusionCoreProxyBE extends FusionBE {
     public FusionCoreProxyBE(BlockPos pPos, BlockState pBlockState) {
         super(FUSION_CORE_PROXY_BE.get(), pPos, pBlockState);
     }
-    protected int timer = 20;
+    protected byte wasSignal = 0;
     protected void validateCore()
     {
         if(core != null)
@@ -38,20 +38,25 @@ public class FusionCoreProxyBE extends FusionBE {
             core = (FusionCoreBE<?>) level.getBlockEntity(core.getBlockPos());
             corePos = core.getBlockPos();
         } else {
+            if(corePos == null) return;
             core = (FusionCoreBE<?>) level.getBlockEntity(corePos);
         }
     }
 
     public void tickServer()
     {
-        timer--;
-        if(timer <= 0)
-        {
-            timer = 20;
+        if(getLevel().getGameTime() % 20 == 0) {
             validateCore();
         }
         if(!(core instanceof FusionCoreBE)) {
             level.removeBlock(worldPosition, false);
+            return;
+        }
+
+        if(wasSignal != core.analogSignal) {
+            wasSignal = core.analogSignal;
+            setChanged();
+            level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
         }
     }
 
@@ -160,5 +165,13 @@ public class FusionCoreProxyBE extends FusionBE {
         this.core = core;
         core.inputRedstoneSignal =  Math.max(getLevel().getBestNeighborSignal(getBlockPos()), core.inputRedstoneSignal);
         core.rfAmplificationRatio = (int)((double)core.inputRedstoneSignal / 0.15D);
+    }
+
+    public void toggleRedstoneMode() {
+        getCoreBE().toggleRedstoneMode();
+    }
+
+    public int getAnalogSignal() {
+        return getCoreBE().analogSignal;
     }
 }

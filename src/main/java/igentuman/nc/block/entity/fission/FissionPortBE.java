@@ -70,7 +70,9 @@ public class FissionPortBE extends FissionBE {
             updated = true;
         }
 
-        updateAnalogSignal();
+        if(level.getGameTime() % 10 == 0) {
+            updateAnalogSignal();
+        }
         switch (redstoneMode) {
             case SignalSource.SWITCH -> controller().toggleReactor(hasRedstoneSignal());
             case SignalSource.MODERATOR -> controller().adjustModerator(analogSignal);

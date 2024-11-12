@@ -327,6 +327,9 @@ public class NCLanguageProvider extends LanguageProvider {
         add("gui.nc.reactor_comparator_config.tooltip_4","Comparator: Fuel Left");
         add("gui.nc.reactor_comparator_config.tooltip_5","Input: On/Off Reactor");
         add("gui.nc.reactor_comparator_config.tooltip_6","Input: Moderation Control");
+        add("gui.nc.reactor_comparator_config.tooltip_11","Comparator: Energy Stored");
+        add("gui.nc.reactor_comparator_config.tooltip_12","Comparator: Heat Stored");
+        add("gui.nc.reactor_comparator_config.tooltip_13","Comparator: Efficiency");
         add("gui.nc.reactor_comparator_strength.tooltip","Current Signal Strength: %s");
         add("gui.nc.redstone_config.tooltip_0","WORK MODE: IGNORE SIGNAL");
         add("gui.nc.redstone_config.tooltip_1","WORK MODE: ON SIGNAL");

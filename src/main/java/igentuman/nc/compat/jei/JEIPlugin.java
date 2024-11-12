@@ -139,7 +139,7 @@ public  class JEIPlugin implements IModPlugin {
             if (!Processors.registered().containsKey(name)) continue;
             addRecipeClickArea(registration, NCProcessorScreen.class, 67, 74, 18, 18, getRecipeType(name));
         }
-        registration.addRecipeClickArea(FissionControllerScreen.class,65, 42, 36, 26, FISSION);
+        registration.addRecipeClickArea(FissionControllerScreen.class,67, 42, 36, 26, FISSION);
     }
 
     @Override

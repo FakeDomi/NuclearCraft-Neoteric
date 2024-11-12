@@ -476,7 +476,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
                 hasToRefresh = false;
                 beCache = new HashMap<>();
                 bsCache = new HashMap<>();
-                refreshCooldown = 50;
+                refreshCooldown = 20;
             }
         }
     }
@@ -487,10 +487,10 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
 
     public boolean onBlockChange(BlockPos pos) {
         if(allBlocks.contains(pos)) {
-            BlockEntity targetBlock = getBlockEntity(pos);
-            if(targetBlock instanceof FissionControllerBE<?>
-                    || targetBlock instanceof FissionPortBE
-                    || targetBlock instanceof IrradiatorBE) {
+            Block targetBlock = getBlockState(pos).getBlock();
+            if(targetBlock.getDescriptionId().matches(
+                    ".*fusion_proxy.*|.*fusion_core.*|.*controller.*|.*port.*|.*irradiator.*"
+            )) {
                 return true;
             }
             hasToRefresh = true;
@@ -500,6 +500,12 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
         if(bottomLeft == null || topRight == null) return false;
         if(pos.getX() >= bottomLeft.getX() && pos.getY() >= bottomLeft.getY() && pos.getZ() >= bottomLeft.getZ()
                 && pos.getX() <= topRight.getX() && pos.getY() <= topRight.getY() && pos.getZ() <= topRight.getZ()) {
+            Block targetBlock = getBlockState(pos).getBlock();
+            if(targetBlock.getDescriptionId().matches(
+                    ".*core_proxy.*|.*fusion_core.*|.*port.*|.*irradiator.*"
+            )) {
+                return true;
+            }
             hasToRefresh = true;
             controller.clearStats();
             return true;

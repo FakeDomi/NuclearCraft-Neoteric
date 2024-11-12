@@ -3,6 +3,7 @@ package igentuman.nc.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import igentuman.nc.client.gui.element.NCGuiElement;
 import igentuman.nc.client.gui.element.bar.VerticalBar;
+import igentuman.nc.client.gui.element.button.Button;
 import igentuman.nc.client.gui.element.button.Checkbox;
 import igentuman.nc.client.gui.element.button.SliderHorizontal;
 import igentuman.nc.client.gui.element.fluid.FluidTankRenderer;
@@ -33,6 +34,7 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
     protected int relY;
     private int xCenter;
     private Checkbox checklist;
+    private Button.FusionReactorRedstoneModeButton redstoneConfigBtn;
 
     public FusionCoreContainer container()
     {
@@ -79,6 +81,8 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
         plasmaHeatBar = new VerticalBar.HeatLong(36, 5,  this, (long) (container().getOptimalTemp()*2), () -> container().getPlasmaHeat());
         rfAmplifierSlider = new SliderHorizontal(64, 40, 119, this, menu.getBlockPos());
         rfAmplifierSlider.slideTo(container().getAmlificationAdjustment());
+        redstoneConfigBtn = new Button.FusionReactorRedstoneModeButton(169, 83, this, menu.getBlockPos());
+        widgets.add(redstoneConfigBtn);
         widgets.add(rfAmplifierSlider);
         widgets.add(heatBar);
         widgets.add(plasmaHeatBar);
@@ -103,7 +107,17 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
+    public byte getComparatorMode() {
+        return container().redstoneMode();
+    }
+
+    public byte getAnalogSignalStrength() {
+        return container().analogSignal();
+    }
+
     private void renderWidgets(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+        redstoneConfigBtn.setMode(getComparatorMode());
+        redstoneConfigBtn.strength = getAnalogSignalStrength();
         for(NCGuiElement widget: widgets) {
             widget.draw(graphics, mouseX, mouseY, partialTicks);
         }
@@ -215,6 +229,7 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         super.mouseClicked(pMouseX, pMouseY, pButton);
+        redstoneConfigBtn.mouseClicked(pMouseX, pMouseY, pButton);
         rfAmplifierSlider.mouseClicked(pMouseX, pMouseY, pButton);
         return false;
     }
@@ -222,6 +237,7 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
         super.mouseReleased(pMouseX, pMouseY, pButton);
+        redstoneConfigBtn.mouseReleased(pMouseX, pMouseY, pButton);
         rfAmplifierSlider.mouseReleased(pMouseX, pMouseY, pButton);
         return false;
     }

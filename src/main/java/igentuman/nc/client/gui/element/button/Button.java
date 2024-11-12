@@ -167,11 +167,39 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
         }
     }
 
+    public static class FusionReactorRedstoneModeButton extends ReactorPortRedstoneModeButton {
+        public static final int BTN_ID = 73;
+        public FusionReactorRedstoneModeButton(int xPos, int yPos, AbstractContainerScreen<?> screen, BlockPos pos) {
+            super(BTN_ID, xPos, yPos, screen, pos);
+        }
+
+        @Override
+        public void setMode(byte redstoneMode) {
+            mode = redstoneMode;
+            try {
+                Field f = btn.getClass().getDeclaredField("yTexStart");
+                f.setAccessible(true);
+                f.set(btn, 256 - (redstoneMode-10) * 36);
+            } catch (NoSuchFieldException | IllegalAccessException ignore) {
+            }
+        }
+    }
+
     public static class ReactorPortRedstoneModeButton extends Button {
         private final BlockPos pos;
         public static final int BTN_ID = 71;
         public byte mode = 2;
         public byte strength = 0;
+
+        public ReactorPortRedstoneModeButton(int btId, int xPos, int yPos, AbstractContainerScreen<?> screen, BlockPos pos) {
+            super(xPos, yPos, screen, btId);
+            this.pos = pos;
+            height = 18;
+            width = 18;
+            btn = new ImageButton(X(), Y(), width, height, 238, 256, 18, TEXTURE, pButton -> {
+                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, bId));
+            });
+        }
 
         public ReactorPortRedstoneModeButton(int xPos, int yPos, AbstractContainerScreen<?> screen, BlockPos pos) {
             super(xPos, yPos, screen, BTN_ID);
@@ -179,7 +207,7 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
             height = 18;
             width = 18;
             btn = new ImageButton(X(), Y(), width, height, 238, 256, 18, TEXTURE, pButton -> {
-                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, BTN_ID));
+                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, bId));
             });
         }
 

@@ -1,6 +1,7 @@
 package igentuman.nc.block.entity.fusion;
 
 import igentuman.nc.NuclearCraft;
+import igentuman.nc.block.entity.fission.FissionPortBE;
 import igentuman.nc.block.fusion.FusionCoreBlock;
 import igentuman.nc.client.particle.FusionBeamParticleData;
 import igentuman.nc.client.sound.SoundHandler;
@@ -59,6 +60,11 @@ import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXE
 
 public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE {
 
+
+    @NBTField
+    public byte analogSignal = 0;
+    @NBTField
+    public byte redstoneMode = SignalSource.HEAT;
     @NBTField
     public double reactorHeat = 0;
     @NBTField
@@ -107,6 +113,15 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     @NBTField
     protected boolean isInternalValid = false;
     protected int updateSpan = 20;
+
+    public void toggleRedstoneMode() {
+        redstoneMode++;
+        if(redstoneMode > SignalSource.EFFICIENCY) {
+            redstoneMode = SignalSource.ENERGY;
+        }
+        setChanged();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+    }
 
     public List<FusionCoolantRecipe> getCoolantRecipes() {
         if(coolantRecipes == null) {
@@ -231,6 +246,20 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
 
     public <T> LazyOptional<T> getOCDevice(Capability<T> cap, Direction side) {
         return LazyOptional.of(() -> NCFusionReactorDevice.createDevice(this)).cast();
+    }
+
+    public void updateAnalogSignal() {
+        switch (redstoneMode) {
+            case FusionCoreBE.SignalSource.ENERGY:
+               analogSignal = (byte) ((double)energyStorage.getEnergyStored() * 15 / (double)energyStorage.getMaxEnergyStored());
+                break;
+            case FusionCoreBE.SignalSource.HEAT:
+                analogSignal = (byte) (reactorHeat * 15 / getMaxHeat());
+                break;
+            case FusionCoreBE.SignalSource.EFFICIENCY:
+                analogSignal = (byte) (efficiency * 15 );
+                break;
+        }
     }
 
     @Override
@@ -388,6 +417,9 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
         handleMeltdown();
 
         if(refreshCacheFlag || changed) {
+            if(level.getGameTime() % 10 == 0) {
+                updateAnalogSignal();
+            }
             try {
                 assert level != null;
                 level.setBlockAndUpdate(worldPosition, getBlockState().setValue(POWERED, powered));
@@ -1056,5 +1088,11 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
         public double getCoolingRate() {
             return Math.max(rarityModifier, 1);
         }
+    }
+
+    public static class SignalSource {
+        public static final byte ENERGY = 11;
+        public static final byte HEAT = 12;
+        public static final byte EFFICIENCY = 13;
     }
 }

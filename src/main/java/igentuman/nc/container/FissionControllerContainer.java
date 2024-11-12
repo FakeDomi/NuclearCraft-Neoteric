@@ -53,21 +53,12 @@ public class FissionControllerContainer extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
-            if (index == 0) {
-                if (!this.moveItemStackTo(stack, 1, 37, true)) {
+            if(slot instanceof NCSlotItemHandler.Output || slot instanceof NCSlotItemHandler.Input) {
+                if (!this.moveItemStackTo(stack, 0, 35, true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickCraft(stack, itemstack);
             } else {
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) {
-                    if (!this.moveItemStackTo(stack, 0, 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index < 28) {
-                    if (!this.moveItemStackTo(stack, 28, 37, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index < 37 && !this.moveItemStackTo(stack, 1, 28, false)) {
+                if (!this.moveItemStackTo(stack, slots.size()-3, slots.size()-1, true)) {
                     return ItemStack.EMPTY;
                 }
             }

@@ -34,7 +34,7 @@ public class FusionReactor {
 
     public static final RegistryObject<Block> FUSION_CORE_PROXY =
             BLOCKS.register("fusion_reactor_core_proxy",
-                    () -> new FusionCoreProxy(REACTOR_BLOCKS_PROPERTIES));
+                    () -> new FusionCoreProxyBlock(REACTOR_BLOCKS_PROPERTIES));
     public static final RegistryObject<BlockEntityType<? extends BlockEntity>> FUSION_CORE_PROXY_BE =
             BLOCK_ENTITIES.register("fusion_reactor_core_proxy",
                     () -> BlockEntityType.Builder

@@ -212,4 +212,12 @@ public class FusionCoreContainer extends AbstractContainerMenu {
     public int getAmlificationAdjustment() {
         return blockEntity.amplificationAdjustment;
     }
+
+    public byte redstoneMode() {
+        return blockEntity.redstoneMode;
+    }
+
+    public byte analogSignal() {
+        return blockEntity.analogSignal;
+    }
 }
