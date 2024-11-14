@@ -116,5 +116,9 @@ public class RTGs {
         public int getRadiation() {
             return radiation;
         }
+
+        public int getActualGeneration() {
+            return (int) (config().generation * ENERGY_GENERATION.GENERATION_MULTIPLIER.get());
+        }
     }
 }

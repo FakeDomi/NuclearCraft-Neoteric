@@ -97,13 +97,22 @@ public class ProcessorsConfig {
         public ForgeConfigSpec.ConfigValue<Integer> BASE_TIME;
         public ForgeConfigSpec.ConfigValue<Integer> BASE_POWER;
         public ForgeConfigSpec.ConfigValue<Integer> SKIP_TICKS;
-        public ForgeConfigSpec.ConfigValue<List<Boolean>> REGISTER_PROCESSOR;
-        public ForgeConfigSpec.ConfigValue<List<Integer>> PROCESSOR_POWER;
-        public ForgeConfigSpec.ConfigValue<List<Integer>> PROCESSOR_TIME;
+        public HashMap<String, ProcessorConfigSpec> PROCESSOR_CONFIG;
 
+        public static class ProcessorConfigSpec {
+            public ForgeConfigSpec.ConfigValue<Boolean> register;
+            public ForgeConfigSpec.ConfigValue<Integer> base_power;
+            public ForgeConfigSpec.ConfigValue<Integer> base_time;
+
+            public ProcessorConfigSpec(ForgeConfigSpec.Builder builder, boolean register, int base_power, int base_time) {
+                this.register = builder.define("register", register);
+                this.base_power = builder.define("base_power", base_power);
+                this.base_time = builder.define("base_time", base_time);
+            }
+        }
 
         public ProcessorConfig(ForgeConfigSpec.Builder builder) {
-            builder.push("Processor");
+            builder.push("Common settings");
             BASE_TIME = builder
                     .comment("Ticks")
                     .define("base_time", 240);
@@ -134,20 +143,18 @@ public class ProcessorsConfig {
                     .comment("This only works if processor has recipe in work")
                     .comment("May lead to unknown issues, Please test first")
                     .defineInRange("skip_ticks", 0, 0, 10);
-
-            REGISTER_PROCESSOR = builder
-                    .comment("Allow processor registration: " + String.join(", ", Processors.all().keySet()))
-                    .define("register_processor", Processors.initialRegistered(), o -> o instanceof ArrayList);
-
-            PROCESSOR_POWER = builder
-                    .comment("Processor power: " + String.join(", ", Processors.all().keySet()))
-                    .define("processor_power", Processors.initialPower(), o -> o instanceof ArrayList);
-
-            PROCESSOR_TIME = builder
-                    .comment("Time for processor to proceed recipe: " + String.join(", ", Processors.all().keySet()))
-                    .define("processor_time", Processors.initialTime(), o -> o instanceof ArrayList);
             builder.pop();
 
+            PROCESSOR_CONFIG = new HashMap<>();
+            for(String processor: Processors.all().keySet()) {
+                builder.push(processor);
+                PROCESSOR_CONFIG.put(processor, new ProcessorConfigSpec(
+                        builder, true,
+                        Processors.all().get(processor).getPower(),
+                        Processors.all().get(processor).getTime())
+                );
+                builder.pop();
+            }
 
         }
     }

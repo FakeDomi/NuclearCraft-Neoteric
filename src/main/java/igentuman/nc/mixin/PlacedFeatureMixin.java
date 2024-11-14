@@ -17,15 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.lang.ref.Reference;
 
 import static igentuman.nc.NuclearCraft.MODID;
-import static igentuman.nc.handler.config.MaterialsConfig.ORE_CONFIG;
 
 @Mixin(PlacedFeature.class)
-public class PlacedFeatureMixin {
+public abstract class PlacedFeatureMixin {
 
-    @Inject(method = "placeWithContext", at = @At("HEAD"), cancellable = true, remap = false)
+    /*@Inject(method = "placeWithContext", at = @At("HEAD"), cancellable = true, remap = false)
     private void placeWithBiomeCheck(PlacementContext pContext, RandomSource pSource, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
 
-/*        Holder<ConfiguredFeature<?, ?>> feature = pContext.topFeature().get().feature();
+        Holder<ConfiguredFeature<?, ?>> feature = pContext.topFeature().get().feature();
         if (feature.unwrapKey().get().location().getNamespace().equals(MODID)) {
             String name = feature.unwrapKey().get().location().getPath().replace("_ore", "");
             int veinSize = Ores.all().get(name).config().veinSize;
@@ -33,9 +32,9 @@ public class PlacedFeatureMixin {
                 cir.setReturnValue(false);
                 cir.cancel();
             }
-            CountPlacement newPlacement = CountPlacement.of(veinSize);
-           // pContext.topFeature().get().placement().set(0, newPlacement);
-        }*/
-    }
+            CountPlaceement newPlacement = CountPlacement.of(veinSize);
+            pContext.topFeature().get().placement().set(0, newPlacement);
+        }
+    }*/
 
 }

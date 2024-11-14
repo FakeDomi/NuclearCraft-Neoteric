@@ -1,7 +1,10 @@
 package igentuman.nc.setup.registration;
 
+import igentuman.nc.NuclearCraft;
+import igentuman.nc.block.*;
 import igentuman.nc.content.materials.Materials;
 import igentuman.nc.content.materials.Ores;
+import igentuman.nc.content.processors.Processors;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -79,6 +82,18 @@ public class CreativeTabs {
         return itemsList;
     }
 
+    private static List<ItemStack> onlyEnabledBlocks(HashMap<String, RegistryObject<Block>> block)
+    {
+        List<ItemStack> itemsList = new ArrayList<>();
+        Set<String> enabled = Materials.registeredOf("block");
+        for(String name: block.keySet()) {
+            if(enabled.contains(name)) {
+                itemsList.add(new ItemStack(block.get(name).get()));
+            }
+        }
+        return itemsList;
+    }
+
     private static List<ItemStack> getItems()
     {
         List<ItemStack> items = itemStacks(NC_PARTS.values());
@@ -118,20 +133,61 @@ public class CreativeTabs {
 
     private static List<ItemStack> getBlocks()
     {
-        List<ItemStack> items = blockStacks(PROCESSORS.values());
+        List<ItemStack> items = new ArrayList<>();
+        for(String name: PROCESSORS.keySet()) {
+            if(Processors.registered().containsKey(name)) {
+                items.add(new ItemStack(PROCESSORS.get(name).get()));
+            } else {
+                NuclearCraft.LOGGER.info("Processor not registered: " + name);
+            }
+        }
         items.addAll(blockStacks(NC_BLOCKS.values()));
         items.add(new ItemStack(REDSTONE_DIMMER_ITEM_BLOCK.get()));
         items.addAll(blockStacks(NC_ELECTROMAGNETS.values()));
         items.addAll(blockStacks(NC_RF_AMPLIFIERS.values()));
-        items.addAll(blockStacks(ENERGY_BLOCKS.values()));
+        for(RegistryObject<Block> block: ENERGY_BLOCKS.values()) {
+            if(block.get() instanceof SolarPanelBlock solarPanel) {
+                if(solarPanel.registered()) {
+                    items.add(new ItemStack(solarPanel));
+                }
+                continue;
+            }
+            if(block.get() instanceof RTGBlock rtgBlock) {
+                if(rtgBlock.registered()) {
+                    items.add(new ItemStack(rtgBlock));
+                }
+                continue;
+            }
+            if(block.get() instanceof BatteryBlock batteryBlock) {
+                if(batteryBlock.registered()) {
+                    items.add(new ItemStack(batteryBlock));
+                }
+                continue;
+            }
+            items.add(new ItemStack(block.get()));
+        }
         for(ItemStack ore: blockStacks(ORE_BLOCKS.values())) {
             String type = ore.getItem().toString().replaceAll("_ore|_deepslate_ore", "");
             if(Ores.registered().containsKey(type)) {
                 items.add(ore);
             }
         }
-        items.addAll(blockStacks(NC_MATERIAL_BLOCKS.values()));
-        items.addAll(blockStacks(STORAGE_BLOCKS.values()));
+        items.addAll(onlyEnabledBlocks(NC_MATERIAL_BLOCKS));
+        for(RegistryObject<Block> block: STORAGE_BLOCKS.values()) {
+            if(block.get() instanceof ContainerBlock containerBlock) {
+                if(containerBlock.registered()) {
+                    items.add(new ItemStack(containerBlock));
+                }
+                continue;
+            }
+            if(block.get() instanceof BarrelBlock barrelBlock) {
+                if(barrelBlock.registered()) {
+                    items.add(new ItemStack(barrelBlock));
+                }
+                continue;
+            }
+            items.add(new ItemStack(block.get()));
+        }
         return items;
     }
 

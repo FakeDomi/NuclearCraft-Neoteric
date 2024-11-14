@@ -4,6 +4,7 @@ import igentuman.nc.content.energy.BatteryBlocks;
 import igentuman.nc.content.energy.RTGs;
 import igentuman.nc.content.energy.SolarPanels;
 import igentuman.nc.content.storage.BarrelBlocks;
+import igentuman.nc.content.storage.ContainerBlocks;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -50,22 +51,27 @@ public class CommonConfig {
         public ForgeConfigSpec.ConfigValue<List<Integer>> RTG_RADIATION;
         public ForgeConfigSpec.ConfigValue<Integer> STEAM_TURBINE;
         public ForgeConfigSpec.ConfigValue<Integer> DECAY_GENERATOR;
+        public ForgeConfigSpec.ConfigValue<Double> GENERATION_MULTIPLIER;
 
 
         public EnergyGenerationConfig(ForgeConfigSpec.Builder builder) {
-            builder.push("energy_generation");
+            builder.push("Energy");
+
+            GENERATION_MULTIPLIER = builder
+                    .comment("Multiplier for all power generation in the mod")
+                    .defineInRange("generation_multiplier", 1.0, 0.001, 1000.0);
 
             REGISTER_SOLAR_PANELS = builder
-                    .comment("Allow panel registration: " + String.join(", ", SolarPanels.all().keySet()))
+                    .comment("Allow solar panel registration: " + String.join(", ", SolarPanels.all().keySet()))
                     .define("register_panel", SolarPanels.initialRegistered(), o -> o instanceof ArrayList);
 
             SOLAR_PANELS_GENERATION = builder
-                    .comment("Panel power generation: " + String.join(", ", SolarPanels.all().keySet()))
+                    .comment("Solar panel power generation: " + String.join(", ", SolarPanels.all().keySet()))
                     .define("panel_power", SolarPanels.initialPower(), o -> o instanceof ArrayList);
 
             REGISTER_RTG = builder
                     .comment("Allow rtg registration: " + String.join(", ", RTGs.all().keySet()))
-                    .define("register_panel", RTGs.initialRegistered(), o -> o instanceof ArrayList);
+                    .define("register_rtg", RTGs.initialRegistered(), o -> o instanceof ArrayList);
 
             RTG_GENERATION = builder
                     .comment("rtg generation: " + String.join(", ", RTGs.all().keySet()))
@@ -89,27 +95,29 @@ public class CommonConfig {
 
     public static class StorageBlocksConfig {
         public ForgeConfigSpec.ConfigValue<List<Boolean>> REGISTER_BARREL;
+        public ForgeConfigSpec.ConfigValue<List<Boolean>> REGISTER_CONTAINER;
         public ForgeConfigSpec.ConfigValue<List<Integer>> BARREL_CAPACITY;
 
         public StorageBlocksConfig(ForgeConfigSpec.Builder builder) {
+
             builder.push("storage_blocks")
                     .comment("Blocks to store items, fluids, etc...");
 
+            REGISTER_CONTAINER = builder
+                    .comment("Allow container registration: " + String.join(", ", BarrelBlocks.all().keySet()))
+                    .define("container_block_registration", ContainerBlocks.initialRegistered(), o -> o instanceof ArrayList);
+
             REGISTER_BARREL = builder
                     .comment("Allow barrel registration: " + String.join(", ", BarrelBlocks.all().keySet()))
-                    .define("energy_block_registration", BarrelBlocks.initialRegistered(), o -> o instanceof ArrayList);
+                    .define("barrel_block_registration", BarrelBlocks.initialRegistered(), o -> o instanceof ArrayList);
 
             BARREL_CAPACITY = builder
                     .comment("Barrel capacity in Buckets: " + String.join(", ", BarrelBlocks.all().keySet()))
                     .define("barrel_capacity", BarrelBlocks.initialCapacity(), o -> o instanceof ArrayList);
 
-
             builder.pop();
         }
 
-        public int getLiquidCapacityFor(String code) {
-            return BatteryBlocks.all().get(code).config().getStorage();
-        }
     }
 
     public static class EnergyStorageConfig {

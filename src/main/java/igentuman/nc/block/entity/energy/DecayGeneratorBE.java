@@ -76,7 +76,7 @@ public class DecayGeneratorBE extends NCEnergy {
                 decayBlock(getBlockPos().relative(side));
             }
         }
-        return (int) energy;
+        return (int) ((int) energy * ENERGY_GENERATION.GENERATION_MULTIPLIER.get());
     }
 
     //transform block

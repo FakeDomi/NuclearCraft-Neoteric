@@ -39,14 +39,14 @@ public class NCStorageBlocks {
     }
 
     private static void registerBlockEntities() {
-        for(String name: BarrelBlocks.registered().keySet()) {
+        for(String name: BarrelBlocks.all().keySet()) {
             STORAGE_BE.put(name, BLOCK_ENTITIES.register(name,
                     () -> BlockEntityType.Builder
                             .of(BarrelBlocks.all().get(name).getBlockEntity(), STORAGE_BLOCKS.get(name).get())
                             .build(null)));
 
         }
-        for(String name: ContainerBlocks.registered().keySet()) {
+        for(String name: ContainerBlocks.all().keySet()) {
             STORAGE_BE.put(name, BLOCK_ENTITIES.register(name,
                     () -> BlockEntityType.Builder
                             .of(ContainerBlocks.all().get(name).getBlockEntity(), STORAGE_BLOCKS.get(name).get())
@@ -56,11 +56,11 @@ public class NCStorageBlocks {
     }
 
     private static void registerBlocks() {
-        for(String name: BarrelBlocks.registered().keySet()) {
+        for(String name: BarrelBlocks.all().keySet()) {
             STORAGE_BLOCKS.put(name, BLOCKS.register(name, () -> new BarrelBlock(BLOCK_PROPERTIES)));
             BLOCK_ITEMS.put(name, fromBarrelBlock(STORAGE_BLOCKS.get(name)));
         }
-        for(String name: ContainerBlocks.registered().keySet()) {
+        for(String name: ContainerBlocks.all().keySet()) {
             STORAGE_BLOCKS.put(name, BLOCKS.register(name, () -> new ContainerBlock(BLOCK_PROPERTIES)));
             BLOCK_ITEMS.put(name, fromContainerBlock(STORAGE_BLOCKS.get(name)));
         }

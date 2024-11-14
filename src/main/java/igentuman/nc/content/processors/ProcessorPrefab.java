@@ -127,13 +127,9 @@ public class ProcessorPrefab <M extends NCProcessorContainer, U extends Screen &
     public ProcessorPrefab<M, U> config()
     {
         if(!initialized) {
-            if(!CommonConfig.isLoaded()) {
-                return this;
-            }
-            int id = Processors.all().keySet().stream().toList().indexOf(name);
-            registered = PROCESSOR_CONFIG.REGISTER_PROCESSOR.get().get(id);
-            power = PROCESSOR_CONFIG.PROCESSOR_POWER.get().get(id);
-            time = PROCESSOR_CONFIG.PROCESSOR_TIME.get().get(id);
+            registered = PROCESSOR_CONFIG.PROCESSOR_CONFIG.get(name).register.get();
+            power = PROCESSOR_CONFIG.PROCESSOR_CONFIG.get(name).base_power.get();
+            time = PROCESSOR_CONFIG.PROCESSOR_CONFIG.get(name).base_time.get();
             initialized = true;
         }
         return this;

@@ -269,8 +269,9 @@ public class Processors {
     public static HashMap<String, ProcessorPrefab> registered() {
         if(registered.isEmpty()) {
             for(String name: all().keySet()) {
-                if (all().get(name).isRegistered())
+                if (all().get(name).config().isRegistered()) {
                     registered.put(name,all().get(name));
+                }
             }
         }
         return registered;

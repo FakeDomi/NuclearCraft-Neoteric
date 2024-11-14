@@ -3,6 +3,7 @@ package igentuman.nc.block;
 import igentuman.nc.block.entity.BarrelBE;
 import igentuman.nc.block.entity.ContainerBE;
 import igentuman.nc.container.StorageContainerContainer;
+import igentuman.nc.content.storage.ContainerBlocks;
 import igentuman.nc.setup.registration.NCStorageBlocks;
 import igentuman.nc.util.annotation.NothingNullByDefault;
 import net.minecraft.ChatFormatting;
@@ -168,4 +169,7 @@ public class ContainerBlock extends Block implements EntityBlock {
         list.add(Component.translatable("tooltip.nc.use_multitool").withStyle(ChatFormatting.YELLOW));
     }
 
+    public boolean registered() {
+        return ContainerBlocks.registered().containsKey(code());
+    }
 }

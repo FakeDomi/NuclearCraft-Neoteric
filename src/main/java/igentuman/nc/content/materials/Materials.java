@@ -157,6 +157,7 @@ public class Materials extends MaterialsManager {
     public final static String super_alloy = "super_alloy";
     public final static String tungsten_carbide = "tungsten_carbide";
     public static String bscco = "bscco";
+    public static List<String> slurries;
 
     public static HashMap<String, NCMaterial> all()
     {
@@ -331,7 +332,11 @@ public class Materials extends MaterialsManager {
     }
 
     public static List<String> slurries() {
-        return MATERIAL_PRODUCTS.SLURRIES.get();
+        if(slurries == null) slurries = List.of(
+                "uranium", "iron", "gold", "aluminum", "thorium", "boron", "silver",
+                "lead", "tin", "copper", "zinc", "cobalt", "platinum", "lithium", "magnesium"
+        );
+        return slurries;
     }
 
     public static Set<String> registeredOf(String type) {
@@ -343,6 +348,7 @@ public class Materials extends MaterialsManager {
             case "plate" -> Plates.get().registered().keySet();
             case "chunk" -> Chunks.get().registered().keySet();
             case "gem" -> Gems.get().registered().keySet();
+            case "block" -> Blocks.get().registered().keySet();
             default -> Set.of();
         };
     }

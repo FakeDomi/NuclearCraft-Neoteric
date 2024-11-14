@@ -5,11 +5,11 @@
   "refmap": "nuclearcraft.refmap.json",
   "mixins": [
     "ForgeHooksMixin",
-    "MekRadiationManager",
-    "TagLoaderMixin",
+    "KubeJSRecipesEventJSMixin",
     "LightningRodBlockMixin",
+    "MekRadiationManager",
     "PlacedFeatureMixin",
-    "KubeJSRecipesEventJSMixin"
+    "TagLoaderMixin"
   ],
   "client": [
   ],

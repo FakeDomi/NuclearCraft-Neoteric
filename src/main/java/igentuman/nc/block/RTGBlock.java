@@ -70,7 +70,10 @@ public class RTGBlock extends Block implements EntityBlock {
 
     public void appendHoverText(ItemStack pStack, @javax.annotation.Nullable BlockGetter pLevel, List<Component> list, TooltipFlag pFlag)
     {
-        list.add(TextUtils.applyFormat(Component.translatable("rtg.fe_generation", TextUtils.numberFormat(RTGs.all().get(code()).config().getGeneration())), ChatFormatting.GOLD));
+        list.add(TextUtils.applyFormat(Component.translatable("rtg.fe_generation", TextUtils.numberFormat(RTGs.all().get(code()).config().getActualGeneration())), ChatFormatting.GOLD));
     }
 
+    public boolean registered() {
+        return RTGs.registered().containsKey(code());
+    }
 }

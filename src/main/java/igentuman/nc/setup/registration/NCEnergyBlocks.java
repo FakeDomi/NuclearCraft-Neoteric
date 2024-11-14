@@ -35,21 +35,21 @@ public class NCEnergyBlocks {
     }
 
     private static void registerBlockEntities() {
-        for(String name: SolarPanels.registered().keySet()) {
+        for(String name: SolarPanels.all().keySet()) {
             String key = "solar_panel/"+name;
             ENERGY_BE.put(key, BLOCK_ENTITIES.register(key,
                     () -> BlockEntityType.Builder
                             .of(SolarPanels.all().get(name).getBlockEntity(), ENERGY_BLOCKS.get(key).get())
                             .build(null)));
         }
-        for(String name: BatteryBlocks.registered().keySet()) {
+        for(String name: BatteryBlocks.all().keySet()) {
             ENERGY_BE.put(name, BLOCK_ENTITIES.register(name,
                     () -> BlockEntityType.Builder
                             .of(BatteryBlocks.all().get(name).getBlockEntity(), ENERGY_BLOCKS.get(name).get())
                             .build(null)));
 
         }
-        for(String name: RTGs.registered().keySet()) {
+        for(String name: RTGs.all().keySet()) {
             ENERGY_BE.put(name, BLOCK_ENTITIES.register(name,
                     () -> BlockEntityType.Builder
                             .of(RTGs.all().get(name).getBlockEntity(), ENERGY_BLOCKS.get(name).get())
@@ -66,18 +66,18 @@ public class NCEnergyBlocks {
         ENERGY_BLOCKS.put("decay_generator", BLOCKS.register("decay_generator", () -> new DecayGeneratorBlock(ENERGY_BLOCK_PROPERTIES)));
         BLOCK_ITEMS.put("decay_generator", fromBlock(ENERGY_BLOCKS.get("decay_generator")));
 
-        for(String name: SolarPanels.registered().keySet()) {
+        for(String name: SolarPanels.all().keySet()) {
             String key = "solar_panel/"+name;
             ENERGY_BLOCKS.put(key, BLOCKS.register(key.replace("/","_"), () -> new SolarPanelBlock(ENERGY_BLOCK_PROPERTIES)));
             BLOCK_ITEMS.put(key, fromBlock(ENERGY_BLOCKS.get(key)));
         }
 
-        for(String name: BatteryBlocks.registered().keySet()) {
+        for(String name: BatteryBlocks.all().keySet()) {
             ENERGY_BLOCKS.put(name, BLOCKS.register(name, () -> new BatteryBlock(ENERGY_BLOCK_PROPERTIES)));
             BLOCK_ITEMS.put(name, fromBatteryBlock(ENERGY_BLOCKS.get(name)));
         }
 
-        for(String name: RTGs.registered().keySet()) {
+        for(String name: RTGs.all().keySet()) {
             ENERGY_BLOCKS.put(name, BLOCKS.register(name, () -> new RTGBlock(ENERGY_BLOCK_PROPERTIES)));
             BLOCK_ITEMS.put(name, fromBlock(ENERGY_BLOCKS.get(name)));
         }

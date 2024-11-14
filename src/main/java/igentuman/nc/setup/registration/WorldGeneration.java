@@ -1,26 +1,34 @@
 package igentuman.nc.setup.registration;
 
+import igentuman.nc.world.OrePlacementModifier;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.NuclearCraft.rl;
 
 public class WorldGeneration {
    public static final ResourceKey<Biome> WASTELAND_BIOME = makeKey("wasteland");
+
+    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS =
+            DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, MODID);
+
+    public static final RegistryObject<PlacementModifierType<OrePlacementModifier>> NC_ORE_MODIFIER =
+            PLACEMENT_MODIFIERS.register("nc_ore_modifier", () -> () -> OrePlacementModifier.CODEC);
 
     private static ResourceKey<Biome> makeKey(String name) {
         return ResourceKey.create(Registries.BIOME, rl(name));
@@ -32,6 +40,14 @@ public class WorldGeneration {
             Registry.register(BuiltInRegistries.CHUNK_GENERATOR, "nuclearcraft_wasteland", NuclearcraftChunkGenerator.CODEC);
         }*/
     }
+
+    public static void register(IEventBus eventBus) {
+        PLACEMENT_MODIFIERS.register(eventBus);
+    }
+
+    public static void init() {
+    }
+
     public static class StructureLoader {
         private static final String STRUCTURE_PATH = ":structures/fission_reactor   ";
 

@@ -35,12 +35,12 @@ public class NCProcessors {
 
     @SuppressWarnings("unchecked")
     private static void registerContainers() {
-        for(String name: Processors.registered().keySet()) {
+        for(String name: Processors.all().keySet()) {
             PROCESSORS_CONTAINERS.put(name, CONTAINERS.register(name,
                     () -> IForgeMenuType.create((windowId, inv, data) -> {
                         NCProcessorContainer<?> o = null;
                         try {
-                            o = (NCProcessorContainer<?>) Processors.registered().get(name).getContainerConstructor()
+                            o = (NCProcessorContainer<?>) Processors.all().get(name).getContainerConstructor()
                                     .newInstance(windowId, data.readBlockPos(), inv, inv.player, name);
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ignore) {
                         }
@@ -52,7 +52,7 @@ public class NCProcessors {
 
     @SuppressWarnings("unchecked")
     private static void registerBlockEntities() {
-        for(String name: Processors.registered().keySet()) {
+        for(String name: Processors.all().keySet()) {
             PROCESSORS_BE.put(name, BLOCK_ENTITIES.register(name,
                     () -> BlockEntityType.Builder
                             .of(Processors.all().get(name).getBlockEntity(), PROCESSORS.get(name).get())
@@ -61,7 +61,7 @@ public class NCProcessors {
     }
 
     private static void registerBlocks() {
-        for(String name: Processors.registered().keySet()) {
+        for(String name: Processors.all().keySet()) {
             PROCESSORS.put(name, BLOCKS.register(name, () -> new ProcessorBlock(PROCESSOR_BLOCK_PROPERTIES)));
             PROCESSOR_BLOCKS_ITEMS.put(name, fromBlock(PROCESSORS.get(name)));
         }

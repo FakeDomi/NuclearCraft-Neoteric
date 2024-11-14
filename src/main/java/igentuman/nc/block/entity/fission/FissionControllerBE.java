@@ -51,6 +51,7 @@ import java.util.*;
 import static igentuman.nc.block.fission.FissionControllerBlock.POWERED;
 import static igentuman.nc.compat.GlobalVars.CATALYSTS;
 import static igentuman.nc.compat.oc2.NCFissionReactorDevice.DEVICE_CAPABILITY;
+import static igentuman.nc.handler.config.CommonConfig.ENERGY_GENERATION;
 import static igentuman.nc.handler.config.FissionConfig.FISSION_CONFIG;
 import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_BLOCKS;
 import static igentuman.nc.setup.registration.FissionFuel.ITEM_PROPERTIES;
@@ -625,6 +626,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
                 (recipeInfo.energy * Math.abs(fuelCellMultiplier-fuelCellsCount) + moderatorsFE())
                 * (heatMultiplier() + collectedHeatMultiplier() - 1)
                 * FISSION_CONFIG.FE_GENERATION_MULTIPLIER.get()/10D
+                * ENERGY_GENERATION.GENERATION_MULTIPLIER.get()
                 * reactivityLevel / 100D
         );
         return energyPerTick;

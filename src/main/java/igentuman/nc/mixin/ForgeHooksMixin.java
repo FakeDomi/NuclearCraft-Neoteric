@@ -15,7 +15,7 @@ import java.util.Map;
 import static igentuman.nc.NuclearCraft.MODID;
 
 @Mixin(ForgeHooks.class)
-public class ForgeHooksMixin {
+public abstract class ForgeHooksMixin {
 
 /*    @Inject(method = "filterThunks", at = @At("TAIL"), remap = false, cancellable = true)
     private static void filterThunks(Map<ResourceKey<?>, RegistryResourceAccess.EntryThunk<?>> map, CallbackInfoReturnable<Collection<Map.Entry<ResourceKey<?>, RegistryResourceAccess.EntryThunk<?>>>> cir) {

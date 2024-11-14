@@ -118,8 +118,8 @@ public class NCBlocks {
         for(String name: Blocks.get().all().keySet()) {
             BLOCK_TAGS.put(name, TagKey.create(BLOCK_REGISTRY, new ResourceLocation("forge","storage_blocks/"+name)));
             BLOCK_ITEM_TAGS.put(name, TagKey.create(ITEM_REGISTRY, new ResourceLocation("forge", "storage_blocks/"+name)));
-            NC_BLOCKS.put(name, BLOCKS.register(name + "_block", () -> new Block(NC_BLOCKS_PROPERTIES)));
-            NC_BLOCKS_ITEMS.put(name, fromBlock(NC_BLOCKS.get(name)));
+            NC_MATERIAL_BLOCKS.put(name, BLOCKS.register(name + "_block", () -> new Block(NC_BLOCKS_PROPERTIES)));
+            NC_BLOCKS_ITEMS.put(name, fromBlock(NC_MATERIAL_BLOCKS.get(name)));
             ALL_NC_ITEMS.put(name+"_block", NC_BLOCKS_ITEMS.get(name));
         }
 

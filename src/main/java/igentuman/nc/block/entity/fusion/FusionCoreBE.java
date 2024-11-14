@@ -755,6 +755,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
         if(plasmaTemperature < 1000000) {
             energyPerTick = 0;
         }
+        energyPerTick = (int) (energyPerTick* getControlPartsEfficiency());
     }
 
     protected long prevAmplification = 0;

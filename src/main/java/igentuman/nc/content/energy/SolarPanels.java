@@ -80,6 +80,10 @@ public class SolarPanels {
             return generation;
         }
 
+        public int getActualGeneration() {
+            return (int) (config().generation * ENERGY_GENERATION.GENERATION_MULTIPLIER.get());
+        }
+
         public SolarPanelPrefab setGeneration(int generation) {
             this.generation = generation;
             return this;

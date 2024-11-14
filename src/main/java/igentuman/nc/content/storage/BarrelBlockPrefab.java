@@ -16,6 +16,7 @@ public class BarrelBlockPrefab {
     public BarrelBlockPrefab(String name, int capacity) {
         this.capacity = capacity;
         blockEntity = BarrelBE::new;
+        this.name = name;
     }
 
     public int getCapacity() {
@@ -30,9 +31,6 @@ public class BarrelBlockPrefab {
     public BarrelBlockPrefab config()
     {
         if(!initialized) {
-            if(!CommonConfig.isLoaded()) {
-                return this;
-            }
             int id = BarrelBlocks.all().keySet().stream().toList().indexOf(name);
             registered = STORAGE_BLOCKS.REGISTER_BARREL.get().get(id);
             capacity = STORAGE_BLOCKS.BARREL_CAPACITY.get().get(id);

@@ -220,4 +220,7 @@ public class BarrelBlock extends Block implements EntityBlock {
         return TextUtils.numberFormat(val/1000)+" B";
     }
 
+    public boolean registered() {
+        return BarrelBlocks.registered().containsKey(code());
+    }
 }

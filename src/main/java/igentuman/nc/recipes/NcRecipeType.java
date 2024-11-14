@@ -39,8 +39,8 @@ public class NcRecipeType<RECIPE extends NcRecipe> implements RecipeType<RECIPE>
         recipes.put("fission_boiling", register("fission_boiling"));
         recipes.put(TurbineControllerBE.NAME, register(TurbineControllerBE.NAME));
 
-        for(String processorName: Processors.registered().keySet()) {
-            if(Processors.registered().get(processorName).hasRecipes()) {
+        for(String processorName: Processors.all().keySet()) {
+            if(Processors.all().get(processorName).hasRecipes()) {
                 recipes.put(processorName, register(processorName));
             }
         }

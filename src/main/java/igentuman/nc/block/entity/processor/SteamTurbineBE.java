@@ -56,7 +56,7 @@ public class SteamTurbineBE extends NCProcessorBE<SteamTurbineBE.Recipe> {
 
         recipeInfo.process(speedMultiplier()/efficiency);
         efficiency += 0.0004;
-        energyStorage.addEnergy((int) (getEnergyTransferPerTick()*recipe.getEnergy()));
+        energyStorage.addEnergy((int) (getEnergyTransferPerTick()*recipe.getEnergy()*ENERGY_GENERATION.GENERATION_MULTIPLIER.get()));
     }
 
     @Override

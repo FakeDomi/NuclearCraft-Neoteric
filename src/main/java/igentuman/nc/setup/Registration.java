@@ -32,6 +32,7 @@ public class Registration {
         NCItems.init();
         FissionFuel.init();
         NCFluids.init();
+        WorldGeneration.register(bus);
         NCEnergyBlocks.init();
         NCProcessors.init();
         FissionReactor.init();

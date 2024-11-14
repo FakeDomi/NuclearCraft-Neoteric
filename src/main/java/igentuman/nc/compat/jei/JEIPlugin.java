@@ -17,11 +17,13 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.recipe.IRecipeManager;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static igentuman.nc.NuclearCraft.MODID;
+import static igentuman.nc.NuclearCraft.rl;
 import static igentuman.nc.compat.GlobalVars.*;
 import static igentuman.nc.util.ModUtil.isMekanismLoadeed;
 
@@ -62,9 +65,22 @@ public  class JEIPlugin implements IModPlugin {
         return new ResourceLocation(MODID, "jei_plugin");
     }
 
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        IRecipeManager recipeManager = jeiRuntime.getRecipeManager();
+
+        for(String name: Processors.all().keySet()) {
+            if(Processors.registered().containsKey(name)) {
+                continue;
+            }
+            ResourceLocation categoryToHide = rl(name);
+            recipeManager.hideRecipeCategory(recipeManager.getRecipeType(categoryToHide).get());
+        }
+    }
+
     public void registerCategories(IRecipeCategoryRegistration registration) {
         for (String name : getRecipeTypes().keySet()) {
-            if (Processors.registered().get(name) == null) continue;
+            if (!Processors.all().containsKey(name)) continue;
             registration.addRecipeCategories(new ProcessorCategoryWrapper<>(registration.getJeiHelpers().getGuiHelper(), getRecipeType(name)));
         }
         registration.addRecipeCategories(new OreVeinCategoryWrapper<>(registration.getJeiHelpers().getGuiHelper(), ORE_VEINS));
@@ -75,7 +91,6 @@ public  class JEIPlugin implements IModPlugin {
         registration.addRecipeCategories(new FissionCategoryWrapper<>(registration.getJeiHelpers().getGuiHelper(), FISSION));
         if(isMekanismLoadeed()) {
             registration.addRecipeCategories(new MekChemicalConversionCategoryWrapper<>(registration.getJeiHelpers().getGuiHelper(), CHEMICAL_TO_FLUID));
-
         }
     }
 

@@ -29,11 +29,8 @@ public class ContainerBlockPrefab {
     public ContainerBlockPrefab config()
     {
         if(!initialized) {
-            if(!CommonConfig.isLoaded()) {
-                return this;
-            }
-            int id = BarrelBlocks.all().keySet().stream().toList().indexOf(name);
-            registered = STORAGE_BLOCKS.REGISTER_BARREL.get().get(id);
+            int id = ContainerBlocks.all().keySet().stream().toList().indexOf(name);
+            registered = STORAGE_BLOCKS.REGISTER_CONTAINER.get().get(id);
             initialized = true;
         }
         return this;

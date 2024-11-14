@@ -1,16 +1,13 @@
 package igentuman.nc.world.ore;
 
 import igentuman.nc.NuclearCraft;
-import igentuman.nc.handler.config.CommonConfig;
 import igentuman.nc.content.materials.Ores;
 import net.minecraft.world.level.block.Block;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static igentuman.nc.handler.config.MaterialsConfig.ORE_CONFIG;
+import static igentuman.nc.handler.config.OreGenConfig.ORE_CONFIG;
 import static igentuman.nc.setup.registration.NCBlocks.ORE_BLOCKS;
 
 public class NCOre {
@@ -57,13 +54,13 @@ public class NCOre {
         if(!initialized) {
             try {
                 int id = Ores.all().keySet().stream().toList().indexOf(name);
-                registered = (boolean) ORE_CONFIG.ORES.get(name).get(0).get();
-                veinSize = (int) ORE_CONFIG.ORES.get(name).get(2).get();
-                height[0] = (int) ORE_CONFIG.ORES.get(name).get(3).get();
-                height[1] = (int) ORE_CONFIG.ORES.get(name).get(4).get();
+                registered = (boolean) ORE_CONFIG.ORES.get(name).register.get();
+                veinSize = (int) ORE_CONFIG.ORES.get(name).veinSize.get();
+                height[0] = (int) ORE_CONFIG.ORES.get(name).min_height.get();
+                height[1] = (int) ORE_CONFIG.ORES.get(name).max_height.get();
                 initialized = true;
                 try {
-                    dimensions = (List<Integer>) ((ArrayList<?>) ORE_CONFIG.ORES.get(name).get(1).get()).stream().toList();
+                    dimensions = (List<Integer>) ((ArrayList<?>) ORE_CONFIG.ORES.get(name).dimensions.get()).stream().toList();
                 } catch (Exception e) {
                     NuclearCraft.LOGGER.warn("Error while loading dimensions ore config for " + name + "!");
                 }

@@ -2,6 +2,7 @@ package igentuman.nc.block;
 
 import igentuman.nc.block.entity.energy.BatteryBE;
 import igentuman.nc.block.entity.energy.NCEnergy;
+import igentuman.nc.content.energy.BatteryBlocks;
 import igentuman.nc.setup.registration.NCEnergyBlocks;
 import igentuman.nc.util.TextUtils;
 import net.minecraft.ChatFormatting;
@@ -173,4 +174,7 @@ public class BatteryBlock extends Block implements EntityBlock {
         return TextUtils.numberFormat(energy)+" FE";
     }
 
+    public boolean registered() {
+        return BatteryBlocks.registered().containsKey(code());
+    }
 }
