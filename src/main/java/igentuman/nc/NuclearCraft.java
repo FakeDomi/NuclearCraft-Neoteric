@@ -28,21 +28,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ConfigTracker;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Path;
-import java.util.EnumMap;
-import java.util.Set;
 
 import static igentuman.nc.util.FileExtractor.unpackFilesFromFolderToConfig;
 
@@ -55,33 +46,6 @@ public class NuclearCraft {
     public static final String MODID = "nuclearcraft";
     public static NuclearCraft instance;
     private final PacketHandler packetHandler;
-
-    /**
-     * Sorry but has to load config before registration stage
-     */
-    @SuppressWarnings("unchecked")
-    private void forceLoadConfig()
-    {
-        try {
-            Method openConfig = ConfigTracker.INSTANCE.getClass()
-                    .getDeclaredMethod("openConfig", ModConfig.class, Path.class);
-            openConfig.setAccessible(true);
-            Field configSets = ConfigTracker.INSTANCE.getClass().getDeclaredField("configSets");
-            configSets.setAccessible(true);
-            EnumMap<ModConfig.Type, Set<ModConfig>> configSetsValue = (EnumMap<ModConfig.Type, Set<ModConfig>>) configSets.get(ConfigTracker.INSTANCE);
-            ModConfig ncConfig = null;
-            for(ModConfig config : configSetsValue.get(ModConfig.Type.COMMON)) {
-                if(config.getModId().equals(MODID)) {
-                    ncConfig = config;
-                    break;
-                }
-            }
-            openConfig.invoke(ConfigTracker.INSTANCE, ncConfig, FMLPaths.CONFIGDIR.get());
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | NoSuchFieldException e) {
-            LOGGER.error("Unable to force load NC config. And this is why:");
-            LOGGER.error(e);
-        }
-    }
 
     public static void registerConfigs()
     {
