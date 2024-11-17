@@ -99,6 +99,8 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     public int toggleModeTimer = 2000;
 
     @NBTField
+    public boolean enabledByController = false;
+    @NBTField
     public double heatSinkCooling = 0;
     @NBTField
     public double heatPerTick = 0;
@@ -783,7 +785,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     public boolean hasRedstoneSignal() {
-        return Objects.requireNonNull(getLevel()).hasNeighborSignal(worldPosition);
+        return enabledByController || Objects.requireNonNull(getLevel()).hasNeighborSignal(worldPosition);
     }
 
     public Object[] getFuel() {
@@ -855,13 +857,18 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     public void toggleReactor(boolean mode) {
-        controllerEnabled = mode;
+        controllerEnabled = mode || getRedstoneSignal() > 0;
+        enabledByController = mode;
+    }
+
+    public int getRedstoneSignal() {
+        return Objects.requireNonNull(getLevel()).getBestNeighborSignal(worldPosition);
     }
 
     private double targetModerationLevel = 1D;
 
     public void adjustModerator(int redstoneSignal) {
-        String formatted = String.format(Locale.US, "%.2f", (double) redstoneSignal / 15);
+        String formatted = String.format(Locale.US, "%.1f", Math.ceil((double) redstoneSignal / 15));
         targetModerationLevel = Double.parseDouble(formatted);
     }
 

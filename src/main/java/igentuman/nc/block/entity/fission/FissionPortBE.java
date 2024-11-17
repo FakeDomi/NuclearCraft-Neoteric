@@ -74,7 +74,7 @@ public class FissionPortBE extends FissionBE {
             updateAnalogSignal();
         }
         switch (redstoneMode) {
-            case SignalSource.SWITCH -> controller().toggleReactor(hasRedstoneSignal());
+            case SignalSource.SWITCH -> controller().toggleReactor(analogSignal > 0);
             case SignalSource.MODERATOR -> controller().adjustModerator(analogSignal);
         }
 
@@ -109,6 +109,8 @@ public class FissionPortBE extends FissionBE {
                 break;
             case SignalSource.MODERATOR:
                 analogSignal = (byte) (Math.max(1, getRedstoneSignal()));
+            case SignalSource.SWITCH:
+                analogSignal = (byte) (Math.max(0, getRedstoneSignal()));
                 break;
         }
     }
