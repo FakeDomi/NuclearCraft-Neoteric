@@ -1,5 +1,11 @@
 {
   "amount": "Amount: %s",
+  "block.nuclearcraft.active_cryotheum_heat_sink": "Active Cryotheum Heat Sink",
+  "block.nuclearcraft.active_enderium_heat_sink": "Active Enderium Heat Sink",
+  "block.nuclearcraft.active_liquid_helium_heat_sink": "Active Liquid Helium Heat Sink",
+  "block.nuclearcraft.active_liquid_nitrogen_heat_sink": "Active Liquid Nitrogen Heat Sink",
+  "block.nuclearcraft.active_redstone_heat_sink": "Active Redstone Heat Sink",
+  "block.nuclearcraft.active_water_heat_sink": "Active Water Heat Sink",
   "block.nuclearcraft.advanced_barrel": "Advanced Barrel",
   "block.nuclearcraft.advanced_lithium_ion_battery": "Advanced Lithium Ion Battery",
   "block.nuclearcraft.advanced_storage_container": "Advanced Storage Container",

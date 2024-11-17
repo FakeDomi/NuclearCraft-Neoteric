@@ -82,6 +82,7 @@ public class FissionConfig {
 
         public ForgeConfigSpec.ConfigValue<Double> FE_GENERATION_MULTIPLIER;
         public ForgeConfigSpec.ConfigValue<Double> BOILING_MULTIPLIER;
+        public ForgeConfigSpec.ConfigValue<Boolean> ACTIVE_COOLER_PRIME;
 
         public FissionReactorConfig(ForgeConfigSpec.Builder builder) {
             builder.comment("Settings for Fission Reactor").push("fission_reactor");
@@ -125,6 +126,10 @@ public class FissionConfig {
             FE_GENERATION_MULTIPLIER = builder
                     .comment("Affects how much energy reactors produce.")
                     .defineInRange("fe_generation_multiplier", 10D, 0.01D, 1000000D);
+
+            ACTIVE_COOLER_PRIME = builder
+                    .comment("If true, active coolers will be counted in placement rules for other heat sinks.")
+                    .define("active_heatsink_prime", true);
 
             builder.pop();
         }

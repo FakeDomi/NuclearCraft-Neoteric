@@ -32,16 +32,13 @@ public class FileExtractor {
         File targetFolder = new File(configDir.toFile(), targetFolderName);
 
         // Check if the target folder already exists
-        if (targetFolder.exists()) {
-            System.out.println("Folder " + targetFolderName + " already exists in config folder, skipping extraction.");
-           // return;
+        if (!targetFolder.exists()) {
+            if (!targetFolder.mkdirs()) {
+                System.err.println("Failed to create target folder: " + targetFolderName);
+                return;
+            }
         }
 
-        // If the folder doesn't exist, create it
-        if (!targetFolder.mkdirs()) {
-            System.err.println("Failed to create target folder: " + targetFolderName);
-           return;
-        }
         // Find the JAR file where the resources are packaged
         String jarPath = FileExtractor.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         jarPath = jarPath.replace("file:", "").replace("!/", ""); // Clean the path
@@ -73,6 +70,9 @@ public class FileExtractor {
 
                         // Copy the file from the JAR to the config folder
                         try (InputStream inputStream = zipFile.getInputStream(entry)) {
+                            if(targetFile.exists()) {
+                                continue;
+                            }
                             Files.copy(inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                             System.out.println("Extracted file " + relativeFileName + " to config folder.");
                         } catch (IOException e) {
