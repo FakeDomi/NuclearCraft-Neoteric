@@ -47,7 +47,7 @@ public class OreVeinRecipe extends NcRecipe {
     public void write(FriendlyByteBuf buffer) {
 
         super.write(buffer);
-
+        if(isIncomplete()) return;
         buffer.writeDouble(rarityModifier);
     }
 }

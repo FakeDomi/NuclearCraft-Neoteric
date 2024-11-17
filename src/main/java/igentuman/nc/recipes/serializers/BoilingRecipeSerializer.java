@@ -76,6 +76,10 @@ public class BoilingRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     @Override
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         try {
+            boolean isIncomplete = buffer.readBoolean();
+            if(isIncomplete) {
+                return null;
+            }
             readIngredients(buffer);
             double heatRequired = buffer.readDouble();
             double powerModifier = buffer.readDouble();

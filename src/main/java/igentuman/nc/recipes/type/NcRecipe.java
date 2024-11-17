@@ -7,6 +7,7 @@ import igentuman.nc.recipes.ingredient.creator.IngredientCreatorAccess;
 import igentuman.nc.util.annotation.NothingNullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public abstract class NcRecipe extends AbstractRecipe {
 
     protected ItemStackIngredient getBarrier()
     {
-        return IngredientCreatorAccess.item().from(BARRIER);
+        return IngredientCreatorAccess.item().from(ItemStack.EMPTY);
     }
 
     protected FluidStackIngredient getEmptyFluid()
@@ -83,7 +84,10 @@ public abstract class NcRecipe extends AbstractRecipe {
 
     @Override
     public void write(FriendlyByteBuf buffer) {
-
+        buffer.writeBoolean(isIncomplete());
+        if(isIncomplete()) {
+            return;
+        }
         buffer.writeInt(inputItems.length);
         for (ItemStackIngredient input : inputItems) {
             if(input == null) {

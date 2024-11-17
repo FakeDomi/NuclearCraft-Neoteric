@@ -77,6 +77,10 @@ public class TurbineRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         try {
 
+            boolean isIncomplete = buffer.readBoolean();
+            if(isIncomplete) {
+                return null;
+            }
             readIngredients(buffer);
 
             double heatRequired = buffer.readDouble();

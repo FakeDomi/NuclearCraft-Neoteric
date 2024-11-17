@@ -54,6 +54,9 @@ public  class JEIPlugin implements IModPlugin {
         if (recipeTypes == null) {
             recipeTypes = new HashMap<>();
             for (String name : RECIPE_CLASSES.keySet()) {
+                if (Processors.all().containsKey(name) && !Processors.registered().containsKey(name)) {
+                    continue;
+                }
                 recipeTypes.put(name, new RecipeType<>(new ResourceLocation(MODID, name), RECIPE_CLASSES.get(name)));
             }
         }
@@ -74,7 +77,9 @@ public  class JEIPlugin implements IModPlugin {
                 continue;
             }
             ResourceLocation categoryToHide = rl(name);
-            recipeManager.hideRecipeCategory(recipeManager.getRecipeType(categoryToHide).get());
+            if(recipeManager.getRecipeType(categoryToHide).isPresent()) {
+                recipeManager.hideRecipeCategory(recipeManager.getRecipeType(categoryToHide).get());
+            }
         }
     }
 

@@ -140,7 +140,7 @@ public class NcRecipeSerializer<RECIPE extends NcRecipe> implements RecipeSerial
         return this.factory.create(recipeId, inputItems, outputItems, inputFluids, outputFluids, timeModifier, powerModifier, radiation, rarityModifier);
     }
 
-    private RECIPE emptyRecipe(@NotNull ResourceLocation recipeId) {
+    RECIPE emptyRecipe(@NotNull ResourceLocation recipeId) {
         return (RECIPE) new EmptyRecipe(recipeId);
     }
 
@@ -173,11 +173,12 @@ public class NcRecipeSerializer<RECIPE extends NcRecipe> implements RecipeSerial
 
     @Override
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
-        if(recipeId.getPath().contains("nc_ore_veins")) {//todo this is stupid
-            return (RECIPE) SERIALIZERS.get("nc_ore_veins").get().fromNetwork(recipeId, buffer);
+        boolean isIncomplete = buffer.readBoolean();
+        if(isIncomplete) {
+            return null;
         }
-        try {
 
+        try {
             readIngredients(buffer);
 
             double timeModifier = buffer.readDouble();
@@ -191,7 +192,7 @@ public class NcRecipeSerializer<RECIPE extends NcRecipe> implements RecipeSerial
         NuclearCraft.LOGGER.error("Return empty recipe for: {}", recipeId);
 
         //return invalid recipe
-        return this.factory.create(recipeId, new ItemStackIngredient[0], new ItemStackIngredient[0], new FluidStackIngredient[0],  new FluidStackIngredient[0], 0, 0, 0, 1);
+        return emptyRecipe(recipeId);
     }
 
     @Override
