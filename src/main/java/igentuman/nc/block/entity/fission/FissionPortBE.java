@@ -204,21 +204,29 @@ public class FissionPortBE extends FissionBE {
 
     @Override
     public FissionControllerBE<?> controller() {
-        if(NuclearCraft.instance.isNcBeStopped || (getLevel().getServer() != null && !getLevel().getServer().isRunning())) return null;
-        if(getLevel().isClientSide && controllerPos != null) {
+        if(NuclearCraft.instance.isNcBeStopped || (!getLevel().isClientSide() && getLevel().getServer() != null && !getLevel().getServer().isRunning())) return null;
+        if(controller == null && getLevel().isClientSide && controllerPos != null) {
             BlockEntity be = getLevel().getBlockEntity(controllerPos);
-            return be instanceof FissionControllerBE<?> controllerBe ? controllerBe : null;
+            if(be instanceof FissionControllerBE<?> controllerBe) {
+                controller = controllerBe;
+                return  controller;
+            }
         }
         try {
             BlockEntity be = multiblock().controller().controllerBE();
-            return be instanceof FissionControllerBE<?> controllerBe ? controllerBe : null;
+            if(be instanceof FissionControllerBE<?> controllerBe) {
+                controller = controllerBe;
+                return controller;
+            }
         } catch (NullPointerException e) {
             if(controllerPos != null) {
                 BlockEntity be = getLevel().getBlockEntity(controllerPos);
-                return be instanceof FissionControllerBE<?> controllerBe ? controllerBe : null;
+                if(be instanceof FissionControllerBE<?> controllerBe) {
+                    controller = controllerBe;
+                }
             }
-            return null;
         }
+        return controller;
     }
 
     @Override
