@@ -5,6 +5,7 @@ import igentuman.nc.content.materials.Materials;
 import igentuman.nc.content.energy.RTGs;
 import igentuman.nc.setup.registration.FissionFuel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -148,6 +149,9 @@ public class ItemRadiation {
     }
 
     public static double byItem(Item item) {
+        if(item instanceof AirItem) {
+            return 0;
+        }
         if(!initialized) {
             init();
             initialized = true;
