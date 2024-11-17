@@ -271,6 +271,12 @@ public abstract class AbstractRecipeProvider {
         return NcIngredient.stack(stack(isotopeItem(name), count));
     }
 
+    static NcIngredient blockIngredient(String name, int... pCount) {
+        int count = 1;
+        if(pCount.length > 0) count = pCount[0];
+        return ingredient(forgeBlock(name), count);
+    }
+
     public static NcIngredient dustIngredient(String name, int...pCount)
     {
         int count = 1;

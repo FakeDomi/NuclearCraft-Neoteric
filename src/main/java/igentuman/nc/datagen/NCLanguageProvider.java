@@ -10,6 +10,7 @@ import java.util.List;
 
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
+import static igentuman.nc.setup.registration.NCBlocks.*;
 import static igentuman.nc.setup.registration.NCItems.*;
 import static igentuman.nc.setup.registration.NCStorageBlocks.STORAGE_BLOCKS;
 import static igentuman.nc.util.TextUtils.convertToName;
@@ -551,14 +552,17 @@ public class NCLanguageProvider extends LanguageProvider {
     }
 
     private void blocks() {
-        for(String name: NCBlocks.NC_BLOCKS.keySet()) {
-            add(NCBlocks.NC_BLOCKS.get(name).get(), convertToName(name)+" Block");
+        for(String name: NC_MATERIAL_BLOCKS.keySet()) {
+            add(NC_MATERIAL_BLOCKS.get(name).get(), convertToName(name)+" Block");
         }
-        for(String name: NCBlocks.NC_ELECTROMAGNETS.keySet()) {
-            add(NCBlocks.NC_ELECTROMAGNETS.get(name).get(), convertToName(name));
+        for(String name: NC_BLOCKS.keySet()) {
+            add(NC_BLOCKS.get(name).get(), convertToName(name)+" Block");
         }
-        for(String name: NCBlocks.NC_RF_AMPLIFIERS.keySet()) {
-            add(NCBlocks.NC_RF_AMPLIFIERS.get(name).get(), convertToName(name));
+        for(String name: NC_ELECTROMAGNETS.keySet()) {
+            add(NC_ELECTROMAGNETS.get(name).get(), convertToName(name));
+        }
+        for(String name: NC_RF_AMPLIFIERS.keySet()) {
+            add(NC_RF_AMPLIFIERS.get(name).get(), convertToName(name));
         }
         add("block."+MODID+".redstone_dimmer", "Redstone Dimmer");
     }

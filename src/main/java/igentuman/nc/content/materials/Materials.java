@@ -140,6 +140,7 @@ public class Materials extends MaterialsManager {
     public final static String hafnium = "hafnium";
     public final static String niobium = "niobium";
     public final static String osmium = "osmium";
+    public final static String iridium = "iridium";
     public final static String samarium = "samarium";
     public final static String terbium = "terbium";
     public final static String ytterbium = "ytterbium";
@@ -188,6 +189,7 @@ public class Materials extends MaterialsManager {
             all.put(chromium, NCMaterial.get(chromium).define("dust", "ingot"));
             all.put(erbium, NCMaterial.get(erbium).define("dust"));
             all.put(hafnium, NCMaterial.get(hafnium).define("dust", "ingot"));
+            all.put(iridium, NCMaterial.get(iridium).define("dust", "ingot"));
             all.put(niobium, NCMaterial.get(niobium).define("dust", "ingot"));
             all.put(osmium, NCMaterial.get(osmium).define("dust", "ingot"));
             all.put(potassium, NCMaterial.get(potassium).define("dust", "ingot"));

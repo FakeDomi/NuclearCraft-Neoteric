@@ -1175,6 +1175,24 @@ public class NCRecipes extends RecipeProvider {
                 .unlockedBy("item", has(forgePlate(Materials.steel)))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TURBINE_BLOCKS.get("turbine_basic_rotor_blade").get(), 2)
+                .pattern(" P ")
+                .pattern(" P ")
+                .pattern(" P ")
+                .define('P', forgePlate(Materials.iron))
+                .group(MODID+"_turbine")
+                .unlockedBy("item", has(forgePlate(Materials.iron)))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TURBINE_BLOCKS.get("turbine_sic_sic_cmc_rotor_blade").get(), 2)
+                .pattern(" P ")
+                .pattern(" P ")
+                .pattern(" P ")
+                .define('P', forgePlate(Materials.sic_sic_cmc))
+                .group(MODID+"_turbine")
+                .unlockedBy("item", has(forgePlate(Materials.sic_sic_cmc)))
+                .save(consumer);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TURBINE_BLOCKS.get("turbine_glass").get(), 1)
                 .requires(TURBINE_BLOCKS.get("turbine_casing").get())
                 .requires(Tags.Items.GLASS)
@@ -1266,7 +1284,7 @@ public class NCRecipes extends RecipeProvider {
 
         for(String name: Materials.ingots().keySet()) {
             if(Materials.ingots().get(name).block) {
-                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NC_BLOCKS.get(name).get())
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NC_MATERIAL_BLOCKS.get(name).get())
                         .requires(Ingredient.of(forgeIngot(name)), 9)
                         .group(MODID+"_blocks")
                         .unlockedBy("ingot", has(NCItems.NC_INGOTS.get(name).get()))

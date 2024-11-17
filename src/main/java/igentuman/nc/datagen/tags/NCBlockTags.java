@@ -36,7 +36,7 @@ public class NCBlockTags extends BlockTagsProvider {
         ores();
         blocks();
         machines();
-        tag(FissionBlocks.MODERATORS_BLOCKS).add(NCBlocks.NC_BLOCKS.get("graphite").get(), NCBlocks.NC_BLOCKS.get("beryllium").get());
+        tag(FissionBlocks.MODERATORS_BLOCKS).add(NCBlocks.NC_MATERIAL_BLOCKS.get("graphite").get(), NCBlocks.NC_MATERIAL_BLOCKS.get("beryllium").get());
         tag(FusionReactor.CASING_BLOCKS).add(
                 FUSION_BLOCKS.get("fusion_reactor_casing").get(),
                 FUSION_BLOCKS.get("fusion_reactor_casing_glass").get());
@@ -51,8 +51,8 @@ public class NCBlockTags extends BlockTagsProvider {
         tag(FissionBlocks.INNER_REACTOR_BLOCKS)
                 .add(FissionReactor.getHSBlocks())
                 .add(
-                        NCBlocks.NC_BLOCKS.get("graphite").get(),
-                        NCBlocks.NC_BLOCKS.get("beryllium").get(),
+                        NCBlocks.NC_MATERIAL_BLOCKS.get("graphite").get(),
+                        NCBlocks.NC_MATERIAL_BLOCKS.get("beryllium").get(),
                         FISSION_BLOCKS.get("fission_reactor_irradiation_chamber").get(),
                         FISSION_BLOCKS.get("fission_reactor_solid_fuel_cell").get()
                 );
@@ -95,11 +95,19 @@ public class NCBlockTags extends BlockTagsProvider {
                 tag(BLOCK_TAGS.get(block)).add(NCBlocks.NC_BLOCKS.get(block).get());
             }
         }
+        for(String block: NC_MATERIAL_BLOCKS.keySet()) {
+            tag(BlockTags.MINEABLE_WITH_PICKAXE).add(NC_MATERIAL_BLOCKS.get(block).get());
+            tag(BlockTags.NEEDS_IRON_TOOL).add(NC_MATERIAL_BLOCKS.get(block).get());
+            tag(Tags.Blocks.STORAGE_BLOCKS).add(NC_MATERIAL_BLOCKS.get(block).get());
+            if(BLOCK_TAGS.get(block) != null) {
+                tag(BLOCK_TAGS.get(block)).add(NC_MATERIAL_BLOCKS.get(block).get());
+            }
+        }
         tag(DECAY_GEN_BLOCK).add(
-                NC_BLOCKS.get("uranium").get(),
-                NC_BLOCKS.get("uranium238").get(),
-                NC_BLOCKS.get("plutonium238").get(),
-                NC_BLOCKS.get("americium241").get()
+                NC_MATERIAL_BLOCKS.get("uranium").get(),
+                NC_MATERIAL_BLOCKS.get("uranium238").get(),
+                NC_MATERIAL_BLOCKS.get("plutonium238").get(),
+                NC_MATERIAL_BLOCKS.get("americium241").get()
                 );
 
     }

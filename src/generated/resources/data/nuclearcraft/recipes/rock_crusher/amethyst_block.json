@@ -2,17 +2,16 @@
   "type": "nuclearcraft:rock_crusher",
   "input": [
     {
-      "count": 12,
-      "item": "minecraft:purpur_block"
+      "count": 32,
+      "item": "minecraft:amethyst_block"
     }
   ],
   "output": [
     {
-      "count": 4,
-      "tag": "forge:dusts/purpur"
+      "tag": "forge:dusts/yttrium"
     },
     {
-      "tag": "forge:dusts/iridium"
+      "tag": "forge:dusts/hafnium"
     }
   ],
   "powerModifier": 1.0,

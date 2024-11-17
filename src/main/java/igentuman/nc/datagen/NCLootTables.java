@@ -34,7 +34,10 @@ public class NCLootTables extends BaseLootTableProvider {
         }
     }
     private void blocks() {
-        for(RegistryObject<Block> block: NCBlocks.NC_BLOCKS.values()) {
+        for(RegistryObject<Block> block: NC_BLOCKS.values()) {
+            add(block);
+        }
+        for(RegistryObject<Block> block: NC_MATERIAL_BLOCKS.values()) {
             add(block);
         }
 
@@ -82,6 +85,7 @@ public class NCLootTables extends BaseLootTableProvider {
         List<Block> all = new ArrayList<>();
         all.addAll(ORE_BLOCKS.values().stream().map(RegistryObject::get).toList());
         all.addAll(NC_BLOCKS.values().stream().map(RegistryObject::get).toList());
+        all.addAll(NC_MATERIAL_BLOCKS.values().stream().map(RegistryObject::get).toList());
         all.addAll(FISSION_BLOCKS.values().stream().map(RegistryObject::get).toList());
         all.addAll(FUSION_BLOCKS.values().stream().map(RegistryObject::get).toList());
         all.addAll(TURBINE_BLOCKS.values().stream().map(RegistryObject::get).toList());

@@ -1,5 +1,6 @@
 package igentuman.nc.datagen.blockstates;
 
+import igentuman.nc.content.materials.Materials;
 import igentuman.nc.multiblock.fission.FissionBlocks;
 import igentuman.nc.multiblock.turbine.TurbineRegistration;
 import igentuman.nc.setup.registration.NCEnergyBlocks;
@@ -274,13 +275,19 @@ public class NCBlockStates extends BlockStateProvider {
 
 
     private void materialFluidBlocks() {
+        /* currently NC_MATERIAL_BLOCKS used for solid blocks only
         for(String name: NC_MATERIAL_BLOCKS.keySet()) {
-            simpleBlock(NC_MATERIAL_BLOCKS.get(name).get(), model(NC_MATERIAL_BLOCKS.get(name).get(), "material/fluid"));
-        }
+            if(Materials.fluids().containsKey(name)) {
+                simpleBlock(NC_MATERIAL_BLOCKS.get(name).get(), model(NC_MATERIAL_BLOCKS.get(name).get(), "material/fluid"));
+            }
+        }*/
     }
     private void blocks() {
         for(String name: NC_BLOCKS.keySet()) {
             simpleBlock(NC_BLOCKS.get(name).get(), model(NC_BLOCKS.get(name).get(), "material/block"));
+        }
+        for(String name: NC_MATERIAL_BLOCKS.keySet()) {
+            simpleBlock(NC_MATERIAL_BLOCKS.get(name).get(), model(NC_MATERIAL_BLOCKS.get(name).get(), "material/block"));
         }
         for(String name: NC_ELECTROMAGNETS.keySet()) {
             if(name.contains("slope")) {

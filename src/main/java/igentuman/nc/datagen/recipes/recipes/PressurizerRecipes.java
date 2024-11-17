@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.function.Consumer;
 
 import static igentuman.nc.setup.registration.NCBlocks.NC_BLOCKS;
+import static igentuman.nc.setup.registration.NCBlocks.NC_MATERIAL_BLOCKS;
 import static igentuman.nc.setup.registration.NCItems.*;
 import static igentuman.nc.setup.registration.Tags.INGOTS_TAG;
 import static net.minecraft.world.item.Items.*;
@@ -28,10 +29,10 @@ public class PressurizerRecipes extends AbstractRecipeProvider {
         itemToItem(ingredient(IRON_INGOT), plateStack(Materials.iron));
         itemToItem(ingredient(COPPER_INGOT), plateStack(Materials.copper));
 
-        itemToItem(isotopeIngredient(Materials.americium241, 9), ingredient(NC_BLOCKS.get("americium241").get().asItem()));
-        itemToItem(isotopeIngredient(Materials.uranium238, 9), ingredient(NC_BLOCKS.get("uranium238").get().asItem()));
-        itemToItem(isotopeIngredient(Materials.californium250, 9), ingredient(NC_BLOCKS.get("californium250").get().asItem()));
-        itemToItem(isotopeIngredient(Materials.plutonium238, 9), ingredient(NC_BLOCKS.get("plutonium238").get().asItem()));
+        itemToItem(isotopeIngredient(Materials.americium241, 9), ingredient(NC_MATERIAL_BLOCKS.get("americium241").get().asItem()));
+        itemToItem(isotopeIngredient(Materials.uranium238, 9), ingredient(NC_MATERIAL_BLOCKS.get("uranium238").get().asItem()));
+        itemToItem(isotopeIngredient(Materials.californium250, 9), ingredient(NC_MATERIAL_BLOCKS.get("californium250").get().asItem()));
+        itemToItem(isotopeIngredient(Materials.plutonium238, 9), ingredient(NC_MATERIAL_BLOCKS.get("plutonium238").get().asItem()));
         itemToItem(dustIngredient(Materials.graphite), plateStack(Materials.graphite));
         itemToItem(ingredient(ALL_NC_ITEMS.get("flour").get(), 2), ingredient(ALL_NC_ITEMS.get("graham_cracker").get()));
         itemToItem(ingredient(NC_FOOD.get("foursmore").get(), 2), ingredient(NC_FOOD.get("evenmoresmore").get()));

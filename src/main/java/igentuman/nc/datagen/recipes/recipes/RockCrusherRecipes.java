@@ -4,10 +4,12 @@ import igentuman.nc.recipes.ingredient.NcIngredient;
 import igentuman.nc.content.processors.Processors;
 import igentuman.nc.content.materials.Materials;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Item;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+import static igentuman.nc.setup.registration.Tags.forgeOre;
 import static net.minecraft.world.item.Items.*;
 
 public class RockCrusherRecipes extends AbstractRecipeProvider {
@@ -17,13 +19,23 @@ public class RockCrusherRecipes extends AbstractRecipeProvider {
         ID = Processors.ROCK_CRUSHER;
 
         add(
+                ingredient(forgeOre("cobalt"), 4),
+                List.of(dustIngredient(Materials.cobalt, 3), dustIngredient(Materials.osmium, 1))
+        );
+
+        add(
+                (ingredient(AMETHYST_BLOCK, 32)),
+                List.of(dustIngredient(Materials.yttrium, 1), dustIngredient(Materials.hafnium, 1))
+        );
+
+        add(
                 (ingredient(END_STONE, 3)),
                 List.of(dustIngredient(Materials.borax, 1), dustIngredient(Materials.germanium, 1))
         );
 
         add(
-                (ingredient(PURPUR_BLOCK, 2)),
-                List.of(dustIngredient(Materials.purpur, 1))
+                (ingredient(PURPUR_BLOCK, 12)),
+                List.of(dustIngredient(Materials.purpur, 4), dustIngredient(Materials.iridium, 1))
         );
 
         add(

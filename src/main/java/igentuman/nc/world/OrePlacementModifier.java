@@ -36,12 +36,29 @@ public class OrePlacementModifier extends PlacementModifier {
         this.heightMap = new HashMap<>();
         this.dimensionsMap = new HashMap<>();
         for(String name: ORE_CONFIG.ORES.keySet()) {
-            int amount = ORE_CONFIG.ORES.get(name).veinSize.get();
-            if(!ORE_CONFIG.ORES.get(name).register.get()) {
+            boolean register;
+            int amount;
+            int minHeight;
+            int maxHeight;
+            List<Integer> dims;
+            try {
+                register = ORE_CONFIG.ORES.get(name).register.get();
+                amount = ORE_CONFIG.ORES.get(name).veinSize.get();
+                minHeight = ORE_CONFIG.ORES.get(name).min_height.get();
+                maxHeight = ORE_CONFIG.ORES.get(name).max_height.get();
+                dims = ORE_CONFIG.ORES.get(name).dimensions.get();
+            } catch (Exception e) {
+                register = ORE_CONFIG.ORES.get(name).register.getDefault();
+                amount = ORE_CONFIG.ORES.get(name).veinSize.getDefault();
+                minHeight = ORE_CONFIG.ORES.get(name).min_height.getDefault();
+                maxHeight = ORE_CONFIG.ORES.get(name).max_height.getDefault();
+                dims = ORE_CONFIG.ORES.get(name).dimensions.getDefault();
+            }
+            if(!register) {
                 amount = 0;
             }
-            this.heightMap.put(name, new Integer[]{ORE_CONFIG.ORES.get(name).min_height.get(), ORE_CONFIG.ORES.get(name).max_height.get()});
-            this.dimensionsMap.put(name, ORE_CONFIG.ORES.get(name).dimensions.get());
+            this.heightMap.put(name, new Integer[]{minHeight, maxHeight});
+            this.dimensionsMap.put(name, dims);
             this.countMap.put(name, amount);
         }
 

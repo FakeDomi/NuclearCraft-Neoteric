@@ -11,6 +11,12 @@ public class AlloySmelterRecipes extends AbstractRecipeProvider {
         AlloySmelterRecipes.consumer = consumer;
         ID = Processors.ALLOY_SMELTER;
 
+        doubleToItem(ID, dustIngredient(Materials.iron, 1), dustIngredient(Materials.chromium, 4),
+                ingotStack(Materials.nichrome, 5), 2D);
+        doubleToItem(ID, dustIngredient(Materials.osmium, 3), dustIngredient(Materials.iridium, 1),
+                ingotStack(Materials.osmiridium, 4), 2D);
+        doubleToItem(ID, dustIngredient(Materials.carbon_manganese, 1), dustIngredient(Materials.titanium, 11),
+                ingotStack(Materials.sic_sic_cmc, 12), 4D);
         doubleToItem(ID, dustIngredient(Materials.niobium, 1), dustIngredient(Materials.titanium),
                 ingotStack(Materials.niobium_titanium, 1), 4D);
         doubleToItem(ID, dustIngredient(Materials.niobium, 2), dustIngredient(Materials.tin),
@@ -52,6 +58,12 @@ public class AlloySmelterRecipes extends AbstractRecipeProvider {
         doubleToItem(ID, dustIngredient(Materials.molybdenum, 15), dustIngredient(Materials.zirconium),
                 ingotStack(Materials.zirconium_molybdenum, 16),8D, 2D);
 
+        doubleToItem(ID, ingotIngredient(Materials.osmium, 3), ingotIngredient(Materials.iridium, 1),
+                ingotStack(Materials.osmiridium, 4), 4D);
+        doubleToItem(ID, ingotIngredient(Materials.iron, 1), ingotIngredient(Materials.chromium, 4),
+                ingotStack(Materials.nichrome, 5), 2.5D);
+        doubleToItem(ID, ingotIngredient(Materials.carbon_manganese, 1), ingotIngredient(Materials.titanium, 11),
+                ingotStack(Materials.sic_sic_cmc, 12), 7D);
         doubleToItem(ID, ingotIngredient(Materials.niobium, 1), ingotIngredient(Materials.titanium),
                 ingotStack(Materials.niobium_titanium, 1), 5D);
         doubleToItem(ID, ingotIngredient(Materials.niobium, 2), ingotIngredient(Materials.tin),
