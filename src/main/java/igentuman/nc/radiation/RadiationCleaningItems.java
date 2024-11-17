@@ -11,9 +11,9 @@ import static igentuman.nc.handler.config.RadiationConfig.RADIATION_CONFIG;
 import static net.minecraft.world.item.Items.AIR;
 
 public class RadiationCleaningItems {
-    protected static HashMap<Item, Integer> radiationMap = new HashMap<>();
+    protected static HashMap<Item, Long> radiationMap = new HashMap<>();
     protected static boolean initialized = false;
-    public static HashMap<Item, Integer> get()
+    public static HashMap<Item, Long> get()
     {
         return radiationMap;
     }
@@ -33,13 +33,13 @@ public class RadiationCleaningItems {
                 continue;
             }
             try {
-                radiationMap.put(item, Integer.parseInt(split[1].trim()));
+                radiationMap.put(item, Long.parseLong(split[1].trim()));
             } catch (NumberFormatException ignored) {}
         }
 
     }
 
-    public static void add(String item, int radiation)
+    public static void add(String item, long radiation)
     {
         Item toAdd = getItemByName(item);
         if(toAdd.equals(AIR)) {
@@ -48,7 +48,7 @@ public class RadiationCleaningItems {
         radiationMap.put(toAdd, radiation);
     }
 
-    public static void add(Item item, int radiation)
+    public static void add(Item item, long radiation)
     {
         radiationMap.put(item, radiation);
     }

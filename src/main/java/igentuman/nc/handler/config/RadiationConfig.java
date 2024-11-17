@@ -122,13 +122,13 @@ public class RadiationConfig {
             RADIATION_REMOVAL_ITEMS = builder
                     .comment("List of items what cleans player radiation when used (pRad). Format: item_id|radiation")
                     .define("radiation_removal_items", List.of(
-                            "minecraft:golden_carrot|50000000",
-                            "minecraft:golden_apple|200000000",
-                            "minecraft:enchanted_golden_apple|5000000000",
-                            "nuclearcraft:dominos|500000000",
-                            "nuclearcraft:moresmore|5000000000",
-                            "nuclearcraft:evenmoresmore|2000000000",
-                            "nuclearcraft:radaway|10000000000"
+                            "minecraft:golden_carrot|10000000",
+                            "minecraft:golden_apple|100000000",
+                            "minecraft:enchanted_golden_apple|2500000000",
+                            "nuclearcraft:dominos|250000000",
+                            "nuclearcraft:moresmore|2500000000",
+                            "nuclearcraft:evenmoresmore|1000000000",
+                            "nuclearcraft:radaway|5000000000"
                     ), o -> o instanceof ArrayList);
 
             ITEM_RADIATION = builder
