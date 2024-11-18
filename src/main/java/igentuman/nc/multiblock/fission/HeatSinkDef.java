@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import igentuman.nc.NuclearCraft;
 import igentuman.nc.block.fission.FissionFuelCellBlock;
 import igentuman.nc.multiblock.MultiblockHandler;
+import igentuman.nc.recipes.ingredient.creator.FluidStackIngredientCreator;
 import igentuman.nc.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +17,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +28,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_BLOCKS;
-import static igentuman.nc.setup.registration.Registries.ITEM_REGISTRY;
+import static igentuman.nc.setup.registration.Registries.*;
+import static igentuman.nc.util.TagUtil.getFirstMatchingFluidByTag;
 
 public class HeatSinkDef {
     public double heat = 0;
@@ -127,6 +131,17 @@ public class HeatSinkDef {
 
     public boolean mustdDirectlyTouchFuelCell() {
         return validator.hasToTouchFuelCell();
+    }
+
+    public List<FluidStack> getAllowedFluids() {
+        return getFluidByTagKey("forge:"+name);
+    }
+
+    private List<FluidStack> getFluidByTagKey(String name) {
+        List<FluidStack> tmp = new ArrayList<>();
+        Fluid fluid = getFirstMatchingFluidByTag(name);
+        tmp.add(new FluidStack(fluid,1));
+        return tmp;
     }
 
     public static class Validator {

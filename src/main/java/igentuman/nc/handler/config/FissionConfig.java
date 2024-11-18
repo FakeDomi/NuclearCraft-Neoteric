@@ -1,19 +1,9 @@
 package igentuman.nc.handler.config;
 
-import igentuman.nc.content.Electromagnets;
-import igentuman.nc.content.RFAmplifier;
-import igentuman.nc.content.energy.BatteryBlocks;
-import igentuman.nc.content.energy.RTGs;
-import igentuman.nc.content.energy.SolarPanels;
-import igentuman.nc.content.fuel.FuelManager;
-import igentuman.nc.content.storage.BarrelBlocks;
-import igentuman.nc.multiblock.fission.FissionBlocks;
-import igentuman.nc.multiblock.turbine.TurbineRegistration;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 public class FissionConfig {
@@ -82,7 +72,8 @@ public class FissionConfig {
 
         public ForgeConfigSpec.ConfigValue<Double> FE_GENERATION_MULTIPLIER;
         public ForgeConfigSpec.ConfigValue<Double> BOILING_MULTIPLIER;
-        public ForgeConfigSpec.ConfigValue<Boolean> ACTIVE_COOLER_PRIME;
+        public ForgeConfigSpec.ConfigValue<Boolean> ACTIVE_HEATSINK_PRIME;
+        public ForgeConfigSpec.ConfigValue<Integer> ACTIVE_HEATSINK_COOLANT_PER_TICK;
 
         public FissionReactorConfig(ForgeConfigSpec.Builder builder) {
             builder.comment("Settings for Fission Reactor").push("fission_reactor");
@@ -127,9 +118,13 @@ public class FissionConfig {
                     .comment("Affects how much energy reactors produce.")
                     .defineInRange("fe_generation_multiplier", 10D, 0.01D, 1000000D);
 
-            ACTIVE_COOLER_PRIME = builder
+            ACTIVE_HEATSINK_PRIME = builder
                     .comment("If true, active coolers will be counted in placement rules for other heat sinks.")
                     .define("active_heatsink_prime", true);
+
+            ACTIVE_HEATSINK_COOLANT_PER_TICK = builder
+                    .comment("How much coolant active heat sink will consume per tick.")
+                    .defineInRange("active_heatsink_coolant_per_tick", 100, 1, 10000);
 
             builder.pop();
         }

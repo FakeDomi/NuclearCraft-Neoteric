@@ -24,15 +24,17 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
 
     private int irradiationConnections = 0;
     private final List<Block> validModerators;
-    public HashMap<BlockPos, HeatSinkBlock> activeHeatSinks = new HashMap<>();
+    public HashMap<BlockPos, HeatSinkBlock> validHeatSinks = new HashMap<>();
     private List<BlockPos> moderators = new ArrayList<>();
     private List<BlockPos> irradiators = new ArrayList<>();
     public List<BlockPos> heatSinks = new ArrayList<>();
     public List<BlockPos> fuelCells = new ArrayList<>();
     private double heatSinkCooling = 0;
+    public double activeCooling = 0;
     private FissionControllerBE<?> controllerBe;
     private List<BlockPos> directFuelCellConnectionPos = new ArrayList<>();
     private List<BlockPos> secondFuelCellConnectionPos = new ArrayList<>();
+    public HashMap<String, Integer> coolantPerTick = new HashMap<>();
 
     @Override
     public int maxHeight() {
@@ -86,18 +88,59 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     }
 
     public Map<BlockPos, HeatSinkBlock> validHeatSinks() {
-        if(activeHeatSinks.isEmpty()) {
+        if(validHeatSinks.isEmpty()) {
             for(BlockPos hpos: heatSinks) {
                 Block block = getBlockState(hpos).getBlock();
                 if(block instanceof HeatSinkBlock hs) {
                     if(hs.isValid(getLevel(), hpos)) {
-                        activeHeatSinks.put(hpos, hs);
+                        validHeatSinks.put(hpos, hs);
+                        if(hs.isActive()) {
+                            addActiveCoolant(hs.def.name.replace("active_", ""));
+                        }
                     }
                 }
             }
         }
-        controllerBE().heatSinksCount = activeHeatSinks.size();
-        return activeHeatSinks;
+        controllerBE().heatSinksCount = validHeatSinks.size();
+        return validHeatSinks;
+    }
+
+    private void addActiveCoolant(String name) {
+        if(!coolantPerTick.containsKey(name)) {
+            coolantPerTick.put(name, 0);
+        }
+        coolantPerTick.replace(name, coolantPerTick.get(name)+FISSION_CONFIG.ACTIVE_HEATSINK_COOLANT_PER_TICK.get());
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        tickActiveHeatSinks();
+    }
+
+    private void tickActiveHeatSinks() {
+        activeCooling = 0;
+        for(String coolant: coolantPerTick.keySet()) {
+            int amount = coolantPerTick.get(coolant);
+            if(amount == 0) {
+                continue;
+            }
+            if(!controllerBE().hasEnoughCoolant(coolant, amount)) {
+                activeCooling -= getCoolingByCoolant(coolant, amount);
+                continue;
+            }
+            activeCooling += getCoolingByCoolant(coolant, amount);
+            controllerBE().drainCoolant(coolant, amount);
+        }
+    }
+
+    private double getCoolingByCoolant(String coolant, int amount) {
+        if(!FissionBlocks.heatsinks.containsKey("active_"+coolant)) {
+            return 0;
+        }
+        int mbPerTick = FISSION_CONFIG.ACTIVE_HEATSINK_COOLANT_PER_TICK.get();
+        FissionBlocks.heatsinks.get("active_"+coolant);
+        return ((double)amount /(double)mbPerTick)*FissionBlocks.heatsinks.get("active_"+coolant).heat;
     }
 
     public boolean isModerator(BlockPos pos, Level level) {
@@ -304,7 +347,8 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         irradiators.clear();
         fuelCells.clear();
         heatSinks.clear();
-        activeHeatSinks.clear();
+        validHeatSinks.clear();
+        coolantPerTick.clear();
         directFuelCellConnectionPos.clear();
         secondFuelCellConnectionPos.clear();
         irradiationConnections = 0;
@@ -318,6 +362,9 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         if(refreshInnerCacheFlag || forceCheck) {
             heatSinkCooling = 0;
             for (HeatSinkBlock hs : validHeatSinks().values()) {
+                if(hs.isActive()) {
+                    continue;
+                }
                 heatSinkCooling += hs.heat;
             }
         }

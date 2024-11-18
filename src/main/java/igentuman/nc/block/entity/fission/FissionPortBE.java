@@ -132,7 +132,7 @@ public class FissionPortBE extends FissionBE {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return controller().contentHandler.itemCapability.cast();
         }
-        if (cap == ForgeCapabilities.FLUID_HANDLER && controller().isSteamMode) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER && controller().canAcceptFluid()) {
             return controller().getCapability(cap, side);
         }
         if (cap == ForgeCapabilities.ENERGY && !controller().isSteamMode) {

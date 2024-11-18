@@ -156,4 +156,8 @@ public class HeatSinkBlock extends MultiblockBlock {
     public boolean isValid(Level level, BlockPos pos) {
         return def.getValidator().isValid(level, pos);
     }
+
+    public boolean isActive() {
+        return def.name.contains("active");
+    }
 }

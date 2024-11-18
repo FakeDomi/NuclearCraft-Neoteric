@@ -8,6 +8,7 @@ import igentuman.nc.handler.sided.SidedContentHandler;
 import igentuman.nc.handler.sided.SlotModePair;
 import igentuman.nc.handler.sided.capability.ItemCapabilityHandler;
 import igentuman.nc.item.ItemFuel;
+import igentuman.nc.multiblock.fission.FissionBlocks;
 import igentuman.nc.multiblock.fission.FissionReactorMultiblock;
 import igentuman.nc.radiation.ItemRadiation;
 import igentuman.nc.radiation.data.RadiationManager;
@@ -41,6 +42,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -156,7 +158,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         multiblock = new FissionReactorMultiblock(this);
         contentHandler = new SidedContentHandler(
                 1, 1,
-                1, 1);
+                1+activeCoolersTypes().size(), 1);
         contentHandler.setBlockEntity(this);
         contentHandler.fluidCapability.setGlobalMode(0, SlotModePair.SlotMode.PULL);
         contentHandler.fluidCapability.setGlobalMode(1, SlotModePair.SlotMode.PUSH);
@@ -166,6 +168,22 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         contentHandler.fluidCapability.tanks.get(1).setCapacity(10000);
         contentHandler.setAllowedInputFluids(0, getAllowedCoolants());
         contentHandler.setAllowedInputFluids(1, getAllowedCoolantsOutput());
+        for(String type: activeCoolersTypes()) {
+            contentHandler.setAllowedInputFluids(
+                    1+activeCoolersTypes().indexOf(type),
+                    FissionBlocks.heatsinks.get(type).getAllowedFluids()
+            );
+        }
+    }
+
+    private List<String> activeCoolersTypes() {
+        List<String> types = new ArrayList<>();
+        for(String name: FissionBlocks.heatsinks.keySet()) {
+            if(name.contains("active") && !name.contains("empty")) {
+                types.add(name.replace("active_", ""));
+            }
+        }
+        return types;
     }
 
     protected List<FluidStack> getAllowedCoolantsOutput() {
@@ -311,7 +329,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return contentHandler.getItemCapability(side);
         }
-        if (cap == ForgeCapabilities.FLUID_HANDLER && isSteamMode) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER && canAcceptFluid()) {
             return contentHandler.getFluidCapability(side);
         }
         if (cap == ForgeCapabilities.ENERGY && !isSteamMode && side == null) {
@@ -510,7 +528,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     private boolean coolDown() {
         double wasHeat = heat;
         heat -= coolingPerTick();
-        boil();
+        if(isSteamMode) {
+            boil();
+        }
         heat = Math.max(0, heat);
         return wasHeat != heat;
     }
@@ -611,7 +631,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
 
     public double heatSinksCooling() {
         heatSinkCooling = multiblock().countCooling(refreshCacheFlag);
-        return heatSinkCooling;
+        return heatSinkCooling+multiblock().activeCooling;
     }
 
     public double heatPerTick() {
@@ -897,6 +917,30 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     public void adjustModerationLevel(int level) {
         String formatted = String.format(Locale.US,"%.2f", (double) Math.max(1, level) / 100);
         targetModerationLevel = Double.parseDouble(formatted);
+    }
+
+    public boolean canAcceptFluid() {
+        return isSteamMode || multiblock().coolantPerTick.size() > 0;
+    }
+
+    public boolean hasEnoughCoolant(String coolant, int amount) {
+        for(int i = 0; i < contentHandler.fluidCapability.tanks.size(); i++) {
+            FluidStack stack = contentHandler.fluidCapability.tanks.get(i).getFluid();
+            if(ForgeRegistries.FLUIDS.getKey(stack.getFluid()).getPath().equals(coolant) && stack.getAmount() >= amount) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void drainCoolant(String coolant, int amount) {
+        for(int i = 0; i < contentHandler.fluidCapability.tanks.size(); i++) {
+            FluidStack stack = contentHandler.fluidCapability.tanks.get(i).getFluid();
+            if(ForgeRegistries.FLUIDS.getKey(stack.getFluid()).getPath().equals(coolant) && stack.getAmount() >= amount) {
+                contentHandler.fluidCapability.tanks.get(i).drain(amount, IFluidHandler.FluidAction.EXECUTE);
+                return;
+            }
+        }
     }
 
     public static class Recipe extends NcRecipe {
