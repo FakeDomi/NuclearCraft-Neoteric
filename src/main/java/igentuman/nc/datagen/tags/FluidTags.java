@@ -8,6 +8,8 @@ import net.minecraftforge.common.Tags.Fluids;
 import net.minecraftforge.data.event.GatherDataEvent;
 
 import static igentuman.nc.NuclearCraft.MODID;
+import static igentuman.nc.setup.registration.NCFluids.NC_GASES;
+import static igentuman.nc.setup.registration.NCFluids.NC_MATERIALS;
 import static igentuman.nc.setup.registration.Tags.LIQUIDS_TAG;
 
 public class FluidTags extends FluidTagsProvider
@@ -20,16 +22,16 @@ public class FluidTags extends FluidTagsProvider
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		for(String name: NCFluids.NC_MATERIALS.keySet()) {
-			tag(LIQUIDS_TAG.get(name)).add(NCFluids.NC_MATERIALS.get(name).getStill());
-			tag(LIQUIDS_TAG.get(name)).add(NCFluids.NC_MATERIALS.get(name).getFlowing());
+		for(String name: NC_MATERIALS.keySet()) {
+			tag(LIQUIDS_TAG.get(name)).add(NC_MATERIALS.get(name).getStill());
+			tag(LIQUIDS_TAG.get(name)).add(NC_MATERIALS.get(name).getFlowing());
 		}
-		for(String name: NCFluids.NC_GASES.keySet()) {
-			tag(LIQUIDS_TAG.get(name)).add(NCFluids.NC_GASES.get(name).getStill());
-			tag(LIQUIDS_TAG.get(name)).add(NCFluids.NC_GASES.get(name).getFlowing());
+		for(String name: NC_GASES.keySet()) {
+			tag(LIQUIDS_TAG.get(name)).add(NC_GASES.get(name).getStill());
+			tag(LIQUIDS_TAG.get(name)).add(NC_GASES.get(name).getFlowing());
 
-			tag(Fluids.GASEOUS).add(NCFluids.NC_GASES.get(name).getStill());
-			tag(Fluids.GASEOUS).add(NCFluids.NC_GASES.get(name).getFlowing());
+			tag(Fluids.GASEOUS).add(NC_GASES.get(name).getStill());
+			tag(Fluids.GASEOUS).add(NC_GASES.get(name).getFlowing());
 		}
 	}
 }

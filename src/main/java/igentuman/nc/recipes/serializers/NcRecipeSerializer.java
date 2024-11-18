@@ -175,7 +175,7 @@ public class NcRecipeSerializer<RECIPE extends NcRecipe> implements RecipeSerial
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         boolean isIncomplete = buffer.readBoolean();
         if(isIncomplete) {
-            return null;
+            return emptyRecipe(recipeId);
         }
 
         try {

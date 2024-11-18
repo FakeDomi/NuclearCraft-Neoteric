@@ -1,6 +1,5 @@
 package igentuman.nc.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.nc.block.entity.fission.FissionControllerBE;
 import igentuman.nc.compat.jei.util.TickTimer;
 import mezz.jei.api.constants.VanillaTypes;
@@ -27,7 +26,9 @@ import java.util.List;
 import static igentuman.nc.NuclearCraft.*;
 import static igentuman.nc.compat.GlobalVars.*;
 import static igentuman.nc.util.TextUtils.numberFormat;
+import static net.minecraft.world.item.Items.AIR;
 
+@SuppressWarnings("removal")
 public class FissionCategoryWrapper<T extends FissionControllerBE.Recipe> implements IRecipeCategory<T> {
     public final static ResourceLocation TEXTURE =
             new ResourceLocation(MODID, "textures/gui/fission/jei.png");
@@ -47,7 +48,7 @@ public class FissionCategoryWrapper<T extends FissionControllerBE.Recipe> implem
         if(CATALYSTS.containsKey(getRecipeType().getUid().getPath())) {
             this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CATALYSTS.get(getRecipeType().getUid().getPath()).get(0));
         } else{
-            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
+            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(AIR));
         }
     }
 

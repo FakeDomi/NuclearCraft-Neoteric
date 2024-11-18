@@ -22,7 +22,7 @@ public class OreVeinRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
         try {
             boolean isIncomplete = buffer.readBoolean();
             if(isIncomplete) {
-                return null;
+                return emptyRecipe(recipeId);
             }
             readIngredients(buffer);
 

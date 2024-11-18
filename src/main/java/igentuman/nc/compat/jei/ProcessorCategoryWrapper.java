@@ -1,8 +1,6 @@
 package igentuman.nc.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.nc.compat.jei.util.TickTimer;
-import igentuman.nc.recipes.AbstractRecipe;
 import igentuman.nc.content.processors.ProcessorPrefab;
 import igentuman.nc.content.processors.Processors;
 import igentuman.nc.recipes.ingredient.FluidStackIngredient;
@@ -10,7 +8,6 @@ import igentuman.nc.recipes.type.NcRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -34,7 +31,9 @@ import java.util.List;
 import static igentuman.nc.NuclearCraft.rl;
 import static igentuman.nc.client.gui.element.bar.ProgressBar.bars;
 import static igentuman.nc.compat.GlobalVars.*;
+import static net.minecraft.world.item.Items.AIR;
 
+@SuppressWarnings("removal")
 public class ProcessorCategoryWrapper<T extends NcRecipe> implements IRecipeCategory<T> {
     public final static ResourceLocation TEXTURE = rl("textures/gui/processor_jei.png");
 
@@ -65,7 +64,7 @@ public class ProcessorCategoryWrapper<T extends NcRecipe> implements IRecipeCate
         if(CATALYSTS.containsKey(getRecipeType().getUid().getPath())) {
             this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CATALYSTS.get(getRecipeType().getUid().getPath()).get(0));
         } else{
-            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
+            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(AIR));
         }
     }
 

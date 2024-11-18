@@ -15,8 +15,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import java.util.List;
 
 import static igentuman.nc.NuclearCraft.MODID;
-import static igentuman.nc.setup.registration.NCItems.NC_BLOCKS_ITEMS;
-import static igentuman.nc.setup.registration.NCItems.ORE_BLOCK_ITEMS;
+import static igentuman.nc.setup.registration.NCItems.*;
 import static igentuman.nc.setup.registration.Tags.*;
 
 public class NCItemTags extends ItemTagsProvider {
@@ -75,23 +74,23 @@ public class NCItemTags extends ItemTagsProvider {
     }
 
     private void gems() {
-        for(String name: NCItems.NC_GEMS.keySet()) {
-            tag(Tags.Items.GEMS).add(NCItems.NC_GEMS.get(name).get());
-            tag(GEMS_TAG.get(name)).add(NCItems.NC_GEMS.get(name).get());
+        for(String name: NC_GEMS.keySet()) {
+            tag(Tags.Items.GEMS).add(NC_GEMS.get(name).get());
+            tag(GEMS_TAG.get(name)).add(NC_GEMS.get(name).get());
         }
     }
 
     private void ingots() {
-        for(String name: NCItems.NC_INGOTS.keySet()) {
-            tag(Tags.Items.INGOTS).add(NCItems.NC_INGOTS.get(name).get());
-            tag(INGOTS_TAG.get(name)).add(NCItems.NC_INGOTS.get(name).get());
+        for(String name: NC_INGOTS.keySet()) {
+            tag(Tags.Items.INGOTS).add(NC_INGOTS.get(name).get());
+            tag(INGOTS_TAG.get(name)).add(NC_INGOTS.get(name).get());
         }
     }
 
     private void nuggets() {
-        for(String name: NCItems.NC_NUGGETS.keySet()) {
-            tag(Tags.Items.NUGGETS).add(NCItems.NC_NUGGETS.get(name).get());
-            tag(NUGGETS_TAG.get(name)).add(NCItems.NC_NUGGETS.get(name).get());
+        for(String name: NC_NUGGETS.keySet()) {
+            tag(Tags.Items.NUGGETS).add(NC_NUGGETS.get(name).get());
+            tag(NUGGETS_TAG.get(name)).add(NC_NUGGETS.get(name).get());
         }
     }
 
@@ -103,16 +102,16 @@ public class NCItemTags extends ItemTagsProvider {
     }
 
     private void dusts() {
-        for(String name: NCItems.NC_DUSTS.keySet()) {
-            tag(Tags.Items.DUSTS).add(NCItems.NC_DUSTS.get(name).get());
-            tag(DUSTS_TAG.get(name)).add(NCItems.NC_DUSTS.get(name).get());
+        for(String name: NC_DUSTS.keySet()) {
+            tag(Tags.Items.DUSTS).add(NC_DUSTS.get(name).get());
+            tag(DUSTS_TAG.get(name)).add(NC_DUSTS.get(name).get());
         }
     }
 
     private void chunks() {
-        for(String name: NCItems.NC_CHUNKS.keySet()) {
-            tag(Tags.Items.RAW_MATERIALS).add(NCItems.NC_CHUNKS.get(name).get());
-            tag(CHUNKS_TAG.get(name)).add(NCItems.NC_CHUNKS.get(name).get());
+        for(String name: NC_CHUNKS.keySet()) {
+            tag(Tags.Items.RAW_MATERIALS).add(NC_CHUNKS.get(name).get());
+            tag(CHUNKS_TAG.get(name)).add(NC_CHUNKS.get(name).get());
         }
     }
 

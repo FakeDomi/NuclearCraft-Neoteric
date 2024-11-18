@@ -1,11 +1,7 @@
 package igentuman.nc.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.nc.compat.jei.util.TickTimer;
-import igentuman.nc.recipes.AbstractRecipe;
 import igentuman.nc.recipes.type.MekChemicalConversionRecipe;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.chemical.slurry.SlurryStack;
 import mekanism.client.jei.MekanismJEI;
@@ -16,7 +12,6 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -36,6 +31,7 @@ import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.NuclearCraft.rl;
 import static net.minecraft.world.item.Items.BUCKET;
 
+@SuppressWarnings("removal")
 public class MekChemicalConversionCategoryWrapper<T extends MekChemicalConversionRecipe> implements IRecipeCategory<T> {
     public final static ResourceLocation TEXTURE =
             new ResourceLocation(MODID, "textures/gui/processor_jei.png");

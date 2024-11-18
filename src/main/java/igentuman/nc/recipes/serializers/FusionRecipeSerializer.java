@@ -23,7 +23,7 @@ public class FusionRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSer
 
             boolean isIncomplete = buffer.readBoolean();
             if(isIncomplete) {
-                return null;
+                return emptyRecipe(recipeId);
             }
             readIngredients(buffer);
 

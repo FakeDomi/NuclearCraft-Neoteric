@@ -78,7 +78,7 @@ public class BoilingRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
         try {
             boolean isIncomplete = buffer.readBoolean();
             if(isIncomplete) {
-                return null;
+                return emptyRecipe(recipeId);
             }
             readIngredients(buffer);
             double heatRequired = buffer.readDouble();

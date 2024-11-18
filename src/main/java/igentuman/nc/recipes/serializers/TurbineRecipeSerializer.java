@@ -79,7 +79,7 @@ public class TurbineRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
 
             boolean isIncomplete = buffer.readBoolean();
             if(isIncomplete) {
-                return null;
+                return emptyRecipe(recipeId);
             }
             readIngredients(buffer);
 

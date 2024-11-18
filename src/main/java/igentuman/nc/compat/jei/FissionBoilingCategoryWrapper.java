@@ -1,10 +1,7 @@
 package igentuman.nc.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.nc.block.entity.fission.FissionControllerBE;
-import igentuman.nc.block.entity.fusion.FusionCoreBE;
 import igentuman.nc.compat.jei.util.TickTimer;
-import igentuman.nc.datagen.recipes.recipes.FissionBoilingRecipes;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -29,7 +26,9 @@ import java.util.List;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.NuclearCraft.rl;
 import static igentuman.nc.compat.GlobalVars.CATALYSTS;
+import static net.minecraft.world.item.Items.AIR;
 
+@SuppressWarnings("removal")
 public class FissionBoilingCategoryWrapper<T extends FissionControllerBE.FissionBoilingRecipe> implements IRecipeCategory<T> {
     public final static ResourceLocation TEXTURE =
             new ResourceLocation(MODID, "textures/gui/processor_jei.png");
@@ -49,7 +48,7 @@ public class FissionBoilingCategoryWrapper<T extends FissionControllerBE.Fission
         if(CATALYSTS.containsKey(getRecipeType().getUid().getPath())) {
             this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CATALYSTS.get(getRecipeType().getUid().getPath()).get(0));
         } else{
-            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
+            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(AIR));
         }
     }
 

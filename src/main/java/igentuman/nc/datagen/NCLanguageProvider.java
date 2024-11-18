@@ -11,6 +11,7 @@ import java.util.List;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
 import static igentuman.nc.setup.registration.NCBlocks.*;
+import static igentuman.nc.setup.registration.NCFluids.NC_MATERIALS;
 import static igentuman.nc.setup.registration.NCItems.*;
 import static igentuman.nc.setup.registration.NCStorageBlocks.STORAGE_BLOCKS;
 import static igentuman.nc.util.TextUtils.convertToName;

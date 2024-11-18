@@ -1,7 +1,5 @@
 package igentuman.nc.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import igentuman.nc.block.entity.fission.FissionControllerBE;
 import igentuman.nc.block.entity.turbine.TurbineControllerBE;
 import igentuman.nc.compat.jei.util.TickTimer;
 import mezz.jei.api.constants.VanillaTypes;
@@ -15,7 +13,6 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +25,9 @@ import java.util.List;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.NuclearCraft.rl;
 import static igentuman.nc.compat.GlobalVars.CATALYSTS;
+import static net.minecraft.world.item.Items.AIR;
 
+@SuppressWarnings("removal")
 public class TurbineControllerCategoryWrapper<T extends TurbineControllerBE.Recipe> implements IRecipeCategory<T> {
     public final static ResourceLocation TEXTURE =
             new ResourceLocation(MODID, "textures/gui/processor_jei.png");
@@ -48,7 +47,7 @@ public class TurbineControllerCategoryWrapper<T extends TurbineControllerBE.Reci
         if(CATALYSTS.containsKey(getRecipeType().getUid().getPath())) {
             this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CATALYSTS.get(getRecipeType().getUid().getPath()).get(0));
         } else{
-            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
+            this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(AIR));
         }
     }
 

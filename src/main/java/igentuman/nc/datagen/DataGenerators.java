@@ -40,6 +40,7 @@ public class DataGenerators {
         generator.addProvider(event.includeClient(), new NCFluidBlockStates(generator, event));
         generator.addProvider(event.includeClient(), new NCItemModels(generator, event));
         generator.addProvider(event.includeClient(), new NCLanguageProvider(generator, "en_us"));
+        generator.addProvider(event.includeClient(), new EmiLangProvider(generator, "en_gb"));
         generator.addProvider(event.includeServer(), new NCWorldGenProvider(generator, event));
     }
 }
