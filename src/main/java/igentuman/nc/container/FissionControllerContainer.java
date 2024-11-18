@@ -186,11 +186,11 @@ public class FissionControllerContainer extends AbstractContainerMenu {
     }
 
     public String getNetHeat() {
-        return roundFormat(blockEntity.getNetHeat());
+        return roundFormat(blockEntity.heatPerTick-blockEntity.heatSinkCooling-blockEntity.activeCooling);
     }
 
     public int getCooling() {
-        return (int) blockEntity.heatSinkCooling;
+        return (int) (blockEntity.heatSinkCooling + blockEntity.activeCooling);
     }
 
     public String getHeating() {

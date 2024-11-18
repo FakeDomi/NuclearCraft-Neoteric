@@ -105,6 +105,8 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     @NBTField
     public double heatSinkCooling = 0;
     @NBTField
+    public double activeCooling = 0;
+    @NBTField
     public double heatPerTick = 0;
     @NBTField
     public int energyPerTick = 0;
@@ -628,10 +630,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         return getLevel().getBiome(getBlockPos()).get().getBaseTemperature() * 10;
     }
 
-
     public double heatSinksCooling() {
         heatSinkCooling = multiblock().countCooling(refreshCacheFlag);
-        return heatSinkCooling+multiblock().activeCooling;
+        return heatSinkCooling+activeCooling;
     }
 
     public double heatPerTick() {
@@ -789,7 +790,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     public double getNetHeat() {
-        return heatPerTick - heatSinkCooling;
+        return heatPerTick - heatSinksCooling();
     }
 
     public int getDepth() {

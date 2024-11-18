@@ -148,6 +148,9 @@ public class HeatSinkBlock extends MultiblockBlock {
 
         if(DESCRIPTIONS_SHOW) {
             list.add(TextUtils.applyFormat(getPlacementRule(), ChatFormatting.AQUA));
+            if(isActive()) {
+                list.add(TextUtils.applyFormat(Component.translatable("tooltip.active_heatsink"), ChatFormatting.YELLOW));
+            }
         } else {
             list.add(TextUtils.applyFormat(Component.translatable("tooltip.toggle_description_keys"), ChatFormatting.GRAY));
         }

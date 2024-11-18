@@ -15,12 +15,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.datagen.recipes.recipes.AbstractRecipeProvider.dustIngredient;
+import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_BLOCKS;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_BLOCKS;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.coils;
@@ -988,7 +990,7 @@ public class NCRecipes extends RecipeProvider {
 
     private void fissionBlocks(Consumer<FinishedRecipe> consumer) {
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("fission_reactor_irradiation_chamber").get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("fission_reactor_irradiation_chamber").get())
                 .pattern("LPL")
                 .pattern("MTM")
                 .pattern("LPL")
@@ -1000,19 +1002,19 @@ public class NCRecipes extends RecipeProvider {
                 .unlockedBy("item", has(STORAGE_BLOCKS.get("basic_storage_container").get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("fission_reactor_port").get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("fission_reactor_port").get())
                 .pattern("LPL")
                 .pattern("MTM")
                 .pattern("LPL")
                 .define('M', NCItems.NC_PARTS.get("servo").get())
                 .define('P', NCItems.NC_PARTS.get("plate_advanced").get())
-                .define('T', FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get())
+                .define('T', FISSION_BLOCKS.get("fission_reactor_casing").get())
                 .define('L', forgePlate("tough_alloy"))
                 .group(MODID+"_fission")
-                .unlockedBy("item", has(FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get()))
+                .unlockedBy("item", has(FISSION_BLOCKS.get("fission_reactor_casing").get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get(), 4)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("fission_reactor_casing").get(), 4)
                 .pattern("LPL")
                 .pattern("P P")
                 .pattern("LPL")
@@ -1022,40 +1024,40 @@ public class NCRecipes extends RecipeProvider {
                 .unlockedBy("item", has(NCItems.NC_PARTS.get("plate_advanced").get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("fission_reactor_controller").get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("fission_reactor_controller").get())
                 .pattern("LPL")
                 .pattern("TDT")
                 .pattern("LPL")
                 .define('P', NCItems.NC_PARTS.get("plate_advanced").get())
                 .define('D', NCProcessors.PROCESSORS.get(Processors.DECAY_HASTENER).get())
                 .define('T', NC_PARTS.get("basic_electric_circuit").get())
-                .define('L', FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get())
+                .define('L', FISSION_BLOCKS.get("fission_reactor_casing").get())
                 .group(MODID+"_fission")
                 .unlockedBy("item", has(NCItems.NC_PARTS.get("plate_advanced").get()))
                 .save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("fission_reactor_glass").get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("fission_reactor_glass").get())
                 .pattern(" P ")
                 .pattern("PTP")
                 .pattern(" P ")
                 .define('P', Tags.Items.GLASS)
-                .define('T', FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get())
+                .define('T', FISSION_BLOCKS.get("fission_reactor_casing").get())
                 .group(MODID+"_fission")
                 .unlockedBy("item", has(NCItems.NC_PARTS.get("plate_advanced").get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("fission_reactor_solid_fuel_cell").get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("fission_reactor_solid_fuel_cell").get())
                 .pattern("TGT")
                 .pattern("G G")
                 .pattern("TGT")
                 .define('G', Tags.Items.GLASS)
                 .define('T', forgeIngot(Materials.zirconium))
                 .group(MODID+"_fission")
-                .unlockedBy("item", has(FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get()))
+                .unlockedBy("item", has(FISSION_BLOCKS.get("fission_reactor_casing").get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get("empty_heat_sink").get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("empty_heat_sink").get())
                 .pattern("TIT")
                 .pattern("ABA")
                 .pattern("TIT")
@@ -1064,29 +1066,43 @@ public class NCRecipes extends RecipeProvider {
                 .define('A', IRON_BARS)
                 .define('T', forgeIngot("tough_alloy"))
                 .group(MODID+"_fission")
-                .unlockedBy("item", has(FissionReactor.FISSION_BLOCKS.get("fission_reactor_casing").get()))
+                .unlockedBy("item", has(FISSION_BLOCKS.get("fission_reactor_casing").get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get("empty_active_heat_sink").get())
+                .pattern("TIT")
+                .pattern("IBI")
+                .pattern("TIT")
+                .define('I', NC_PARTS.get("motor").get())
+                .define('B', FISSION_BLOCKS.get("empty_heat_sink").get())
+                .define('T', forgePlate("thermoconducting"))
+                .group(MODID+"_fission")
+                .unlockedBy("item", has(FISSION_BLOCKS.get("empty_heat_sink").get()))
                 .save(consumer);
 
         for(String name: FissionBlocks.heatsinks.keySet()) {
-            if(name.matches(".*active.*|.*water.*|.*liquid.*|.*empty.*|.*cryotheum.*")) {
+            if(name.matches(".*water.*|.*liquid.*|.*empty.*|.*cryotheum.*")) {
                 continue;
             }
-            TagKey<Item> i = forgeDust(name);
+            TagKey<Item> i = forgeDust(name.replace("active_", ""));
             if(name.contains("slime")) {
                 i = Tags.Items.SLIMEBALLS;
             }
             if(name.contains("nether_brick")) {
                 i = Tags.Items.INGOTS_NETHER_BRICK;
             }
-
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FissionReactor.FISSION_BLOCKS.get(name+"_heat_sink").get())
+            Block empty = FISSION_BLOCKS.get("empty_heat_sink").get();
+            if(name.contains("active")) {
+                empty = FISSION_BLOCKS.get("empty_active_heat_sink").get();
+            }
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FISSION_BLOCKS.get(name+"_heat_sink").get())
                     .pattern(" I ")
                     .pattern("IBI")
                     .pattern(" I ")
                     .define('I', Ingredient.of(i))
-                    .define('B', FissionReactor.FISSION_BLOCKS.get("empty_heat_sink").get())
+                    .define('B', empty)
                     .group(MODID+"_fission")
-                    .unlockedBy("item", has(FissionReactor.FISSION_BLOCKS.get("empty_heat_sink").get()))
+                    .unlockedBy("item", has(empty))
                     .save(consumer);
 
         }

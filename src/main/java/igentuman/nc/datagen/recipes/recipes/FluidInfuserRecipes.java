@@ -96,6 +96,30 @@ public class FluidInfuserRecipes extends AbstractRecipeProvider {
         );
 
         add(
+                fluidIngredient("cryotheum", 1000),
+                blockStack("empty_active_heat_sink"),
+                blockStack("active_cryotheum_heat_sink")
+        );
+
+        add(
+                fluidIngredient("liquid_helium", 1000),
+                blockStack("empty_active_heat_sink"),
+                blockStack("active_liquid_helium_heat_sink")
+        );
+
+        add(
+                fluidIngredient("liquid_nitrogen", 1000),
+                blockStack("empty_active_heat_sink"),
+                blockStack("active_liquid_nitrogen_heat_sink")
+        );
+
+        add(
+                fluidIngredient("minecraft:water", 1000),
+                blockStack("empty_active_heat_sink"),
+                blockStack("active_water_heat_sink")
+        );
+
+        add(
                 fluidIngredient("radaway", 250),
                 ingredient(ALL_NC_ITEMS.get("bioplastic").get(), 2),
                 ingredient(ALL_NC_ITEMS.get("radaway").get())

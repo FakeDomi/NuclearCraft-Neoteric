@@ -224,6 +224,8 @@ public class NCLanguageProvider extends LanguageProvider {
 
         add("boiling.recipe.heat_required","Heat required: %s H");
 
+        add("tooltip.active_heatsink","Needs coolant fluid supply into reactor to work.");
+
         add("processor.recipe.power","Process Power: %s FE/t");
         add("processor.recipe.duration","Process Duration: %s t");
         add("processor.recipe.radiation","Process Radiation: %s uRad");

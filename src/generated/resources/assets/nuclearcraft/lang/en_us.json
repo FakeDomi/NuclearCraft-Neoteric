@@ -2107,6 +2107,7 @@
   "sound_event.nuclearcraft.item.geiger_4": "Geiger Counter Ticks Level 4 Intensity",
   "sound_event.nuclearcraft.item.geiger_5": "Geiger Counter Ticks Level 5 Intensity",
   "speed.multiplier": "Speed Multiplier: x%s",
+  "tooltip.active_heatsink": "Needs coolant fluid supply into reactor to work.",
   "tooltip.machine.progress": "Progress: %s%%",
   "tooltip.mode.3x3": "3x3",
   "tooltip.mode.3x3x3": "3x3x3",
