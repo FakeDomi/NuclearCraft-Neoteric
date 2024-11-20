@@ -48,6 +48,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 import static igentuman.nc.block.fission.FissionControllerBlock.POWERED;
@@ -656,11 +658,11 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     public double moderatorsHeat() {
-        return moderationLevel * recipeInfo.heat * moderatorCellMultiplier * (FISSION_CONFIG.MODERATOR_HEAT_MULTIPLIER.get() / 100);
+        return Math.max(0.25, getModerationLevel()) * recipeInfo.heat * moderatorCellMultiplier * (FISSION_CONFIG.MODERATOR_HEAT_MULTIPLIER.get() / 100);
     }
 
     public double moderatorsFE() {
-        return moderationLevel * recipeInfo.energy * moderatorCellMultiplier * (FISSION_CONFIG.MODERATOR_FE_MULTIPLIER.get() / 100);
+        return getModerationLevel() * recipeInfo.energy * moderatorCellMultiplier * (FISSION_CONFIG.MODERATOR_FE_MULTIPLIER.get() / 100);
     }
 
 
@@ -889,8 +891,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     private double targetModerationLevel = 1D;
 
     public void adjustModerator(int redstoneSignal) {
-        String formatted = String.format(Locale.US, "%.1f", Math.ceil((double) redstoneSignal / 15));
-        targetModerationLevel = Double.parseDouble(formatted);
+        BigDecimal bd = BigDecimal.valueOf((double) redstoneSignal / 15);
+        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        targetModerationLevel = bd.doubleValue();
     }
 
     /**
@@ -912,7 +915,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
 
     public double getModerationLevel() {
         if(moderatorsCount == 0) return 1D;
-        return moderationLevel;
+        BigDecimal bd = BigDecimal.valueOf(moderationLevel);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     public void adjustModerationLevel(int level) {
