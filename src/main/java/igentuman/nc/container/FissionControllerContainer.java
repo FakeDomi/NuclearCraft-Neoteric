@@ -253,4 +253,8 @@ public class FissionControllerContainer extends AbstractContainerMenu {
     public int getReactivity() {
         return blockEntity.reactivityLevel;
     }
+
+    public int getMaxBoilingRate() {
+        return blockEntity.maxSteamOutput;
+    }
 }

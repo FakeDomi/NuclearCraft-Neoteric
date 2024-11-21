@@ -2,6 +2,7 @@ package igentuman.nc.block.entity;
 
 import igentuman.nc.block.ISizeToggable;
 import igentuman.nc.content.storage.BarrelBlocks;
+import igentuman.nc.handler.sided.capability.NcFluidTank;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,10 +28,10 @@ import static igentuman.nc.setup.registration.NCStorageBlocks.STORAGE_BE;
 
 public class BarrelBE extends NuclearCraftBE implements ISizeToggable {
 
-    public final FluidTank fluidTank;
+    public final NcFluidTank fluidTank;
 
-    private FluidTank createTank() {
-        return new FluidTank(BarrelBlocks.all().get(getName()).config().getCapacity()) {
+    private NcFluidTank createTank() {
+        return new NcFluidTank(BarrelBlocks.all().get(getName()).config().getCapacity()) {
             @Override
             public void setFluid(FluidStack fluid) {
                 super.setFluid(fluid);
@@ -94,12 +95,17 @@ public class BarrelBE extends NuclearCraftBE implements ISizeToggable {
                     }
                     currentAmount.addAndGet(-accepted);
                 } else if (currentAmount.get() < getTankCapacity() && sideConfig.get(direction.ordinal()) == SideMode.IN) {
-                    int extracted = fluidTank.fill(sideHandler.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);
-                    if(extracted > 0) {
-                        sideHandler.drain(extracted, IFluidHandler.FluidAction.EXECUTE);
-                        wasUpdated = true;
+                    FluidStack drain = sideHandler.drain(fluidTank.getCapacity() - currentAmount.get(), IFluidHandler.FluidAction.SIMULATE);
+                    if(drain.isEmpty()) continue;
+                    if(drain.getFluid().isSame(fluidTank.getFluid().getFluid()) || currentAmount.get() == 0) {
+                        int extracted = fluidTank.fill(drain, IFluidHandler.FluidAction.EXECUTE);
+                        if(extracted > 0) {
+                            sideHandler.drain(extracted, IFluidHandler.FluidAction.EXECUTE);
+                            wasUpdated = true;
+                        }
+                        currentAmount.addAndGet(extracted);
                     }
-                    currentAmount.addAndGet(extracted);
+
                 }
             }
         }

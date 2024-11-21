@@ -78,6 +78,8 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     @NBTField
     public double heat = 0;
     @NBTField
+    public int maxSteamOutput = 0;
+    @NBTField
     public int fuelCellsCount = 0;
     @NBTField
     public int reactivityLevel = 0;
@@ -176,7 +178,8 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
             contentHandler.setAllowedInputFluids(
                     1+activeCoolersTypes().indexOf(type),
                     FissionBlocks.heatsinks.get(type).getAllowedFluids()
-            );
+                );
+            contentHandler.fluidCapability.setGlobalMode(2+activeCoolersTypes().indexOf(type), SlotModePair.SlotMode.PULL);
         }
     }
 
@@ -272,9 +275,8 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         if(!isProcessing()) return;
         double cooling = coolingPerTick();
         if(getNetHeat() < 0) {
-            cooling += getNetHeat();
+            cooling = heatPerTick;
         }
-        cooling = Math.min(heatPerTick, cooling);
         double heatEff =  cooling * FISSION_CONFIG.BOILING_MULTIPLIER.get() * efficiency * 0.01D * heatMultiplier;
 
         if(hasCoolant()) {
@@ -289,9 +291,10 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
                 return;
             }
             double capacity = contentHandler.fluidCapability.tanks.get(1).getCapacity() - currentOutput.getAmount();
+            maxSteamOutput = (int) (steam.getAmount()*conversion);
             int ops = (int) (capacity/steam.getAmount());
             capacity = ops*steam.getAmount();
-            int canGetAmount = (int) Math.min(steam.getAmount()*conversion, capacity);
+            int canGetAmount = (int) Math.min(maxSteamOutput, capacity);
             ops = canGetAmount/steam.getAmount();
             ops = Math.min(currentCoolant.getAmount()/coolant.getAmount(), ops);
             steamPerTick = Math.max(ops*steam.getAmount(), 0);

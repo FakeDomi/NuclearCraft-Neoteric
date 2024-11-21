@@ -2080,6 +2080,7 @@
   "reactor.reactivity": "Reactivity: %s%%",
   "reactor.size": "Structure size: %sx%sx%s",
   "reactor.steam_per_tick": "Boiling rate: %s mB/t",
+  "reactor.max_boiling_rate": "Max rate: %s mB/t",
   "rtg.fe_generation": "Energy Generation: %s FE/t",
   "side_config.back": "BACK: ",
   "side_config.default": "DEFAULT",

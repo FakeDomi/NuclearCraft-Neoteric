@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -45,7 +46,7 @@ public final class StackUtils {
         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
     }
 
-    private static List<Item> allowedTools = new ArrayList<>();
+    private static final List<Item> allowedTools = new ArrayList<>();
 
     public static boolean isMultiTool(ItemStack stack) {
         if(allowedTools.isEmpty()) {
@@ -55,19 +56,19 @@ public final class StackUtils {
             Item thermal = getItemByRegistryName("thermalfoundation:wrench");
             Item hammer = getItemByRegistryName("immersiveengineering:hammer");
             Item enderIoWrench = getItemByRegistryName("enderio:item_yeta_wrench");
-            if(wrench != null) {
+            if(!(wrench instanceof AirItem)) {
                 allowedTools.add(wrench);
             }
-            if(configurator != null) {
+            if (!(configurator instanceof AirItem)) {
                 allowedTools.add(configurator);
             }
-            if(thermal != null) {
+            if (!(thermal instanceof AirItem)) {
                 allowedTools.add(thermal);
             }
-            if(hammer != null) {
+            if (!(hammer instanceof AirItem)) {
                 allowedTools.add(hammer);
             }
-            if(enderIoWrench != null) {
+            if (!(enderIoWrench instanceof AirItem)) {
                 allowedTools.add(enderIoWrench);
             }
         }

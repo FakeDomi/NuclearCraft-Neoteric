@@ -245,6 +245,7 @@ public class NCLanguageProvider extends LanguageProvider {
         add("gui.nc.reactor_mode.tooltip_energy","Energy Mode");
         add("gui.nc.reactor_mode.timer","Changing mode in: %s sec");
         add("reactor.steam_per_tick","Boiling rate: %s mB/t");
+        add("reactor.max_boiling_rate","Max rate: %s mB/t");
 
         add("nc.redstone_dimmer.description", "Adjusts redstone output power based on impulses received from the left or right sides.");
         add("tooltip.nc.fusion_connector.descr", "Used to connect fusion core and toroidal reactor chamber");

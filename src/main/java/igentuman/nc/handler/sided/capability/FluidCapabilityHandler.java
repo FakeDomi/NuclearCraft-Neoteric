@@ -8,15 +8,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -24,7 +20,7 @@ import java.util.*;
 import static igentuman.nc.handler.sided.SlotModePair.SlotMode.*;
 
 public class FluidCapabilityHandler extends AbstractCapabilityHandler implements INBTSerializable<CompoundTag> {
-    public final NonNullList<FluidTank> tanks;
+    public final NonNullList<NcFluidTank> tanks;
     public final NonNullList<LazyOptional<IFluidHandler>> fluidCapabilites;
 
     protected FluidStack[] sortedFluids;
@@ -41,12 +37,12 @@ public class FluidCapabilityHandler extends AbstractCapabilityHandler implements
         fluidCapabilites = NonNullList.create();
         for (int i = 0; i < inputSlots; i++) {
             int finalI = i;
-            tanks.add(new FluidTank(inputCapacity*1000));
+            tanks.add(new NcFluidTank(inputCapacity*1000));
             fluidCapabilites.add(LazyOptional.of(() -> tanks.get(finalI)));
         }
         for (int i = inputSlots; i < inputSlots+outputSlots; i++) {
             int finalI = i;
-            tanks.add(new FluidTank(outputCapacity*1000));
+            tanks.add(new NcFluidTank(outputCapacity*1000));
             fluidCapabilites.add(LazyOptional.of(() -> tanks.get(finalI)));
         }
         initDefault();
@@ -138,7 +134,7 @@ public class FluidCapabilityHandler extends AbstractCapabilityHandler implements
             SidedContentHandler.RelativeDirection relativeDirection = SidedContentHandler.RelativeDirection.toRelative(dir, getFacing());
             for(SlotModePair pair : sideMap.get(relativeDirection.ordinal())) {
                 if(pair.getMode() == SlotMode.PUSH || forceFlag) {
-                    FluidTank tank = tanks.get(pair.getSlot());
+                    NcFluidTank tank = tanks.get(pair.getSlot());
                     if(tank.getFluidAmount() > 0) {
                         int amount = handler.fill(tank.getFluid(), IFluidHandler.FluidAction.EXECUTE);
                         tank.drain(amount, IFluidHandler.FluidAction.EXECUTE);
@@ -163,7 +159,7 @@ public class FluidCapabilityHandler extends AbstractCapabilityHandler implements
             SidedContentHandler.RelativeDirection relativeDirection = SidedContentHandler.RelativeDirection.toRelative(dir, getFacing());
             for(SlotModePair pair : sideMap.get(relativeDirection.ordinal())) {
                 if(pair.getMode() == SlotMode.PULL || forceFlag) {
-                    FluidTank tank = tanks.get(pair.getSlot());
+                    NcFluidTank tank = tanks.get(pair.getSlot());
                     if(tank.getFluidAmount() < tank.getCapacity()) {
                         int amount = tank.fill(handler.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                         return amount > 0;
@@ -268,7 +264,7 @@ public class FluidCapabilityHandler extends AbstractCapabilityHandler implements
                 SidedContentHandler.RelativeDirection relativeDirection = SidedContentHandler.RelativeDirection.toRelative(dir, getFacing());
                 for(SlotModePair pair : sideMap.get(relativeDirection.ordinal())) {
                     if(pair.getMode() == PUSH_EXCESS) {
-                        FluidTank tank = tanks.get(pair.getSlot());
+                        NcFluidTank tank = tanks.get(pair.getSlot());
                         if(tank.getFluidAmount() > 0 && toOutput.getFluid().equals(tank.getFluid().getFluid())) {
                             if(handler.fill(toOutput, IFluidHandler.FluidAction.SIMULATE) == toOutput.getAmount() ) {
                                 int amount = handler.fill(toOutput, IFluidHandler.FluidAction.EXECUTE);

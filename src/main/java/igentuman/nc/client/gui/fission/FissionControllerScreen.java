@@ -250,6 +250,7 @@ public class FissionControllerScreen extends AbstractContainerScreen<FissionCont
             if(steamTank.isMouseOver(pMouseX, pMouseY+10)) {
                 List<Component> tooltips = steamTank.getTooltips();
                 tooltips.add(Component.translatable("reactor.steam_per_tick", container().getSteamPerTick()));
+                tooltips.add(Component.translatable("reactor.max_boiling_rate", container().getMaxBoilingRate()));
                 graphics.renderTooltip(font, tooltips,
                         Optional.empty(), pMouseX, pMouseY);
             }
