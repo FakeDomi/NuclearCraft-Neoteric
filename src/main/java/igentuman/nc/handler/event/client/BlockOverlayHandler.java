@@ -51,6 +51,7 @@ import static com.mojang.math.Axis.YP;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.item.QNP.getMode;
 import static igentuman.nc.util.AreaUtil.getArea;
+import static igentuman.nc.util.StackUtils.isMultiTool;
 
 @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
 public class BlockOverlayHandler {
@@ -102,7 +103,7 @@ public class BlockOverlayHandler {
     }
 
     private static void handleMultitool(RenderHighlightEvent.Block event, HitResult hit, ItemStack stackItem) {
-        if (hit.getType() == HitResult.Type.BLOCK && stackItem.getItem() instanceof MultitoolItem multitool) {
+        if (hit.getType() == HitResult.Type.BLOCK && isMultiTool(stackItem)) {
             BlockHitResult blockRayTraceResult = (BlockHitResult) hit;
             event.setCanceled(true);
             BlockPos blockPos = blockRayTraceResult.getBlockPos();

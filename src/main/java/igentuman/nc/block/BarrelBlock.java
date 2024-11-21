@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -36,9 +37,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static igentuman.nc.setup.registration.NCItems.MULTITOOL;
+import static igentuman.nc.util.StackUtils.getItemByRegistryName;
+import static igentuman.nc.util.StackUtils.isMultiTool;
 import static net.minecraft.world.item.Items.BUCKET;
 
 public class BarrelBlock extends Block implements EntityBlock {
@@ -68,13 +72,16 @@ public class BarrelBlock extends Block implements EntityBlock {
         return 0;
     }
 
+
+
+
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (!level.isClientSide()) {
             BarrelBE be = (BarrelBE)level.getBlockEntity(pos);
             ItemStack handStack = player.getItemInHand(hand);
             IFluidHandler barrel = be.getFluidHandler().orElse(null);
-            if(handStack.getItem().equals(MULTITOOL.get())) {
+            if(isMultiTool(handStack)) {
                 Direction dirToChange = result.getDirection();
                 if(player.isShiftKeyDown()) {
                     dirToChange = dirToChange.getOpposite();

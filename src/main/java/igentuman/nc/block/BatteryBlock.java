@@ -36,6 +36,7 @@ import java.util.List;
 
 import static igentuman.nc.handler.config.CommonConfig.ENERGY_STORAGE;
 import static igentuman.nc.setup.registration.NCItems.MULTITOOL;
+import static igentuman.nc.util.StackUtils.isMultiTool;
 
 public class BatteryBlock extends Block implements EntityBlock {
     public BatteryBlock(Properties pProperties) {
@@ -68,7 +69,7 @@ public class BatteryBlock extends Block implements EntityBlock {
         if (!level.isClientSide()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof BatteryBE batteryBE)  {
-                if(player.getItemInHand(hand).getItem().equals(MULTITOOL.get())) {
+                if(isMultiTool(player.getItemInHand(hand))) {
                     Direction dirToChange = result.getDirection();
                     if(player.isShiftKeyDown()) {
                         dirToChange = dirToChange.getOpposite();

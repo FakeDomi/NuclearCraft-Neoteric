@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static igentuman.nc.setup.registration.NCItems.MULTITOOL;
+import static igentuman.nc.util.StackUtils.isMultiTool;
 
 @NothingNullByDefault
 public class ContainerBlock extends Block implements EntityBlock {
@@ -74,7 +75,7 @@ public class ContainerBlock extends Block implements EntityBlock {
         if (!level.isClientSide()) {
             ContainerBE be = (ContainerBE)level.getBlockEntity(pos);
             ItemStack handStack = player.getItemInHand(hand);
-            if(handStack.getItem().equals(MULTITOOL.get())) {
+            if(isMultiTool(handStack)) {
                 Direction dirToChange = result.getDirection();
                 if(player.isShiftKeyDown()) {
                     dirToChange = dirToChange.getOpposite();
