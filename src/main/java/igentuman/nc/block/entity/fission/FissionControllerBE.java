@@ -632,7 +632,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     public double environmentCooling() {
-        return getLevel().getBiome(getBlockPos()).get().getBaseTemperature() * 10;
+        return 1 / getLevel().getBiome(getBlockPos()).get().getBaseTemperature();
     }
 
     public double heatSinksCooling() {
