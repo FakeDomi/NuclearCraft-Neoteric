@@ -35,6 +35,8 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
     private List<BlockPos> directFuelCellConnectionPos = new ArrayList<>();
     private List<BlockPos> secondFuelCellConnectionPos = new ArrayList<>();
     public HashMap<String, Integer> coolantPerTick = new HashMap<>();
+    private List<BlockPos> delayedValidation = new ArrayList<>();
+    private boolean delayedValidationFlag = false;
 
     @Override
     public int maxHeight() {
@@ -212,6 +214,10 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
                 }
             }
         }
+        delayedValidationFlag = true;
+        for(BlockPos pos: delayedValidation) {
+            processInnerBlock(pos);
+        }
 
         validationResult =  ValidationResult.VALID;
         heatSinkCooling = countCooling(true);
@@ -231,11 +237,20 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
                         controllerBE().fuelCellMultiplier += countAdjacentFuelCells(NCBlockPos.of(toCheck), 3);
                         controllerBE().moderatorCellMultiplier += (countAdjacentFuelCells(NCBlockPos.of(toCheck), 1)+1)*moderatorAttachments;
                         controllerBE().moderatorAttachments += moderatorAttachments;
+                        indexDirectHeatSinks(new BlockPos(toCheck));
                     }
                 }
             }
         }
         controllerBE().fuelCellsCount = fuelCells.size();
+    }
+
+    private void indexDirectHeatSinks(BlockPos toCheck) {
+        for(Direction d : Direction.values()) {
+            if(isHeatSink(toCheck.relative(d))) {
+                addSecondConnectionsToFuelCell(toCheck.relative(d));
+            }
+        }
     }
 
     private FissionControllerBE<?> controllerBE() {
@@ -244,6 +259,7 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         }
         return controllerBe;
     }
+
 
     @Override
     protected boolean processInnerBlock(BlockPos toCheck) {
@@ -258,6 +274,10 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
                 addIfNotExists(new BlockPos(toCheck), heatSinks);
                 addSecondConnectionsToFuelCell(new BlockPos(toCheck));
                 return true;
+            } else {
+                if(!delayedValidationFlag) {
+                    delayedValidation.add(new BlockPos(toCheck));
+                }
             }
         }
         if(isIrradiator(toCheck)) {
@@ -351,7 +371,9 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         coolantPerTick.clear();
         directFuelCellConnectionPos.clear();
         secondFuelCellConnectionPos.clear();
+        delayedValidation.clear();
         irradiationConnections = 0;
+        delayedValidationFlag = false;
     }
 
     protected Direction getFacing() {
