@@ -54,7 +54,7 @@ public  class JEIPlugin implements IModPlugin {
         if (recipeTypes == null) {
             recipeTypes = new HashMap<>();
             for (String name : RECIPE_CLASSES.keySet()) {
-                if (Processors.all().containsKey(name) && !Processors.registered().containsKey(name)) {
+                if (Processors.all().containsKey(name) && !Processors.all().get(name).isRegistered()) {
                     continue;
                 }
                 recipeTypes.put(name, new RecipeType<>(new ResourceLocation(MODID, name), RECIPE_CLASSES.get(name)));
@@ -111,6 +111,13 @@ public  class JEIPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         try {
             for (String name : getRecipeTypes().keySet()) {
+                if(List.of(
+                        "fusion_core", "fusion_coolant",
+                        "fission_reactor_controller", "fission_boiling",
+                        "nc_ore_veins", "turbine_controller"
+                ).contains(name)) {
+                    continue;
+                }
                 registration.addRecipes(
                         getRecipeType(name),
                         NcRecipeType.ALL_RECIPES.get(name).getRecipes(NcClient.tryGetClientWorld()));

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import igentuman.nc.NuclearCraft;
+import igentuman.nc.content.processors.Processors;
 import igentuman.nc.recipes.ingredient.FluidStackIngredient;
 import igentuman.nc.recipes.type.EmptyRecipe;
 import igentuman.nc.recipes.type.NcRecipe;
@@ -32,6 +33,10 @@ public class NcRecipeSerializer<RECIPE extends NcRecipe> implements RecipeSerial
 
     @Override
     public @NotNull RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
+        String type = GsonHelper.getAsString(json, "type");
+        if(Processors.all().containsKey(type) && !Processors.all().get(type).config().isRegistered()) {
+            return emptyRecipe(recipeId);
+        }
         inputItems = new ItemStackIngredient[0];
         try {
             if (json.has(JsonConstants.INPUT)) {

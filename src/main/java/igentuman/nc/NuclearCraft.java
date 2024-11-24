@@ -35,6 +35,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static igentuman.nc.util.FileExtractor.preFetchProcessorsConfig;
 import static igentuman.nc.util.FileExtractor.unpackFilesFromFolderToConfig;
 
 @Mod(NuclearCraft.MODID)
@@ -49,6 +50,7 @@ public class NuclearCraft {
 
     public static void registerConfigs()
     {
+        preFetchProcessorsConfig();
         unpackFilesFromFolderToConfig("data/nuclearcraft/fission_fuel", "NuclearCraft/fission_fuel");
         unpackFilesFromFolderToConfig("data/nuclearcraft/heat_sinks", "NuclearCraft/heat_sinks");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MaterialsConfig.spec, "NuclearCraft/materials.toml");
@@ -61,6 +63,8 @@ public class NuclearCraft {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, RadiationConfig.spec, "NuclearCraft/radiation.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WorldConfig.spec, "NuclearCraft/world.toml");
     }
+
+
 
     public NuclearCraft() {
         instance = this;

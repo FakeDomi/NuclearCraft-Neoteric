@@ -1,7 +1,6 @@
 package igentuman.nc.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
@@ -9,14 +8,44 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.file.FileConfig;
 import igentuman.nc.NuclearCraft;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class FileExtractor {
+
+    public static HashMap<String, Boolean> registrationConfig = new HashMap<>();
+
+    public static void preFetchProcessorsConfig() {
+        preloadRegistrations("processors");
+    }
+
+    public static void preloadRegistrations(String name) {
+        Path configDir = FMLPaths.CONFIGDIR.get();
+        File configFile = new File(configDir.toFile(), "NuclearCraft/" + name + ".toml" );
+        if (!configFile.exists()) {
+            registrationConfig.put(name, null);
+        }
+        try (FileConfig config = FileConfig.of(configFile)) {
+            config.load();
+            for(String key: config.valueMap().keySet()) {
+                if(config.get(key) instanceof CommentedConfig child) {
+                    if(child.contains("register")) {
+                        registrationConfig.put(key, child.get("register"));
+                    }
+                }
+            }
+
+        } catch (Exception e) {    }
+    }
 
     /**
      * Extracts all files from a specific folder inside the mod JAR and copies them to the config folder.
@@ -76,7 +105,10 @@ public class FileExtractor {
                             Files.copy(inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                             System.out.println("Extracted file " + relativeFileName + " to config folder.");
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            if(targetFolder.listFiles().length == 0) {
+                                System.err.println("Failed to extract files to " + targetFolder.getPath());
+                            }
+                           // e.printStackTrace();
                         }
                     }
                 }

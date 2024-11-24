@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.NuclearCraft.rl;
+import static igentuman.nc.util.FileExtractor.registrationConfig;
 
 public class NcRecipeType<RECIPE extends NcRecipe> implements RecipeType<RECIPE>,
         INcRecipeTypeProvider<RECIPE> {
@@ -87,6 +88,9 @@ public class NcRecipeType<RECIPE extends NcRecipe> implements RecipeType<RECIPE>
     @NotNull
     @Override
     public List<RECIPE> getRecipes(@Nullable Level world) {
+        if(Processors.all().containsKey(registryName.getPath()) && !Processors.all().get(registryName.getPath()).config().isRegistered()) {
+            return Collections.emptyList();
+        }
         if (world == null) {
             world = DistExecutor.unsafeRunForDist(() -> NcClient::tryGetClientWorld, () -> () -> ServerLifecycleHooks.getCurrentServer().overworld());
             if (world == null) {
