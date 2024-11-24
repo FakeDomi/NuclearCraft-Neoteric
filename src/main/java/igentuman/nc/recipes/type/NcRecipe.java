@@ -74,7 +74,7 @@ public abstract class NcRecipe extends AbstractRecipe {
 
     protected ItemStackIngredient getBarrier()
     {
-        return IngredientCreatorAccess.item().from(ItemStack.EMPTY);
+        return IngredientCreatorAccess.item().from(new ItemStack(BARRIER));
     }
 
     protected FluidStackIngredient getEmptyFluid()
@@ -84,10 +84,6 @@ public abstract class NcRecipe extends AbstractRecipe {
 
     @Override
     public void write(FriendlyByteBuf buffer) {
-        buffer.writeBoolean(isIncomplete());
-        if(isIncomplete()) {
-            return;
-        }
         buffer.writeInt(inputItems.length);
         for (ItemStackIngredient input : inputItems) {
             if(input == null) {

@@ -111,7 +111,6 @@ public class MekChemicalConversionRecipe extends NcRecipe {
     @Override
     public void write(FriendlyByteBuf buffer) {
         super.write(buffer);
-        if(isIncomplete()) return;
         buffer.writeDouble(rarityModifier);
     }
 }
