@@ -24,45 +24,9 @@ public class TurbineRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     @Override
     public @NotNull RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
 
-        FluidStackIngredient[] inputFluids = new FluidStackIngredient[0];
-        try {
-            if(json.has("inputFluids")) {
-                if (GsonHelper.isArrayNode(json, "inputFluids")) {
-                    JsonElement input = GsonHelper.getAsJsonArray(json, "inputFluids");
-                    inputFluids = new FluidStackIngredient[input.getAsJsonArray().size()];
-                    int i = 0;
-                    for (JsonElement in : input.getAsJsonArray()) {
-                        inputFluids[i] = IngredientCreatorAccess.fluid().deserialize(in);
-                        i++;
-                    }
-                } else {
-                    JsonElement inputJson = GsonHelper.getAsJsonObject(json, "inputFluids");
-                    inputFluids = new FluidStackIngredient[]{IngredientCreatorAccess.fluid().deserialize(inputJson)};
-                }
-            }
-        } catch (Exception ex) {
-            NuclearCraft.LOGGER.warn("Unable to parse input fluid for recipe: "+recipeId);
-        }
+        inputItemsFromJson(json, recipeId);
+        outputItemsFromJson(json, recipeId);
 
-        FluidStackIngredient[] outputFluids = new FluidStackIngredient[0];
-        try {
-            if(json.has("outputFluids")) {
-                if (GsonHelper.isArrayNode(json, "outputFluids")) {
-                    JsonElement output = GsonHelper.getAsJsonArray(json, "outputFluids");
-                    outputFluids = new FluidStackIngredient[output.getAsJsonArray().size()];
-                    int i = 0;
-                    for (JsonElement out : output.getAsJsonArray()) {
-                        outputFluids[i] = IngredientCreatorAccess.fluid().deserialize(out.getAsJsonObject());
-                        i++;
-                    }
-                } else {
-                    JsonElement output = GsonHelper.getAsJsonObject(json, "outputFluids");
-                    outputFluids = new FluidStackIngredient[]{IngredientCreatorAccess.fluid().deserialize(output.getAsJsonObject())};
-                }
-            }
-        } catch (Exception ex) {
-            NuclearCraft.LOGGER.warn("Unable to parse output fluid for recipe: "+recipeId);
-        }
         double heatRequired = 1D;
         try {
             heatRequired = GsonHelper.getAsDouble(json, "heatRequired", 1D);
@@ -77,10 +41,6 @@ public class TurbineRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         try {
 
-            boolean isIncomplete = buffer.readBoolean();
-            if(isIncomplete) {
-                return emptyRecipe(recipeId);
-            }
             readIngredients(buffer);
 
             double heatRequired = buffer.readDouble();

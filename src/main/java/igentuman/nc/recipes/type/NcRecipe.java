@@ -72,7 +72,7 @@ public abstract class NcRecipe extends AbstractRecipe {
             this(id, new ItemStackIngredient[0], new ItemStackIngredient[0], inputFluids, outputFluids, timeModifier, powerModifier, radiationModifier, rarityModifier);
     }
 
-    protected ItemStackIngredient getBarrier()
+    public static ItemStackIngredient getBarrier()
     {
         return IngredientCreatorAccess.item().from(new ItemStack(BARRIER));
     }
