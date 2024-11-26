@@ -72,7 +72,7 @@ public class OrePlacementModifier extends PlacementModifier {
 
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
-        int actualCount = determinePlacementCount(context, random, pos);
+        int actualCount = determinePlacementCount(context, random);
 
         return Stream.generate(() -> new BlockPos(
                 pos.getX() + random.nextInt(16),
@@ -81,14 +81,18 @@ public class OrePlacementModifier extends PlacementModifier {
         )).limit(actualCount);
     }
 
-    private int determinePlacementCount(PlacementContext context, RandomSource random, BlockPos pos) {
-        name = context.topFeature().get().feature().unwrapKey().get().location().getPath().replace("_ore", "");
-        int dimensionId = context.getLevel().getServer().registryAccess().registry(Registries.DIMENSION_TYPE).get().getId(context.getLevel().getLevel().dimensionType());
-        int veinSize = countMap.get(name);
-        if(!dimensionsMap.get(name).contains(dimensionId)) {
-            veinSize = 0;
+    private int determinePlacementCount(PlacementContext context, RandomSource random) {
+        try {
+            name = context.topFeature().get().feature().unwrapKey().get().location().getPath().replace("_ore", "");
+            int dimensionId = context.getLevel().getServer().registryAccess().registry(Registries.DIMENSION_TYPE).get().getId(context.getLevel().getLevel().dimensionType());
+            int veinSize = countMap.get(name);
+            if(!dimensionsMap.get(name).contains(dimensionId)) {
+                veinSize = 0;
+            }
+            if(veinSize == 0) return 0;
+            return random.nextInt(veinSize);
+        } catch (Exception e) {
+            return 0;
         }
-        if(veinSize == 0) return 0;
-        return random.nextInt(veinSize);
     }
 }
