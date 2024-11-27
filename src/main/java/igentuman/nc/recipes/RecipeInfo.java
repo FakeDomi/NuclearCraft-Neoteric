@@ -92,6 +92,10 @@ public class RecipeInfo <RECIPE extends AbstractRecipe> implements INBTSerializa
 
     public boolean process(double multiplier) {
         if(isStuck()) return false;
+        //check if ticksProcessed is not NaN
+        if(Double.isNaN(ticksProcessed)) {
+            ticksProcessed = 0;
+        }
         ticksProcessed+=1*Math.abs(multiplier);
         ticksProcessed = Math.min(ticks, ticksProcessed);
         return true;

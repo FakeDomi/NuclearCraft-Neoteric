@@ -583,6 +583,9 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     private boolean process() {
         reactivityLevel += controllerEnabled ? 1 : -1;
         reactivityLevel = Math.max(0, Math.min(reactivityLevel, 100));
+        if(recipeInfo.be == null) {
+            recipeInfo.be = this;
+        }
         recipeInfo.process(fuelCellsCount * (heatMultiplier() + collectedHeatMultiplier() - 1) * reactivityLevel/100D);
         if(recipeInfo.radiation != 1D) {
             RadiationManager.get(getLevel()).addRadiation(getLevel(), recipeInfo.radiation/10000, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ());

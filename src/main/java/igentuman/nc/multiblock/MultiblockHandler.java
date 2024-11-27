@@ -41,7 +41,9 @@ public class MultiblockHandler {
                 toRemove.add(id);
                 continue;
             }
-            multiblock.tick();
+            if(multiblock.isLoaded()) {
+                multiblock.tick();
+            }
         }
         if(!toRemove.isEmpty()) {
             for(String id: toRemove) {

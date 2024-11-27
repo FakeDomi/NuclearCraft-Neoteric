@@ -521,4 +521,9 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
     public boolean checkAttachmentToBlock(Class<?> toCheck, Level level, BlockPos pos, Direction dir) {
         return false;
     }
+
+    public boolean isLoaded() {
+        if(controllerPos == null) return false;
+        return getLevel().getChunkSource().hasChunk(controllerPos.getX() >> 4, controllerPos.getZ() >> 4);
+    }
 }
