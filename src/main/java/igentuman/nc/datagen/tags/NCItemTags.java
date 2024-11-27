@@ -8,6 +8,7 @@ import igentuman.nc.setup.registration.NCItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -37,6 +38,7 @@ public class NCItemTags extends ItemTagsProvider {
         parts();
         fuel();
         isotopes();
+        disks();
         tag(FusionReactor.CASING_ITEMS).add(
                 FusionReactor.FUSION_ITEMS.get("fusion_reactor_casing").get(),
                 FusionReactor.FUSION_ITEMS.get("fusion_reactor_casing_glass").get());
@@ -49,17 +51,21 @@ public class NCItemTags extends ItemTagsProvider {
         );
     }
 
+    private void disks() {
+        for(String name: NC_RECORDS.keySet()) {
+            tag(ItemTags.MUSIC_DISCS).add(NC_RECORDS.get(name).get());
+        }
+    }
+
     private void isotopes() {
         for(String name: FissionFuel.NC_ISOTOPES.keySet()) {
             tag(ISOTOPE_TAG).add(FissionFuel.NC_ISOTOPES.get(name).get());
-            //tag(PLATES_TAG.get(name)).add(NCItems.NC_PLATES.get(name).get());
         }
     }
 
     private void fuel() {
         for(List<String> name: FissionFuel.NC_FUEL.keySet()) {
             tag(NC_FUEL_TAG).add(FissionFuel.NC_FUEL.get(name).get());
-            //tag(PLATES_TAG.get(name)).add(NCItems.NC_PLATES.get(name).get());
         }
 
         for(List<String> name: FissionFuel.NC_DEPLETED_FUEL.keySet()) {
