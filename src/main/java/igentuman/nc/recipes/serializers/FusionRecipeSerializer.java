@@ -1,6 +1,8 @@
 package igentuman.nc.recipes.serializers;
 
 import igentuman.nc.NuclearCraft;
+import igentuman.nc.recipes.ingredient.FluidStackIngredient;
+import igentuman.nc.recipes.ingredient.ItemStackIngredient;
 import igentuman.nc.recipes.type.NcRecipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +17,10 @@ public class FusionRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSer
     @Override
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         try {
-            readIngredients(buffer);
+            ItemStackIngredient[] inputItems = readItems(buffer);
+            ItemStackIngredient[] outputItems = readItems(buffer);
+            FluidStackIngredient[] inputFluids = readFluids(buffer);
+            FluidStackIngredient[] outputFluids = readFluids(buffer);
 
             double timeModifier = buffer.readDouble();
             double powerModifier = buffer.readDouble();
