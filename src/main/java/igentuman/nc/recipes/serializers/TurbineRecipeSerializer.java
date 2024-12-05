@@ -24,8 +24,8 @@ public class TurbineRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     @Override
     public @NotNull RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
 
-        inputItemsFromJson(json, recipeId);
-        outputItemsFromJson(json, recipeId);
+        FluidStackIngredient[] inputFluids = inputFluidsFromJson(json, recipeId);
+        FluidStackIngredient[] outputFluids = outputFluidsFromJson(json, recipeId);
 
         double heatRequired = 1D;
         try {
@@ -40,8 +40,10 @@ public class TurbineRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     @Override
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         try {
-
-            readIngredients(buffer);
+            ItemStackIngredient[] inputItems = readItems(buffer);
+            ItemStackIngredient[] outputItems = readItems(buffer);
+            FluidStackIngredient[] inputFluids = readFluids(buffer);
+            FluidStackIngredient[] outputFluids = readFluids(buffer);
 
             double heatRequired = buffer.readDouble();
             double powerModifier = buffer.readDouble();

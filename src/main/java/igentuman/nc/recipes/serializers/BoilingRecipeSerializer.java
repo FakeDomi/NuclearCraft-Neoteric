@@ -2,6 +2,7 @@ package igentuman.nc.recipes.serializers;
 
 import com.google.gson.JsonObject;
 import igentuman.nc.NuclearCraft;
+import igentuman.nc.recipes.ingredient.FluidStackIngredient;
 import igentuman.nc.recipes.ingredient.ItemStackIngredient;
 import igentuman.nc.recipes.type.NcRecipe;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,8 +19,8 @@ public class BoilingRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     @Override
     public @NotNull RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
 
-        inputFluidsFromJson(json, recipeId);
-        outputFluidsFromJson(json, recipeId);
+        FluidStackIngredient[] inputFluids = inputFluidsFromJson(json, recipeId);
+        FluidStackIngredient[] outputFluids = outputFluidsFromJson(json, recipeId);
 
         double heatRequired = 1D;
         try {
@@ -34,8 +35,11 @@ public class BoilingRecipeSerializer<RECIPE extends NcRecipe> extends NcRecipeSe
     @Override
     public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         try {
+            ItemStackIngredient[] inputItems = readItems(buffer);
+            ItemStackIngredient[] outputItems = readItems(buffer);
+            FluidStackIngredient[] inputFluids = readFluids(buffer);
+            FluidStackIngredient[] outputFluids = readFluids(buffer);
 
-            readIngredients(buffer);
             double heatRequired = buffer.readDouble();
             double powerModifier = buffer.readDouble();
             double radiation = buffer.readDouble();
