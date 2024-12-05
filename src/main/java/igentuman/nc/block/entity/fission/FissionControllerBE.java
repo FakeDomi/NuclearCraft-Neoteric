@@ -466,10 +466,14 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         return super.multiblock();
     }
 
+    private int delay = 40;
+
     private void handleValidation() {
         boolean wasFormed = multiblock().isFormed();
         boolean assembled = wasFormed && isInternalValid && isCasingValid;
-        if ((!assembled && getLevel().getGameTime() % 40 == 0) || (getLevel().getGameTime() % 200 == 0 && hasRecipe())) {
+        if ((!assembled && getLevel().getGameTime() % delay == 0) || (getLevel().getGameTime() % delay*5 == 0 && hasRecipe())) {
+            Random rand = new Random();
+            delay = rand.nextInt(40) + 40;
             multiblock().validate();
             isCasingValid = multiblock().isOuterValid();
             if(isCasingValid) {
@@ -635,7 +639,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     }
 
     public double environmentCooling() {
-        return 1 / getLevel().getBiome(getBlockPos()).get().getBaseTemperature();
+        return 1 / Math.max(getLevel().getBiome(getBlockPos()).get().getBaseTemperature(), 0.01);
     }
 
     public double heatSinksCooling() {
