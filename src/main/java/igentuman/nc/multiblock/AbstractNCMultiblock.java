@@ -233,6 +233,7 @@ public abstract class AbstractNCMultiblock implements INCMultiblock {
 
     public void resolveDimensions()
     {
+        if(getFacing() ==null)  return;
         resolveHeight();
         resolveDepth();
         resolveWidth();
