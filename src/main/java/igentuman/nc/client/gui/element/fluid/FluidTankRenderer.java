@@ -142,7 +142,9 @@ public class FluidTankRenderer extends NCGuiElement {
         int fluidColor = getColorTint(fluidStack);
 
         long amount = fluidStack.getAmount();
-        long scaledAmount = (amount * height) / tank.getCapacity();
+        int capacity = Math.min(1, tank.getCapacity());
+
+        long scaledAmount = (amount * height) / capacity;
 
         if (amount > 0 && scaledAmount < MIN_FLUID_HEIGHT) {
             scaledAmount = MIN_FLUID_HEIGHT;
