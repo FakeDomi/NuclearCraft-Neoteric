@@ -42,15 +42,6 @@ public class BatteryBlock extends Block implements EntityBlock {
     public BatteryBlock(Properties pProperties) {
         super(pProperties);
     }
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState();
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-
-    }
 
     public boolean hasAnalogOutputSignal(BlockState pState) {
         return true;

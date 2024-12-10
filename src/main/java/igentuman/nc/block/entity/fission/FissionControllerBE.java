@@ -466,12 +466,12 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         return super.multiblock();
     }
 
-    private int delay = 40;
+    private int delay = 20;
 
     private void handleValidation() {
         boolean wasFormed = multiblock().isFormed();
         boolean assembled = wasFormed && isInternalValid && isCasingValid;
-        if ((!assembled && getLevel().getGameTime() % delay == 0) || (getLevel().getGameTime() % delay*5 == 0 && hasRecipe())) {
+        if ((!assembled && getLevel().getGameTime() % delay == 0) || (getLevel().getGameTime() % delay*10 == 0 && hasRecipe())) {
             Random rand = new Random();
             delay = rand.nextInt(40) + 40;
             multiblock().validate();

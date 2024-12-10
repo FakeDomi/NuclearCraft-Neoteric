@@ -1,5 +1,6 @@
 package igentuman.nc.setup;
 
+import igentuman.nc.client.block.BatteryBlockItemDecorator;
 import igentuman.nc.client.block.BatteryBlockLoader;
 import igentuman.nc.client.block.fusion.FusionCoreRenderer;
 import igentuman.nc.client.block.turbine.TurbineRotorRenderer;
@@ -13,13 +14,13 @@ import igentuman.nc.client.particle.FusionBeamParticle;
 import igentuman.nc.client.particle.RadiationParticle;
 import igentuman.nc.client.gui.fission.FissionControllerScreen;
 import igentuman.nc.client.sound.SoundHandler;
+import igentuman.nc.content.energy.BatteryBlocks;
 import igentuman.nc.handler.event.client.*;
-import igentuman.nc.multiblock.fusion.FusionReactor;
 import igentuman.nc.radiation.client.ClientRadiationData;
 import igentuman.nc.radiation.client.RadiationOverlay;
 import igentuman.nc.radiation.client.WhiteNoiseOverlay;
-import igentuman.nc.multiblock.fission.FissionReactor;
 import igentuman.nc.content.processors.Processors;
+import igentuman.nc.setup.registration.NCEnergyBlocks;
 import igentuman.nc.setup.registration.NCFluids;
 import igentuman.nc.setup.registration.NCProcessors;
 import igentuman.nc.setup.registration.NcParticleTypes;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -54,6 +56,7 @@ import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_CONTAINER
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.*;
 import static igentuman.nc.setup.registration.NCBlocks.REDSTONE_DIMMER_CONTAINER;
 import static igentuman.nc.setup.registration.NCItems.GEIGER_COUNTER;
+import static igentuman.nc.setup.registration.NCStorageBlocks.BLOCK_ITEMS;
 import static igentuman.nc.setup.registration.NCStorageBlocks.STORAGE_CONTAINER;
 import static igentuman.nc.setup.registration.Registries.FLUIDS;
 import static net.minecraftforge.eventbus.api.EventPriority.LOWEST;
@@ -132,4 +135,11 @@ public class ClientSetup {
         TickHandler.register(event);
         BlockOverlayHandler.register(event);
     }
+
+    @SubscribeEvent
+    public static void registerItemDecorations(RegisterItemDecorationsEvent event) {
+        for(String name: BatteryBlocks.all().keySet()) {
+            event.register(NCEnergyBlocks.BLOCK_ITEMS.get(name).get(), BatteryBlockItemDecorator.INSTANCE);
+        }
+      }
 }
