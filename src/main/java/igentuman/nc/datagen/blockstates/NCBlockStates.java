@@ -25,6 +25,7 @@ import static igentuman.nc.client.block.BatteryBlockLoader.BATTERY_LOADER;
 import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_BLOCKS;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_BLOCKS;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_PROXY;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzBlocks.KUGELBLITZ_BLOCKS;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
 import static igentuman.nc.setup.registration.NCBlocks.*;
 import static igentuman.nc.setup.registration.NCProcessors.PROCESSORS;
@@ -51,6 +52,7 @@ public class NCBlockStates extends BlockStateProvider {
         turbine();
         storageBlocks();
         fusionReactor();
+        kugelblitz();
     }
 
     private void turbine() {
@@ -70,6 +72,20 @@ public class NCBlockStates extends BlockStateProvider {
         for(String type: TurbineRegistration.coils.keySet()) {
             simpleBlock(TURBINE_BLOCKS.get("turbine_" + type + "_coil").get(), multiBlockModel(TURBINE_BLOCKS.get("turbine_" + type + "_coil").get(), "turbine/" + type + "_coil"));
         }
+    }
+
+    private void kugelblitz() {
+        horizontalBlock(KUGELBLITZ_BLOCKS.get("chamber_terminal").get(),
+                st -> controllerModel(st, sidedModel(KUGELBLITZ_BLOCKS.get("chamber_terminal").get(), "kugelblitz/terminal"))
+        );
+        horizontalBlock(KUGELBLITZ_BLOCKS.get("chamber_port").get(),
+                st -> controllerModel(st, sidedModel(KUGELBLITZ_BLOCKS.get("chamber_port").get(), "kugelblitz/port"))
+        );
+        simpleBlock(KUGELBLITZ_BLOCKS.get("neutronium_frame").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("neutronium_frame").get(), "kugelblitz"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("event_horizon_stabilizer").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("event_horizon_stabilizer").get(), "kugelblitz"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("photon_concentrator").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("photon_concentrator").get(), "kugelblitz"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("quantum_flux_regulator").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("quantum_flux_regulator").get(), "kugelblitz"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("quantum_transformer").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("quantum_transformer").get(), "kugelblitz"));
     }
 
     public static int[] getRotationByDirection(Direction dir) {

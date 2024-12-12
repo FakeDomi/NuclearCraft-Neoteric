@@ -9,6 +9,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 import java.util.List;
 
 import static igentuman.nc.NuclearCraft.MODID;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzBlocks.KUGELBLITZ_BLOCKS;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
 import static igentuman.nc.setup.registration.NCBlocks.*;
 import static igentuman.nc.setup.registration.NCFluids.NC_MATERIALS;
@@ -144,6 +145,10 @@ public class NCLanguageProvider extends LanguageProvider {
     }
 
     private void multiblocks() {
+        for(String name: KUGELBLITZ_BLOCKS.keySet()) {
+            String title = convertToName(name);
+            add(KUGELBLITZ_BLOCKS.get(name).get(), title);
+        }
         for(String name: FissionReactor.FISSION_BLOCKS.keySet()) {
             String title = convertToName(name);
             add(FissionReactor.FISSION_BLOCKS.get(name).get(), title);

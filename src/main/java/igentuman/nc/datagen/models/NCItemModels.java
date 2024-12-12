@@ -17,6 +17,7 @@ import java.util.List;
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_BLOCKS;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_PROXY;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzBlocks.KUGELBLITZ_BLOCKS;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
 import static igentuman.nc.setup.registration.NCItems.*;
 
@@ -80,6 +81,9 @@ public class NCItemModels extends ItemModelProvider {
         for(String name: FUSION_BLOCKS.keySet()) {
             if(name.contains("core")) continue;
             withExistingParent(FUSION_BLOCKS.get(name).getId().getPath(), modLoc("block/fusion/"+name));
+        }
+        for(String name: KUGELBLITZ_BLOCKS.keySet()) {
+            withExistingParent(KUGELBLITZ_BLOCKS.get(name).getId().getPath(), modLoc("block/multiblock/"+name));
         }
         withExistingParent(FUSION_CORE_PROXY.getId().getPath(), modLoc("item/fusion_core"));
     }
