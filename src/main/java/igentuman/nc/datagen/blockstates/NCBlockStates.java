@@ -76,16 +76,16 @@ public class NCBlockStates extends BlockStateProvider {
 
     private void kugelblitz() {
         horizontalBlock(KUGELBLITZ_BLOCKS.get("chamber_terminal").get(),
-                st -> controllerModel(st, sidedModel(KUGELBLITZ_BLOCKS.get("chamber_terminal").get(), "kugelblitz/terminal"))
+                st -> controllerModel(st, sidedModel(KUGELBLITZ_BLOCKS.get("chamber_terminal").get(), "kugelblitz/controller"))
         );
         horizontalBlock(KUGELBLITZ_BLOCKS.get("chamber_port").get(),
-                st -> controllerModel(st, sidedModel(KUGELBLITZ_BLOCKS.get("chamber_port").get(), "kugelblitz/port"))
+                st -> multiBlockModel(KUGELBLITZ_BLOCKS.get("chamber_port").get(), "kugelblitz/port")
         );
-        simpleBlock(KUGELBLITZ_BLOCKS.get("neutronium_frame").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("neutronium_frame").get(), "kugelblitz"));
-        simpleBlock(KUGELBLITZ_BLOCKS.get("event_horizon_stabilizer").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("event_horizon_stabilizer").get(), "kugelblitz"));
-        simpleBlock(KUGELBLITZ_BLOCKS.get("photon_concentrator").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("photon_concentrator").get(), "kugelblitz"));
-        simpleBlock(KUGELBLITZ_BLOCKS.get("quantum_flux_regulator").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("quantum_flux_regulator").get(), "kugelblitz"));
-        simpleBlock(KUGELBLITZ_BLOCKS.get("quantum_transformer").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("quantum_transformer").get(), "kugelblitz"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("neutronium_frame").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("neutronium_frame").get(), "kugelblitz/neutronium_frame"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("event_horizon_stabilizer").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("event_horizon_stabilizer").get(), "kugelblitz/event_horizon_stabilizer"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("photon_concentrator").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("photon_concentrator").get(), "kugelblitz/photon_concentrator"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("quantum_flux_regulator").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("quantum_flux_regulator").get(), "kugelblitz/quantum_flux_regulator"));
+        simpleBlock(KUGELBLITZ_BLOCKS.get("quantum_transformer").get(), multiBlockModel(KUGELBLITZ_BLOCKS.get("quantum_transformer").get(), "kugelblitz/quantum_transformer"));
     }
 
     public static int[] getRotationByDirection(Direction dir) {
@@ -259,6 +259,8 @@ public class NCBlockStates extends BlockStateProvider {
             type = "fission";
         } else if(st.getBlock() == TURBINE_BLOCKS.get("turbine_controller").get()) {
             type = "turbine";
+        } else if(st.getBlock() == KUGELBLITZ_BLOCKS.get("chamber_terminal").get()) {
+            type = "kugelblitz";
         }
         BlockModelBuilder result = models()
                 .getBuilder("block/multiblock/"+key(st.getBlock()).getPath()+powered)
@@ -363,6 +365,9 @@ public class NCBlockStates extends BlockStateProvider {
                 break;
             case "fusion":
                 blockPath = "block/fusion/";
+                break;
+            case "kugelblitz":
+                blockPath = "block/kugelblitz/";
                 break;
             case "electromagnet":
                 blockPath = "block/electromagnet/";

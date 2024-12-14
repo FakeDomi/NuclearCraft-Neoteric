@@ -16,6 +16,7 @@ import java.util.*;
 
 import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_BLOCKS;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_BLOCKS;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzBlocks.KUGELBLITZ_BLOCKS;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BLOCKS;
 import static igentuman.nc.setup.registration.FissionFuel.*;
 import static igentuman.nc.setup.registration.NCBlocks.*;
@@ -35,6 +36,13 @@ public class CreativeTabs {
             .icon(() -> new ItemStack(FUSION_BLOCKS.get("fusion_core").get()))
             .title(Component.translatable("itemGroup.nuclearcraft_fusion_reactor"))
             .build());
+
+    public static final RegistryObject<CreativeModeTab> KUGELBLITZ_TAB = CREATIVE_TABS.register("kugelblitz",
+            () ->  CreativeModeTab.builder()
+                    .displayItems((displayParams, output) -> KUGELBLITZ_BLOCKS.values().forEach(itemlike -> output.accept(new ItemStack(itemlike.get()))))
+                    .icon(() -> new ItemStack(KUGELBLITZ_BLOCKS.get("chamber_terminal").get()))
+                    .title(Component.translatable("itemGroup.nuclearcraft_kugelblitz"))
+                    .build());
 
 
     public static final RegistryObject<CreativeModeTab> NC_BLOCKS_TAB = CREATIVE_TABS.register("nc_blocks",
