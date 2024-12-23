@@ -26,14 +26,14 @@ public class NCGTEnergyHandler implements IEnergyContainer {
 
     @Override
     public long acceptEnergyFromNetwork(Direction direction, long voltage, long amperage) {
-        NuclearCraft.LOGGER.info("GT EU input: "+voltage+" - "+amperage);
+        //NuclearCraft.LOGGER.info("GT EU input: "+voltage+" - "+amperage);
         if(amperage >= getInputAmperage() && PROCESSOR_CONFIG.GT_SUPPORT.get() == 2) return 0L;
         long canAccept = this.getEnergyCapacity() - this.getEnergyStored();
         overloaded = voltage > this.getInputVoltage() || overloaded;
         if (canAccept >= voltage) {
             long amperesAccepted = Math.min(canAccept / voltage, Math.min(amperage, this.getInputAmperage()));
             addEnergy(voltage * amperesAccepted);
-            NuclearCraft.LOGGER.info("GT EU input accept: " + amperesAccepted);
+            //NuclearCraft.LOGGER.info("GT EU input accept: " + amperesAccepted);
             return amperesAccepted;
         }
         return 0L;
