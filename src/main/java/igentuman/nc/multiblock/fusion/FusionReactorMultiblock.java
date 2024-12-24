@@ -389,7 +389,7 @@ public class FusionReactorMultiblock extends AbstractNCMultiblock {
 
     @Override
     protected Direction getFacing() {
-        return null;
+        return UP;
     }
 
     public void tick() {
