@@ -1,5 +1,6 @@
 package igentuman.nc.multiblock.kugelblitz;
 
+import igentuman.nc.block.entity.kugelblitz.BlackHoleBE;
 import igentuman.nc.block.entity.kugelblitz.ChamberPortBE;
 import igentuman.nc.block.entity.kugelblitz.ChamberTerminalBE;
 import igentuman.nc.block.kugelblitz.ChamberPortBlock;
@@ -76,6 +77,15 @@ public class KugelblitzRegistration {
         KUGELBLITZ_BE.put("chamber_terminal",
                 BLOCK_ENTITIES.register("chamber_terminal",
                         () -> BlockEntityType.Builder.of(ChamberTerminalBE::new, KUGELBLITZ_BLOCKS.get("chamber_terminal").get())
+                                .build(null)));
+
+        KUGELBLITZ_BLOCKS.put("black_hole", BLOCKS.register("black_hole", () -> new ChamberTerminalBlock(KUGELBLITZ_BLOCK_PROPERTIES)));
+        KUGELBLITZ_ITEMS.put("black_hole", fromMultiblock(KUGELBLITZ_BLOCKS.get("black_hole")));
+        ALL_NC_ITEMS.put("black_hole", KUGELBLITZ_ITEMS.get("black_hole"));
+
+        KUGELBLITZ_BE.put("black_hole",
+                BLOCK_ENTITIES.register("black_hole",
+                        () -> BlockEntityType.Builder.of(BlackHoleBE::new, KUGELBLITZ_BLOCKS.get("black_hole").get())
                                 .build(null)));
     }
 

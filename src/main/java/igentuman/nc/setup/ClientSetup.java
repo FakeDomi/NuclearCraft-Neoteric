@@ -15,6 +15,7 @@ import igentuman.nc.client.gui.turbine.TurbinePortScreen;
 import igentuman.nc.client.particle.FusionBeamParticle;
 import igentuman.nc.client.particle.RadiationParticle;
 import igentuman.nc.client.gui.fission.FissionControllerScreen;
+import igentuman.nc.client.particle.ShaderLoader;
 import igentuman.nc.client.sound.SoundHandler;
 import igentuman.nc.content.energy.BatteryBlocks;
 import igentuman.nc.handler.event.client.*;
@@ -60,15 +61,16 @@ import static igentuman.nc.multiblock.kugelblitz.KugelblitzRegistration.CHAMBER_
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.*;
 import static igentuman.nc.setup.registration.NCBlocks.REDSTONE_DIMMER_CONTAINER;
 import static igentuman.nc.setup.registration.NCItems.GEIGER_COUNTER;
-import static igentuman.nc.setup.registration.NCStorageBlocks.BLOCK_ITEMS;
 import static igentuman.nc.setup.registration.NCStorageBlocks.STORAGE_CONTAINER;
 import static igentuman.nc.setup.registration.Registries.FLUIDS;
 import static net.minecraftforge.eventbus.api.EventPriority.LOWEST;
+import igentuman.nc.client.particle.BlackHoleShaderManager;
 
 @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
     public static void init(FMLClientSetupEvent event) {
+        new BlackHoleShaderManager();
         event.enqueueWork(() -> {
             MinecraftForge.EVENT_BUS.addListener(LOWEST, SoundHandler::onTilePlaySound);
             BlockEntityRenderers.register(FUSION_BE.get("fusion_core").get(), FusionCoreRenderer::new);
