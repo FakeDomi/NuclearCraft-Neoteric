@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static igentuman.nc.setup.registration.Registries.ITEM_REGISTRY;
+import static net.minecraft.world.item.Items.BARRIER;
 
 @NothingNullByDefault
 public class ItemStackIngredientCreator implements IItemStackIngredientCreator {
@@ -43,7 +44,8 @@ public class ItemStackIngredientCreator implements IItemStackIngredientCreator {
         Objects.requireNonNull(ingredient, "ItemStackIngredients cannot be created from a null ingredient.");
         if (ingredient == Ingredient.EMPTY) {
             //Instance check for empty ingredient, because we could just be empty currently during datagen and want to allow it
-            throw new IllegalArgumentException("ItemStackIngredients cannot be created using the empty ingredient.");
+            //throw new IllegalArgumentException("ItemStackIngredients cannot be created using the empty ingredient.");
+            return new SingleItemStackIngredient(Ingredient.of(BARRIER), amount);
         } else if (amount <= 0) {
             throw new IllegalArgumentException("ItemStackIngredients must have an amount of at least one. Received size was: " + amount);
         }
@@ -165,7 +167,7 @@ public class ItemStackIngredientCreator implements IItemStackIngredientCreator {
                 return true;
             } else if (items.length == 1) {
                 ItemStack item = items[0];
-                return item.getItem() == Items.BARRIER && item.getHoverName().getContents() instanceof LiteralContents contents && contents.text().startsWith("Empty Tag: ");
+                return item.getItem() == BARRIER && item.getHoverName().getContents() instanceof LiteralContents contents && contents.text().startsWith("Empty Tag: ");
             }
             return false;
         }

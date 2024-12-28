@@ -162,13 +162,13 @@ public abstract class AbstractRecipe implements Recipe<IgnoredIInventory> {
         if(empty) return true;
         for(ItemStackIngredient inputItem: inputItems) {
             if(inputItem == null || inputItem.getRepresentations().isEmpty()
-                    || inputItem.getRepresentations().get(0).getItem().equals(BARRIER)) {
+                    || inputItem.getRepresentations().get(0).is(BARRIER)) {
                 return true;
             }
         }
         for(ItemStackIngredient output: outputItems) {
             if(output == null || output.getRepresentations().isEmpty()
-                    || output.getRepresentations().get(0).equals(BARRIER)) {
+                    || output.getRepresentations().get(0).is(BARRIER)) {
                 return true;
             }
         }

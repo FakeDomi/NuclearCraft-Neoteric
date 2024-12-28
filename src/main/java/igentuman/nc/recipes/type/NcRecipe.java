@@ -86,7 +86,7 @@ public abstract class NcRecipe extends AbstractRecipe {
     public void write(FriendlyByteBuf buffer) {
         buffer.writeInt(inputItems.length);
         for (ItemStackIngredient input : inputItems) {
-            if(input == null) {
+            if(input == null || input.getRepresentations().isEmpty()) {
                 input = getBarrier();
             }
             input.write(buffer);
@@ -94,7 +94,7 @@ public abstract class NcRecipe extends AbstractRecipe {
 
         buffer.writeInt(outputItems.length);
         for (ItemStackIngredient output : outputItems) {
-            if(output == null) {
+            if(output == null || output.getRepresentations().isEmpty()) {
                 output = getBarrier();
             }
             output.write(buffer);

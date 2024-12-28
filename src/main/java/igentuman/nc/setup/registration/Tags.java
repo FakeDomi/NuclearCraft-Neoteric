@@ -70,6 +70,7 @@ public class Tags {
 
     public static TagKey<Item> forgeIngot(String name)
     {
+
         return TagKey.create(ITEM_REGISTRY, new ResourceLocation("forge:ingots/"+name));
     }
 

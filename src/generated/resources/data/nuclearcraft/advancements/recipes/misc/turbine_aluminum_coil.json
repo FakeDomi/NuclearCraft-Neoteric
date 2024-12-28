@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "nuclearcraft:turbine_aluminium_coil"
+        "recipe": "nuclearcraft:turbine_aluminum_coil"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "nuclearcraft:turbine_aluminium_coil"
+      "nuclearcraft:turbine_aluminum_coil"
     ]
   },
   "sends_telemetry_event": false
