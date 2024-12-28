@@ -8,6 +8,8 @@ import igentuman.nc.client.gui.FusionCoreScreen;
 import igentuman.nc.client.gui.RedstoneDimmerScreen;
 import igentuman.nc.client.gui.StorageContainerScreen;
 import igentuman.nc.client.gui.fission.FissionPortScreen;
+import igentuman.nc.client.gui.kugelblitz.ChamberPortScreen;
+import igentuman.nc.client.gui.kugelblitz.ChamberTerminalScreen;
 import igentuman.nc.client.gui.turbine.TurbineControllerScreen;
 import igentuman.nc.client.gui.turbine.TurbinePortScreen;
 import igentuman.nc.client.particle.FusionBeamParticle;
@@ -53,6 +55,8 @@ import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_CONTROLLER_
 import static igentuman.nc.multiblock.fission.FissionReactor.FISSION_PORT_CONTAINER;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_BE;
 import static igentuman.nc.multiblock.fusion.FusionReactor.FUSION_CORE_CONTAINER;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzRegistration.CHAMBER_PORT_CONTAINER;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzRegistration.CHAMBER_TERMINAL_CONTAINER;
 import static igentuman.nc.multiblock.turbine.TurbineRegistration.*;
 import static igentuman.nc.setup.registration.NCBlocks.REDSTONE_DIMMER_CONTAINER;
 import static igentuman.nc.setup.registration.NCItems.GEIGER_COUNTER;
@@ -75,6 +79,8 @@ public class ClientSetup {
             MenuScreens.register(TURBINE_PORT_CONTAINER.get(), TurbinePortScreen::new);
             MenuScreens.register(FISSION_CONTROLLER_CONTAINER.get(), FissionControllerScreen::new);
             MenuScreens.register(FISSION_PORT_CONTAINER.get(), FissionPortScreen::new);
+            MenuScreens.register(CHAMBER_PORT_CONTAINER.get(), ChamberPortScreen::new);
+            MenuScreens.register(CHAMBER_TERMINAL_CONTAINER.get(), ChamberTerminalScreen::new);
             MenuScreens.register(REDSTONE_DIMMER_CONTAINER.get(), RedstoneDimmerScreen::new);
 
             for(String name: NCProcessors.PROCESSORS_CONTAINERS.keySet()) {

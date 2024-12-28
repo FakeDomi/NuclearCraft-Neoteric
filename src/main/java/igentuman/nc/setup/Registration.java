@@ -3,7 +3,7 @@ package igentuman.nc.setup;
 import com.mojang.serialization.Codec;
 import igentuman.nc.effect.RadiationResistance;
 import igentuman.nc.multiblock.fusion.FusionReactor;
-import igentuman.nc.multiblock.kugelblitz.KugelblitzBlocks;
+import igentuman.nc.multiblock.kugelblitz.KugelblitzRegistration;
 import igentuman.nc.multiblock.turbine.TurbineRegistration;
 import igentuman.nc.multiblock.fission.FissionReactor;
 import igentuman.nc.recipes.NcRecipeSerializers;
@@ -38,7 +38,7 @@ public class Registration {
         NCProcessors.init();
         FissionReactor.init();
         FusionReactor.init();
-        KugelblitzBlocks.init();
+        KugelblitzRegistration.init();
         TurbineRegistration.init();
         CreativeTabs.init();
         NcRecipeSerializers.init();

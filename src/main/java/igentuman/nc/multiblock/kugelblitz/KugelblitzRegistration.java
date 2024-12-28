@@ -1,9 +1,15 @@
 package igentuman.nc.multiblock.kugelblitz;
 
-import igentuman.nc.block.fusion.MultiblockConnectorBlock;
+import igentuman.nc.block.entity.kugelblitz.ChamberPortBE;
+import igentuman.nc.block.entity.kugelblitz.ChamberTerminalBE;
 import igentuman.nc.block.kugelblitz.ChamberPortBlock;
 import igentuman.nc.block.kugelblitz.ChamberTerminalBlock;
+import igentuman.nc.container.ChamberPortContainer;
+import igentuman.nc.container.ChamberTerminalContainer;
+import igentuman.nc.container.FissionControllerContainer;
+import igentuman.nc.container.FissionPortContainer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -11,25 +17,32 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 
 import static igentuman.nc.setup.registration.NCItems.ALL_NC_ITEMS;
-import static igentuman.nc.setup.registration.Registries.BLOCKS;
-import static igentuman.nc.setup.registration.Registries.ITEMS;
+import static igentuman.nc.setup.registration.Registries.*;
 import static igentuman.nc.setup.registration.Tags.blockTag;
 import static igentuman.nc.setup.registration.Tags.itemTag;
 
-public class KugelblitzBlocks {
+public class KugelblitzRegistration {
 
     public static final Item.Properties KUGELBLITZ_ITEM_PROPERTIES = new Item.Properties();
     public static final Block.Properties KUGELBLITZ_BLOCK_PROPERTIES =  BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(4f).requiresCorrectToolForDrops();;
-    public static HashMap<String, RegistryObject<Block>> KUGELBLITZ_BLOCKS = new HashMap<>();
     public static HashMap<String, RegistryObject<BlockEntityType<? extends BlockEntity>>> KUGELBLITZ_BE = new HashMap<>();
     public static HashMap<String, RegistryObject<Item>> KUGELBLITZ_ITEMS = new HashMap<>();
+    public static HashMap<String, RegistryObject<Block>> KUGELBLITZ_BLOCKS = new HashMap<>();
     public static TagKey<Block> CASING_BLOCKS = blockTag("kugelblitz_casing");
     public static TagKey<Item> CASING_ITEMS = itemTag("kugelblitz_casing");
+
+    public static final RegistryObject<MenuType<ChamberTerminalContainer>> CHAMBER_TERMINAL_CONTAINER = CONTAINERS.register("chamber_terminal",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new ChamberTerminalContainer(windowId, data.readBlockPos(), inv))
+    );
+    public static final RegistryObject<MenuType<ChamberPortContainer>> CHAMBER_PORT_CONTAINER = CONTAINERS.register("chamber_port",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new ChamberPortContainer(windowId, data.readBlockPos(), inv))
+    );
 
     /*
     1. Photon Concentrator
@@ -51,9 +64,19 @@ public class KugelblitzBlocks {
         KUGELBLITZ_ITEMS.put("chamber_port", fromMultiblock(KUGELBLITZ_BLOCKS.get("chamber_port")));
         ALL_NC_ITEMS.put("chamber_port", KUGELBLITZ_ITEMS.get("chamber_port"));
 
+        KUGELBLITZ_BE.put("chamber_port",
+                BLOCK_ENTITIES.register("chamber_port",
+                        () -> BlockEntityType.Builder.of(ChamberPortBE::new, KUGELBLITZ_BLOCKS.get("chamber_port").get())
+                                .build(null)));
+
         KUGELBLITZ_BLOCKS.put("chamber_terminal", BLOCKS.register("chamber_terminal", () -> new ChamberTerminalBlock(KUGELBLITZ_BLOCK_PROPERTIES)));
         KUGELBLITZ_ITEMS.put("chamber_terminal", fromMultiblock(KUGELBLITZ_BLOCKS.get("chamber_terminal")));
         ALL_NC_ITEMS.put("chamber_terminal", KUGELBLITZ_ITEMS.get("chamber_terminal"));
+
+        KUGELBLITZ_BE.put("chamber_terminal",
+                BLOCK_ENTITIES.register("chamber_terminal",
+                        () -> BlockEntityType.Builder.of(ChamberTerminalBE::new, KUGELBLITZ_BLOCKS.get("chamber_terminal").get())
+                                .build(null)));
     }
 
     private static void registerSimpleBlock(String key) {

@@ -64,7 +64,7 @@ public class TurbineMultiblock extends AbstractNCMultiblock {
                 getBlocksByTagKey(CASING_BLOCKS.location().toString()),
                 getBlocksByTagKey(INNER_TURBINE_BLOCKS.location().toString())
         );
-        id = "fission_reactor_"+turbineControllerBE.getBlockPos().toShortString();
+        id = "turbine_"+turbineControllerBE.getBlockPos().toShortString();
         MultiblockHandler.addMultiblock(this);
         controller = new TurbineController(turbineControllerBE);
     }

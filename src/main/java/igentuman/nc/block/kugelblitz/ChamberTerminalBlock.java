@@ -1,7 +1,7 @@
 package igentuman.nc.block.kugelblitz;
 
-import igentuman.nc.block.entity.turbine.TurbineControllerBE;
-import igentuman.nc.container.TurbineControllerContainer;
+import igentuman.nc.block.entity.kugelblitz.ChamberTerminalBE;
+import igentuman.nc.container.ChamberTerminalContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -31,7 +31,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static igentuman.nc.multiblock.turbine.TurbineRegistration.TURBINE_BE;
+import static igentuman.nc.multiblock.kugelblitz.KugelblitzRegistration.KUGELBLITZ_BE;
 
 public class ChamberTerminalBlock extends HorizontalDirectionalBlock implements EntityBlock {
     public static final DirectionProperty HORIZONTAL_FACING = FACING;
@@ -65,7 +65,7 @@ public class ChamberTerminalBlock extends HorizontalDirectionalBlock implements 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-        return TURBINE_BE.get(NAME).get().create(pPos, pState);
+        return KUGELBLITZ_BE.get(NAME).get().create(pPos, pState);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ChamberTerminalBlock extends HorizontalDirectionalBlock implements 
         if (!level.isClientSide()) {
             BlockEntity be = level.getBlockEntity(pos);
 
-            if (be instanceof TurbineControllerBE<?>)  {
+            if (be instanceof ChamberTerminalBE<?>)  {
                 MenuProvider containerProvider = new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
@@ -83,7 +83,7 @@ public class ChamberTerminalBlock extends HorizontalDirectionalBlock implements 
 
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-                            return new TurbineControllerContainer(windowId, pos, playerInventory);
+                            return new ChamberTerminalContainer(windowId, pos, playerInventory);
                     }
                 };
                 NetworkHooks.openScreen((ServerPlayer) player, containerProvider, be.getBlockPos());
@@ -97,14 +97,14 @@ public class ChamberTerminalBlock extends HorizontalDirectionalBlock implements 
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         if (level.isClientSide()) {
             return (lvl, pos, blockState, t) -> {
-                if (t instanceof TurbineControllerBE<?> tile) {
+                if (t instanceof ChamberTerminalBE<?> tile) {
                     tile.tickClient();
                     level.setBlock(pos, blockState.setValue(POWERED, tile.powered), 3);
                 }
             };
         }
         return (lvl, pos, blockState, t)-> {
-            if (t instanceof TurbineControllerBE<?> tile) {
+            if (t instanceof ChamberTerminalBE<?> tile) {
                 tile.tickServer();
             }
         };
