@@ -73,9 +73,6 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
             this.pos = pos;
             height = 18;
             width = 18;
-            btn = new ImageButton(X(), Y(), width, height, 184, 220, 18, TEXTURE, pButton -> {
-                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, BTN_ID));
-            });
         }
 
         public List<Component> getTooltips() {
@@ -84,12 +81,9 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
 
         public void setMode(int redstoneMode) {
             mode = redstoneMode;
-            try {
-                Field f = btn.getClass().getDeclaredField("yTexStart");
-                f.setAccessible(true);
-                f.set(btn, 220 - redstoneMode * 36);
-            } catch (NoSuchFieldException | IllegalAccessException ignore) {
-            }
+            btn = new ImageButton(X(), Y(), width, height, 184, 220 - redstoneMode * 36, 18, TEXTURE, pButton -> {
+                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, BTN_ID));
+            });
         }
     }
 
@@ -154,12 +148,9 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
         public void setMode(boolean reactorMode) {
             mode = reactorMode;
             int y = reactorMode ? 1 : 0;
-            try {
-                Field f = btn.getClass().getDeclaredField("yTexStart");
-                f.setAccessible(true);
-                f.set(btn, 184 - (y+1) * 36);
-            } catch (NoSuchFieldException | IllegalAccessException ignore) {
-            }
+            btn = new ImageButton(X(), Y(), width, height, 220, 184 - (y+1) * 36, 18, TEXTURE, pButton -> {
+                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, BTN_ID));
+            });
         }
 
         public void setTimer(int modeTimer) {
@@ -176,17 +167,14 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
         @Override
         public void setMode(byte redstoneMode) {
             mode = redstoneMode;
-            try {
-                Field f = btn.getClass().getDeclaredField("yTexStart");
-                f.setAccessible(true);
-                f.set(btn, 256 - (redstoneMode-10) * 36);
-            } catch (NoSuchFieldException | IllegalAccessException ignore) {
-            }
+            btn = new ImageButton(X(), Y(), width, height, 238, 256 - (redstoneMode-10) * 36, 18, TEXTURE, pButton -> {
+                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, BTN_ID));
+            });
         }
     }
 
     public static class ReactorPortRedstoneModeButton extends Button {
-        private final BlockPos pos;
+        public final BlockPos pos;
         public static final int BTN_ID = 71;
         public byte mode = 2;
         public byte strength = 0;
@@ -220,12 +208,9 @@ public class Button<T extends AbstractContainerScreen<?>> extends NCGuiElement {
 
         public void setMode(byte redstoneMode) {
             mode = redstoneMode;
-            try {
-                Field f = btn.getClass().getDeclaredField("yTexStart");
-                f.setAccessible(true);
-                f.set(btn, 256 - (redstoneMode+1) * 36);
-            } catch (NoSuchFieldException | IllegalAccessException ignore) {
-            }
+            btn = new ImageButton(X(), Y(), width, height, 238, 256 - (redstoneMode+1) * 36, 18, TEXTURE, pButton -> {
+                NuclearCraft.packetHandler().sendToServer(new PacketGuiButtonPress(pos, BTN_ID));
+            });
         }
     }
 }
