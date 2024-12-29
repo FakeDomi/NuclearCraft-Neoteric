@@ -110,10 +110,8 @@ public class ItemCapabilityHandler extends AbstractCapabilityHandler implements 
     }
 
     public ItemStack insertItemInternal(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        if (stack.isEmpty())
-            return ItemStack.EMPTY;
-        if (!isItemValid(slot, stack))
-            return stack;
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        if (!isValidForSlotInternal(stack, slot)) return stack;
 
         validateSlotIndex(slot);
 
@@ -176,6 +174,12 @@ public class ItemCapabilityHandler extends AbstractCapabilityHandler implements 
             }
         }
         return -1;
+    }
+
+    protected boolean isValidForSlotInternal(ItemStack stack, int slot) {
+        return getStackInSlot(slot).isEmpty()
+                || (ItemHandlerHelper.canItemStacksStack(getStackInSlot(slot), stack)
+                && getStackInSlot(slot).getCount() < getSlotLimit(slot));
     }
 
     private int isValidForAnyOutputSlot(ItemStack stack) {

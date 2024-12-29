@@ -128,6 +128,7 @@ public class NuclearCraftBE extends BlockEntity {
     }
 
     protected void stopSound() {
+        if (currentSound == null) return;
         SoundHandler.stopTileSound(getBlockPos());
         currentSound = null;
         playSoundCooldown = 0;

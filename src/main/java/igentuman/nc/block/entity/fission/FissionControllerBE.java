@@ -391,10 +391,13 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
             stopSound();
             return;
         }
-        if(isProcessing()) {
+        if(isProcessing() && powered) {
             spawnParticles();
             playRunningSound();
+        } else {
+            stopSound();
         }
+        level.setBlockAndUpdate(worldPosition, getBlockState().setValue(POWERED, isProcessing() && powered));
     }
 
     public void tickServer() {
@@ -611,7 +614,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
     private void handleRecipeOutput() {
         if (hasRecipe() && recipeInfo.isCompleted()) {
             if(recipe == null) {
-                recipe = (RECIPE) recipeInfo.recipe();
+                recipe = recipeInfo.recipe();
             }
             if (recipe.handleOutputs(contentHandler)) {
                 recipeInfo.clear();
