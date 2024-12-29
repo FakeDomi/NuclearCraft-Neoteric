@@ -64,9 +64,9 @@ public class BlackHoleShaderManager {
         double distance = Math.sqrt(Math.pow(playerX - blackHoleX, 2)
                 + Math.pow(playerY - blackHoleY, 2)
                 + Math.pow(playerZ - blackHoleZ, 2));
-        AbstractUniform radiusUniform = shader.getUniform("BlackholeRadius");
-        AbstractUniform distortionUniform = shader.getUniform("DistortionAmount");
-        AbstractUniform time = shader.getUniform("Time");
+        Uniform radiusUniform = shader.getUniform("BlackholeRadius");
+        Uniform distortionUniform = shader.getUniform("DistortionAmount");
+        Uniform time = shader.getUniform("Time");
         if (radiusUniform != null) {
             radiusUniform.set(1.3f);
         }
