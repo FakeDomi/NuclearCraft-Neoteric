@@ -51,11 +51,11 @@ public class ChamberTerminalContainer extends AbstractContainerMenu {
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
             if(slot instanceof NCSlotItemHandler.Output || slot instanceof NCSlotItemHandler.Input) {
-                if (!this.moveItemStackTo(stack, 0, 35, true)) {
+                if (!this.moveItemStackTo(stack, 0, 36, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (!this.moveItemStackTo(stack, slots.size()-3, slots.size()-1, true)) {
+                if (!this.moveItemStackTo(stack, slots.size()-2, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
