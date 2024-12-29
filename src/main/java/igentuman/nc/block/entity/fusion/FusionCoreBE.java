@@ -183,10 +183,10 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
         contentHandler.fluidCapability.setGlobalMode(6, SlotModePair.SlotMode.OUTPUT);
         //hot coolant
         contentHandler.fluidCapability.setGlobalMode(7, SlotModePair.SlotMode.OUTPUT);
-        contentHandler.setAllowedInputFluids(0, getAllowedInputFluids());
-        contentHandler.setAllowedInputFluids(1, getAllowedInputFluids());
-        contentHandler.setAllowedInputFluids(2, getAllowedCoolants());
-        contentHandler.setAllowedInputFluids(7, getAllowedCoolantsOutput());
+        contentHandler.setAllowedInputFluids(0, this::getAllowedInputFluids);
+        contentHandler.setAllowedInputFluids(1, this::getAllowedInputFluids);
+        contentHandler.setAllowedInputFluids(2, this::getAllowedCoolants);
+        contentHandler.setAllowedInputFluids(7, this::getAllowedCoolantsOutput);
         contentHandler.fluidCapability.tanks.get(2).setCapacity(100000);
         contentHandler.fluidCapability.tanks.get(7).setCapacity(100000);
     }
@@ -580,6 +580,10 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
             trackChanges(powered);
         } else {
             powered = false;
+            if(plasmaTemperature > 0) {
+                plasmaTemperature = (long) Math.max(0, plasmaTemperature/1.2f - 10000);
+                changed = true;
+            }
         }
         if (!hasRecipe()) {
             updateRecipe();

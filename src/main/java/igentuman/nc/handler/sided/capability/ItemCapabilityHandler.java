@@ -23,12 +23,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static igentuman.nc.handler.sided.SlotModePair.SlotMode.*;
 
 public class ItemCapabilityHandler extends AbstractCapabilityHandler implements IItemHandlerModifiable, INBTSerializable<CompoundTag> {
 
-    public List<ItemStack> allowedInputItems;
+    public Supplier<List<ItemStack>> allowedInputItems;
     public HashMap<Integer, List<Item>> validItemsForSlot = new HashMap<>();
     protected NonNullList<ItemStack> stacks;
     protected ItemStack[] sortedStacks;
@@ -163,7 +164,7 @@ public class ItemCapabilityHandler extends AbstractCapabilityHandler implements 
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return true;
+        return isValidInputItem(stack);
     }
 
     private int isValidForAnyInputSlot(ItemStack stack) {
@@ -262,7 +263,7 @@ public class ItemCapabilityHandler extends AbstractCapabilityHandler implements 
     private LazyOptional<ItemHandlerWrapper> globalCap() {
 
         if(globalCap == null) {
-            globalCap =  LazyOptional.of(() -> new ItemHandlerWrapper(null, this, (i) -> true, (i, s) -> true));
+            globalCap =  LazyOptional.of(() -> new ItemHandlerWrapper(null, this, (i) -> outputAllowed(i, null), (i, s) -> inputAllowed(i, s, null)));
         }
         return globalCap;
     }
@@ -284,21 +285,24 @@ public class ItemCapabilityHandler extends AbstractCapabilityHandler implements 
             validForSlot = validItemsForSlot.get(i).contains(stack.getItem());
         }
         if (!validForSlot) return false;
+        if (side == null) {
+            return i == isValidForAnyInputSlot(stack);
+        }
         SidedContentHandler.RelativeDirection relativeDirection = SidedContentHandler.RelativeDirection.toRelative(side, getFacing());
         SlotModePair.SlotMode mode = sideMap.get(relativeDirection.ordinal())[i].getMode();
-        return mode == INPUT || mode == PULL && isValidInputItem(stack);
+        return (mode == INPUT || mode == PULL || mode == DEFAULT) && isValidInputItem(stack);
     }
 
     public boolean isValidInputItem(ItemStack item)
     {
         if(allowedInputItems == null) return true;
-        if(allowedInputItems.contains(item)) return true;
-        for(ItemStack stack: allowedInputItems) {
+        if(allowedInputItems.get().contains(item)) return true;
+        for(ItemStack stack: allowedInputItems.get()) {
             if(stack.is(item.getItem())) {
                 return true;
             }
         }
-        return allowedInputItems.isEmpty();
+        return allowedInputItems.get().isEmpty();
     }
     public boolean pushItems(Direction dir) {
        return pushItems(dir, false, tile.getBlockPos());

@@ -172,15 +172,16 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
         contentHandler.itemHandler.setGlobalMode(1, SlotModePair.SlotMode.PUSH);
         contentHandler.fluidCapability.tanks.get(0).setCapacity(10000);
         contentHandler.fluidCapability.tanks.get(1).setCapacity(10000);
-        contentHandler.setAllowedInputFluids(0, getAllowedCoolants());
-        contentHandler.setAllowedInputFluids(1, getAllowedCoolantsOutput());
+        contentHandler.setAllowedInputFluids(0, this::getAllowedCoolants);
+        contentHandler.setAllowedInputFluids(1, this::getAllowedCoolantsOutput);
         for(String type: activeCoolersTypes()) {
             contentHandler.setAllowedInputFluids(
                     1+activeCoolersTypes().indexOf(type),
-                    FissionBlocks.heatsinks.get(type).getAllowedFluids()
+                    () -> FissionBlocks.heatsinks.get(type).getAllowedFluids()
                 );
             contentHandler.fluidCapability.setGlobalMode(2+activeCoolersTypes().indexOf(type), SlotModePair.SlotMode.PULL);
         }
+        contentHandler.setAllowedInputItems(this::getAllowedInputItems);
     }
 
     private List<String> activeCoolersTypes() {
@@ -427,7 +428,7 @@ public class FissionControllerBE <RECIPE extends FissionControllerBE.Recipe> ext
             }
             trackChanges(coolDown());
             handleMeltdown();
-            contentHandler.setAllowedInputItems(getAllowedInputItems());
+
         } else {
             //if reactor was broken during processing, contaminate area
             if(isProcessing() && wasFormed) {

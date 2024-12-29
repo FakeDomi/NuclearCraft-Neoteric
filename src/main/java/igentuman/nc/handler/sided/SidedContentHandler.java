@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static igentuman.nc.handler.sided.SlotModePair.SlotMode.INPUT;
 
@@ -192,10 +193,9 @@ public class SidedContentHandler implements INBTSerializable<Tag> {
     }
     private Direction lastPushSide = Direction.UP;
     private Direction lastPullSide = Direction.UP;
+
     public boolean tick() {
         updated = false;
-
-
         if(!canPush() && !canPull()) {
             return updated;
         }
@@ -293,13 +293,13 @@ public class SidedContentHandler implements INBTSerializable<Tag> {
         }
     }
 
-    public void setAllowedInputItems(List<ItemStack> allowedInputItems) {
+    public void setAllowedInputItems(Supplier<List<ItemStack>> allowedInputItems) {
         if(itemHandler != null) {
             itemHandler.allowedInputItems = allowedInputItems;
         }
     }
 
-    public void setAllowedInputFluids(int slotId, List<FluidStack> allowedInputFluids) {
+    public void setAllowedInputFluids(int slotId, Supplier<List<FluidStack>> allowedInputFluids) {
         if(fluidCapability != null) {
             if(fluidCapability.allowedFluids == null) {
                 fluidCapability.allowedFluids = new HashMap<>();
@@ -322,8 +322,7 @@ public class SidedContentHandler implements INBTSerializable<Tag> {
                 fluidCapability.voidSlot(getSlotIdFromGlobalId(slotId) + inputFluidSlots);
             }
             itemHandler.voidSlot(getSlotIdFromGlobalId(slotId) + inputItemSlots);
-        } catch (NullPointerException|IndexOutOfBoundsException e) {
-        }
+        } catch (NullPointerException|IndexOutOfBoundsException ignored) { }
     }
 
     public Object[] getSlotContent(int slotId) {

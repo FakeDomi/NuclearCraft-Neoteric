@@ -86,7 +86,7 @@ public class NCProcessorBE<RECIPE extends AbstractRecipe> extends NuclearCraftBE
     private List<FluidStack> allowedFluids;
     private LazyOptional<NCGTEnergyHandler> gtEnergyCap;
     private ParticleOptions particle1 = ParticleTypes.SMOKE;
-    protected ProcessorPrefab prefab;
+    protected ProcessorPrefab<?,?> prefab;
 
     public LazyOptional<IEnergyStorage> getEnergy() {
         return energy;
@@ -96,7 +96,7 @@ public class NCProcessorBE<RECIPE extends AbstractRecipe> extends NuclearCraftBE
 
     public RecipeInfo<RECIPE> recipeInfo = new RecipeInfo<RECIPE>();
 
-    public ProcessorPrefab prefab() {
+    public ProcessorPrefab<?,?> prefab() {
         if(prefab == null) {
             prefab = Processors.all().get(getName());
         }
@@ -354,9 +354,9 @@ public class NCProcessorBE<RECIPE extends AbstractRecipe> extends NuclearCraftBE
             return;
         }
         boolean updated = manualUpdate();
-        contentHandler.setAllowedInputItems(getAllowedInputItems());
+        contentHandler.setAllowedInputItems(this::getAllowedInputItems);
         for(int i = 0; i < prefab().getSlotsConfig().getInputFluids(); i++) {
-            contentHandler.setAllowedInputFluids(i, getAllowedInputFluids());
+            contentHandler.setAllowedInputFluids(i, this::getAllowedInputFluids);
         }
         processRecipe();
         handleRecipeOutput();

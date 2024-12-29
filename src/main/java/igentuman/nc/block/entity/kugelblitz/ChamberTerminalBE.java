@@ -118,6 +118,7 @@ public class ChamberTerminalBE<RECIPE extends ChamberTerminalBE.Recipe> extends 
         contentHandler.fluidCapability.setGlobalMode(0, SlotModePair.SlotMode.INPUT);
         contentHandler.fluidCapability.setGlobalMode(1, SlotModePair.SlotMode.OUTPUT);
         contentHandler.setBlockEntity(this);
+        contentHandler.setAllowedInputFluids(0, this::getAllowedInputFluids);
     }
 
     @Override
@@ -248,7 +249,6 @@ public class ChamberTerminalBE<RECIPE extends ChamberTerminalBE.Recipe> extends 
                 powered = false;
             }
             handleMeltdown();
-            contentHandler.setAllowedInputFluids(0, getAllowedInputFluids());
         }
         refreshCacheFlag = !multiblock().isFormed();
         if(wasPowered != powered) {

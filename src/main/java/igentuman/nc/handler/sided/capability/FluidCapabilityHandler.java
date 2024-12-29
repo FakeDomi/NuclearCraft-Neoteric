@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static igentuman.nc.handler.sided.SlotModePair.SlotMode.*;
 
@@ -27,7 +28,7 @@ public class FluidCapabilityHandler extends AbstractCapabilityHandler implements
     public List<FluidStack> holdedInputs = new ArrayList<>();
     private Map<Direction, LazyOptional<FluidHandlerWrapper>> handlerCache = new HashMap<>();
 
-    public HashMap<Integer, List<FluidStack>> allowedFluids;
+    public HashMap<Integer, Supplier<List<FluidStack>>> allowedFluids;
 
 
     public FluidCapabilityHandler(int inputSlots, int outputSlots, int inputCapacity, int outputCapacity) {
@@ -70,7 +71,7 @@ public class FluidCapabilityHandler extends AbstractCapabilityHandler implements
     {
         if(allowedFluids == null) return true;
         if(!allowedFluids.containsKey(id)) return true;
-        for(FluidStack stack: allowedFluids.get(id)) {
+        for(FluidStack stack: allowedFluids.get(id).get()) {
             if(stack.isFluidEqual(fluid)) {
                 return true;
             }
