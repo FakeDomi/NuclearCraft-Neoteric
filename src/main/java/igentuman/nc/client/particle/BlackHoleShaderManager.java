@@ -1,5 +1,6 @@
 package igentuman.nc.client.particle;
 
+import com.mojang.blaze3d.shaders.AbstractUniform;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -63,9 +64,9 @@ public class BlackHoleShaderManager {
         double distance = Math.sqrt(Math.pow(playerX - blackHoleX, 2)
                 + Math.pow(playerY - blackHoleY, 2)
                 + Math.pow(playerZ - blackHoleZ, 2));
-        Uniform radiusUniform = (Uniform) shader.safeGetUniform("BlackholeRadius");
-        Uniform distortionUniform = (Uniform) shader.safeGetUniform("DistortionAmount");
-        Uniform time = (Uniform) shader.safeGetUniform("Time");
+        AbstractUniform radiusUniform = shader.getUniform("BlackholeRadius");
+        AbstractUniform distortionUniform = shader.getUniform("DistortionAmount");
+        AbstractUniform time = shader.getUniform("Time");
         if (radiusUniform != null) {
             radiusUniform.set(1.3f);
         }
@@ -80,7 +81,7 @@ public class BlackHoleShaderManager {
         if (distance < 15) {
             RenderSystem.setShader(() -> shader);
         } else {
-            RenderSystem.setShader(() -> GameRenderer.getPositionShader());
+            RenderSystem.setShader(GameRenderer::getPositionShader);
         }
     }
 }
