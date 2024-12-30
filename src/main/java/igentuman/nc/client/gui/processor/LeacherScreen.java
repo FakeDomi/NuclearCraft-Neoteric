@@ -1,22 +1,18 @@
 package igentuman.nc.client.gui.processor;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.nc.block.entity.processor.LeacherBE;
 import igentuman.nc.block.entity.processor.PumpBE;
 import igentuman.nc.client.gui.element.NCGuiElement;
 import igentuman.nc.client.gui.element.button.Checkbox;
 import igentuman.nc.client.gui.element.slot.NormalSlot;
 import igentuman.nc.container.NCProcessorContainer;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-
 import static igentuman.nc.block.entity.processor.LeacherBE.*;
 
-
-public class LeacherScreen<T extends NCProcessorContainer> extends NCProcessorScreen<T>{
+public class LeacherScreen<T extends NCProcessorContainer<AbstractContainerMenu>> extends NCProcessorScreen<T> {
 
     public LeacherScreen(AbstractContainerMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
@@ -31,7 +27,7 @@ public class LeacherScreen<T extends NCProcessorContainer> extends NCProcessorSc
     protected void init() {
         super.init();
         for(int i = 0; i<4; i++) {
-            pumpsCheckbox[i] = new Checkbox(68+i*13, 81, this, false);
+            pumpsCheckbox[i] = new Checkbox(29+i*13, 61, this, false);
             widgets.add(pumpsCheckbox[i]);
         }
     }
@@ -54,8 +50,8 @@ public class LeacherScreen<T extends NCProcessorContainer> extends NCProcessorSc
 
     @Override
     protected void renderWidgets(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+        redstoneConfigBtn.setMode(getMenu().getRedstoneMode());
         for(int i = 0; i<4; i++) {
-
             boolean isValid = getPumps()[i] != null && getPumps()[i].isInSituValid();
             pumpsCheckbox[i].setChecked(isValid);
             pumpsCheckbox[i].setTooltipKey("leacher.tooltip."+ (isValid ? "valid" : "invalid") + "_pump");

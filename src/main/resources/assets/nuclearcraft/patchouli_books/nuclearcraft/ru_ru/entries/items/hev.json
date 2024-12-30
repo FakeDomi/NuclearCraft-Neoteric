@@ -1,0 +1,18 @@
+{
+  "name": "HEV Suit",
+  "icon": "nuclearcraft:hev_helmet",
+  "category": "nuclearcraft:items",
+  "sortnum": 0,
+  "pages": [
+    {
+      "anchor": "hev",
+      "type": "items/4",
+      "header": "HEV Suit",
+      "item1": "nuclearcraft:hev_helmet",
+      "item2": "nuclearcraft:hev_chest",
+      "item3": "nuclearcraft:hev_pants",
+      "item4": "nuclearcraft:hev_boots",
+      "text": "$(item)Костюм HEV$() — это высокотехнологичный костюм. Он обеспечивает защиту от радиации и других опасностей окружающей среды, а также обладает рядом полезных функций. Для работы требуется заряд."
+    }
+  ]
+}

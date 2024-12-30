@@ -1,0 +1,164 @@
+{
+  "name": "Общее",
+  "icon": "nuclearcraft:fusion_core",
+  "category": "nuclearcraft:fusion",
+  "sortnum": 0,
+  "pages": [
+    {
+      "anchor": "intro",
+      "type": "text",
+      "text": "$(thing)Термоядерные реакторы$() генерируют значительное количество энергии путем слияния частиц. Они также могут кипятить охлаждающие жидкости, которые должны подаваться для охлаждения функциональных блоков реактора."
+    },
+    {
+      "anchor": "reactor_design",
+      "type": "text",
+      "text": "Плазма в больших реакторах может достигать более высоких температур. А так как камера реакции больше, она может содержать больше топлива и производить больше энергии."
+    },
+    {
+      "anchor": "casing",
+      "type": "blocks/2",
+      "header": "Обшивка реактора",
+      "block1": "nuclearcraft:fusion_reactor_casing",
+      "block2": "nuclearcraft:fusion_reactor_casing_glass",
+      "text": "Блоки обшивки реактора используются для создания тороидальной структуры (камеры реакции) вокруг $(item)Термоядерного ядра$()."
+    },
+    {
+      "anchor": "toroidal_section",
+      "header": "Тороидальный сегмент",
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "mapping": {
+          "C": "nuclearcraft:fusion_reactor_casing",
+          "G": "nuclearcraft:fusion_reactor_casing_glass"
+        },
+        "pattern": [
+          [
+            "   ",
+            "C G",
+            "   "
+          ],
+          [
+            "C G",
+            " 0 ",
+            "C G"
+          ],
+          [
+            "   ",
+            "C G",
+            "   "
+          ]
+        ],
+        "symmetrical": true,
+        "visualize": false
+      },
+      "text": "Вы можете использовать любые блоки обшивки или комбинировать их для создания тороидального сегмента. Центр сегмента должен быть пустым."
+    },
+    {
+      "anchor": "controller",
+      "type": "blocks/1",
+      "header": "Ядро реактора",
+      "block": "nuclearcraft:fusion_core",
+      "text": "Без контроллера многоблочная структура реактора не сформируется. Его GUI отображает информацию о реакторе, например, средние показатели соответствующих компонентов."
+    },
+    {
+      "anchor": "connector",
+      "type": "blocks/1",
+      "header": "Термоядерные коннекторы",
+      "block": "nuclearcraft:fusion_reactor_connector",
+      "text": "$(item)Термоядерные коннекторы$() используются для соединения термоядерного ядра и тороидальной камеры реакции. Они переносят топливо, охлаждающую жидкость и энергию."
+    },
+    {
+      "anchor": "function_blocks",
+      "type": "patchouli:text",
+      "header": "Функциональные блоки",
+      "text": "$(thing)Камера термоядерного реактора$() требует 2 типа функциональных блоков: электромагниты и усилители RF. Эти блоки потребляют энергию для работы и требуют охлаждающей жидкости для охлаждения. Они должны быть размещены в углах тороидального сегмента камеры реакции."
+    },
+    {
+      "anchor": "electormagnets",
+      "type": "blocks/2",
+      "header": "Электромагниты",
+      "block1": "nuclearcraft:basic_electromagnet,nuclearcraft:bscco_electromagnet,nuclearcraft:magnesium_diboride_electromagnet,nuclearcraft:niobium_tin_electromagnet,nuclearcraft:niobium_titanium_electromagnet",
+      "block2": "nuclearcraft:basic_electromagnet_slope,nuclearcraft:bscco_electromagnet_slope,nuclearcraft:magnesium_diboride_electromagnet_slope,nuclearcraft:niobium_tin_electromagnet_slope,nuclearcraft:niobium_titanium_electromagnet_slope",
+      "text": "$(item)Электромагниты$() используются для поддержания плазмы в камере реакции. Более мощное электромагнитное поле обеспечивает лучшую стабильность плазмы и сечение, а также снижает теплопотери плазмы."
+    },
+    {
+      "anchor": "rf_amplifiers",
+      "type": "blocks/1",
+      "header": "Усилители RF",
+      "block": "nuclearcraft:basic_rf_amplifier,nuclearcraft:bscco_rf_amplifier,nuclearcraft:magnesium_diboride_rf_amplifier,nuclearcraft:niobium_tin_rf_amplifier,nuclearcraft:niobium_titanium_rf_amplifier",
+      "text": "$(item)Усилители RF$() используются для увеличения энергии плазмы с помощью радиочастотных волн (например, микроволн). Иными словами, нагревают плазму."
+    },
+    {
+      "anchor": "simple_reactor",
+      "header": "Простой реактор",
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "mapping": {
+          "W": "nuclearcraft:fusion_reactor_casing",
+          "G": "nuclearcraft:fusion_reactor_casing_glass",
+          "C": "nuclearcraft:fusion_core",
+          "N": "nuclearcraft:fusion_reactor_connector",
+          "E": "nuclearcraft:basic_electromagnet",
+          "M": "nuclearcraft:basic_rf_amplifier",
+          "P": "nuclearcraft:fusion_reactor_core_proxy"
+        },
+        "pattern": [
+          [
+            "           ",
+            " GGGGGGGGG ",
+            " GEEEEEEEG ",
+            " GE     EG ",
+            " GE PPP EG ",
+            " GE PPP EG ",
+            " GE PPP EG ",
+            " GE     EG ",
+            " GEEEEEEEG ",
+            " GGGGGGGGG ",
+            "           "
+          ],
+          [
+            " GGGGGGGGG ",
+            "G         G",
+            "G WWWWWWW G",
+            "G W  N  W G",
+            "G W PPP W G",
+            "G WNPPPNW G",
+            "G W PPP W G",
+            "G W  N  W G",
+            "G WWWWWWW G",
+            "G         G",
+            " GGGGGGGGG "
+          ],
+          [
+            " MMMMMMMMM ",
+            "MGGGGGGGGGM",
+            "MG       GM",
+            "MG       GM",
+            "MG  PPP  GM",
+            "MG  PCP  GM",
+            "MG  PPP  GM",
+            "MG       GM",
+            "MG       GM",
+            "MGGGGGGGGGM",
+            " MMMMMMMMM "
+          ],
+          [
+            "           ",
+            "           ",
+            "           ",
+            "           ",
+            "           ",
+            "     0     ",
+            "           ",
+            "           ",
+            "           ",
+            "           ",
+            "           "
+            ]
+        ],
+        "symmetrical": true
+      },
+      "text": "Это простой пример стартового реактора для не высоких температур."
+    }
+  ]
+}
