@@ -1,5 +1,6 @@
 package igentuman.nc.setup.registration;
 
+import igentuman.nc.world.BiomeFilterNether;
 import igentuman.nc.world.OrePlacementModifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -29,6 +30,9 @@ public class WorldGeneration {
 
     public static final RegistryObject<PlacementModifierType<OrePlacementModifier>> NC_ORE_MODIFIER =
             PLACEMENT_MODIFIERS.register("nc_ore_modifier", () -> () -> OrePlacementModifier.CODEC);
+
+    public static final RegistryObject<PlacementModifierType<BiomeFilterNether>> VEGETATION_MODIFIER =
+            PLACEMENT_MODIFIERS.register("nc_vegetation_modifier", () -> () -> BiomeFilterNether.CODEC);
 
     private static ResourceKey<Biome> makeKey(String name) {
         return ResourceKey.create(Registries.BIOME, rl(name));

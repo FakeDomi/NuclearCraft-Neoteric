@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import static igentuman.nc.NuclearCraft.MODID;
 import static igentuman.nc.NuclearCraft.rl;
+import static igentuman.nc.world.NCPlacedFeatures.PLACED_FEATURES;
 
 public class NCBiomeModifier {
 
@@ -30,6 +31,7 @@ public class NCBiomeModifier {
         for(String name: Ores.all().keySet()) {
             map.put(name, registerKey(name + "_biome_modifier"));
         }
+        map.put("glowing_mushroom", registerKey("glowing_mushroom_biome_modifier"));
         return map;
     }
 
@@ -42,23 +44,27 @@ public class NCBiomeModifier {
             if(ore.config().dimensions.contains(0)) {
                 context.register(BIOME_MODIFIERS.get(name), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                         biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
-                        HolderSet.direct(placedFeatures.getOrThrow(NCPlacedFeatures.PLACED_FEATURES.get(name))),
+                        HolderSet.direct(placedFeatures.getOrThrow(PLACED_FEATURES.get(name))),
                         GenerationStep.Decoration.UNDERGROUND_ORES));
             }
             if(ore.config().dimensions.contains(-1)) {
                 context.register(BIOME_MODIFIERS.get(name), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                         biomes.getOrThrow(BiomeTags.IS_NETHER),
-                        HolderSet.direct(placedFeatures.getOrThrow(NCPlacedFeatures.PLACED_FEATURES.get(name))),
+                        HolderSet.direct(placedFeatures.getOrThrow(PLACED_FEATURES.get(name))),
                         GenerationStep.Decoration.UNDERGROUND_ORES));
             }
 
             if(ore.config().dimensions.contains(1)) {
                 context.register(BIOME_MODIFIERS.get(name), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                         biomes.getOrThrow(BiomeTags.IS_END),
-                        HolderSet.direct(placedFeatures.getOrThrow(NCPlacedFeatures.PLACED_FEATURES.get(name))),
+                        HolderSet.direct(placedFeatures.getOrThrow(PLACED_FEATURES.get(name))),
                         GenerationStep.Decoration.UNDERGROUND_ORES));
             }
         }
+        context.register(BIOME_MODIFIERS.get("glowing_mushroom"), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_NETHER),
+                HolderSet.direct(placedFeatures.getOrThrow(PLACED_FEATURES.get("glowing_mushroom"))),
+                GenerationStep.Decoration.UNDERGROUND_DECORATION));
     }
     private static ResourceKey<BiomeModifier> registerKey(String name) {
         return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, rl(name));

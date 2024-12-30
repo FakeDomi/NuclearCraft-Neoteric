@@ -4,14 +4,16 @@ import igentuman.nc.content.materials.Ores;
 import igentuman.nc.world.ore.NCOre;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.*;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
@@ -21,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static igentuman.nc.NuclearCraft.rl;
+import static igentuman.nc.setup.registration.NCBlocks.MUSHROOM_BLOCK;
+import static net.minecraft.world.level.block.Blocks.*;
 
 public class NCConfiguredFeatures {
 
@@ -31,6 +35,7 @@ public class NCConfiguredFeatures {
         for(String name: Ores.all().keySet()) {
             features.put(name, registerKey(name + "_ore"));
         }
+        features.put("glowing_mushroom", registerKey("glowing_mushroom_feature"));
         return features;
     }
 
@@ -65,6 +70,12 @@ public class NCConfiguredFeatures {
                         ore.block().defaultBlockState(), 9));
             }
         }
+        register(context, ORE_CONFIGURED_FEATURES.get("glowing_mushroom"), Feature.RANDOM_PATCH,
+                FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(MUSHROOM_BLOCK.get())),
+                        List.of(SOUL_SOIL, SOUL_SAND, GLOWSTONE)
+                        )
+        );
     }
 
 

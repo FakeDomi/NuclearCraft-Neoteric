@@ -52,7 +52,7 @@ public class NCBlocks {
     public static final RegistryObject<Item> REDSTONE_DIMMER_ITEM_BLOCK = fromBlock(REDSTONE_DIMMER_BLOCK);
     public static final RegistryObject<BlockEntityType<RedstoneDimmerBE>> REDSTONE_DIMMER_BE = BLOCK_ENTITIES.register("redstone_dimmer",
             () -> BlockEntityType.Builder.of(RedstoneDimmerBE::new, REDSTONE_DIMMER_BLOCK.get()).build(null));
-    public static final RegistryObject<Block> MUSHROOM_BLOCK = BLOCKS.register("glowing_mushroom", () -> new GrassBlock(
+    public static final RegistryObject<Block> MUSHROOM_BLOCK = BLOCKS.register("glowing_mushroom", () -> new GlowingMushroomBlock(
             BlockBehaviour.Properties.of().sound(SoundType.GRASS).noCollission().instabreak().randomTicks().lightLevel($ -> 10)
             ));
     public static final RegistryObject<MenuType<RedstoneDImmerContainer>> REDSTONE_DIMMER_CONTAINER = CONTAINERS.register("redstone_dimmer",

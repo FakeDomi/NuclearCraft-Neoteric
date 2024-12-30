@@ -66,7 +66,7 @@ public class NCLootTables extends BaseLootTableProvider {
         for(String name: NC_RF_AMPLIFIERS.keySet()) {
             add(NC_RF_AMPLIFIERS.get(name).get(), block -> createSimpleTable("block", NC_RF_AMPLIFIERS.get(name).get()));
         }
-      //  add(REDSTONE_DIMMER_BLOCK.get(), block -> createSimpleTable("block", REDSTONE_DIMMER_BLOCK.get()));
+        add(MUSHROOM_BLOCK.get(), block -> createSimpleTable("block", MUSHROOM_BLOCK.get()));
     }
 
     @Override
@@ -91,6 +91,7 @@ public class NCLootTables extends BaseLootTableProvider {
         all.addAll(STORAGE_BLOCKS.values().stream().map(RegistryObject::get).toList());
         all.addAll(NC_ELECTROMAGNETS.values().stream().map(RegistryObject::get).toList());
         all.addAll(NC_RF_AMPLIFIERS.values().stream().map(RegistryObject::get).toList());
+        all.add(MUSHROOM_BLOCK.get());
         return all;
     }
 }
