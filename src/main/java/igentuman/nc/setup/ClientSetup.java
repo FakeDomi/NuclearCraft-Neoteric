@@ -70,7 +70,7 @@ import igentuman.nc.client.particle.BlackHoleShaderManager;
 public class ClientSetup {
 
     public static void init(FMLClientSetupEvent event) {
-        new BlackHoleShaderManager();
+        //new BlackHoleShaderManager();
         event.enqueueWork(() -> {
             MinecraftForge.EVENT_BUS.addListener(LOWEST, SoundHandler::onTilePlaySound);
             BlockEntityRenderers.register(FUSION_BE.get("fusion_core").get(), FusionCoreRenderer::new);
