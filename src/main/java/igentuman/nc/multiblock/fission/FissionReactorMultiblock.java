@@ -131,7 +131,9 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
                 activeCooling -= getCoolingByCoolant(coolant, amount);
                 continue;
             }
-            controllerBE().drainCoolant(coolant, amount);
+            if (controllerBE().heat > 0 || controllerBE().isProcessing()) {
+                controllerBE().drainCoolant(coolant, amount);
+            }
         }
         controllerBE().activeCooling = activeCooling;
     }
@@ -384,9 +386,6 @@ public class FissionReactorMultiblock extends AbstractNCMultiblock {
         if(refreshInnerCacheFlag || forceCheck) {
             heatSinkCooling = 0;
             for (HeatSinkBlock hs : validHeatSinks().values()) {
-                if(hs.isActive()) {
-                  //  continue;
-                }
                 heatSinkCooling += hs.heat;
             }
         }
