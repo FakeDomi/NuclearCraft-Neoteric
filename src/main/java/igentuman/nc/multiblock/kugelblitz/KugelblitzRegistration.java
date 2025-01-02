@@ -14,6 +14,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -90,7 +91,11 @@ public class KugelblitzRegistration {
     }
 
     private static void registerSimpleBlock(String key) {
-        KUGELBLITZ_BLOCKS.put(key, BLOCKS.register(key, () -> new Block(KUGELBLITZ_BLOCK_PROPERTIES)));
+        if(key.contains("photon")) {
+            KUGELBLITZ_BLOCKS.put(key, BLOCKS.register(key, () -> new GlassBlock(KUGELBLITZ_BLOCK_PROPERTIES)));
+        } else {
+            KUGELBLITZ_BLOCKS.put(key, BLOCKS.register(key, () -> new Block(KUGELBLITZ_BLOCK_PROPERTIES)));
+        }
         KUGELBLITZ_ITEMS.put(key, fromMultiblock(KUGELBLITZ_BLOCKS.get(key)));
         ALL_NC_ITEMS.put(key, KUGELBLITZ_ITEMS.get(key));
     }
