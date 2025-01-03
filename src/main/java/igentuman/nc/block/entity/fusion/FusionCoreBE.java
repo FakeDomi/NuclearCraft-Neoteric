@@ -1,7 +1,6 @@
 package igentuman.nc.block.entity.fusion;
 
 import igentuman.nc.NuclearCraft;
-import igentuman.nc.block.entity.fission.FissionPortBE;
 import igentuman.nc.block.fusion.FusionCoreBlock;
 import igentuman.nc.client.particle.FusionBeamParticleData;
 import igentuman.nc.client.sound.SoundHandler;
@@ -81,6 +80,8 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
     public int inputRedstoneSignal = 0;
     @NBTField
     public int currentRfAmplification = 0;
+    @NBTField
+    public int amplifiers = 0;
     @NBTField
     protected boolean forceShutdown = false;
     @NBTField
@@ -630,6 +631,7 @@ public class FusionCoreBE <RECIPE extends FusionCoreBE.Recipe> extends FusionBE 
                 || rfAmplifiersPower != multiblock().rfAmplifiersPower*rfAmplifierRatio()
                 || minRFAmplifiersTemp != multiblock().maxRFAmplifiersTemp;
         rfEfficiency = multiblock().rfEfficiency;
+        amplifiers = multiblock().amplifiers.size();
         magnetsEfficiency = multiblock().magnetsEfficiency;
         magneticFieldStrength = multiblock().magneticFieldStrength;
         magnetsPower = multiblock().magnetsPower;

@@ -30,6 +30,7 @@ public class NCLanguageProvider extends LanguageProvider {
         add("itemGroup." + MODID+"_fusion_reactor", "NuclearCraft Fusion Reactor");
         add("itemGroup." + MODID+"_fluids", "NuclearCraft Fluids");
         add("itemGroup." + MODID+"_turbine_controller", "NuclearCraft Turbine");
+        add("itemGroup." + MODID+"_kugelblitz", "NuclearCraft Kugelblitz");
         ores();
         ingots();
         plates();
@@ -262,6 +263,7 @@ public class NCLanguageProvider extends LanguageProvider {
         add("tooltip.nc.rf_amplifier.max_temp","Max Temperature: %s K");
 
         add("tooltip.nc.reactor.charge","Charged: %s");
+        add("tooltip.nc.reactor.running","Activation: %s");
         add("tooltip.nc.reactor.has_magnets","Electromagnets: %s");
         add("tooltip.nc.reactor.has_amplifiers","RF Amplifiers: %s");
         add("tooltip.nc.reactor.has_coolant","Coolant: %s");

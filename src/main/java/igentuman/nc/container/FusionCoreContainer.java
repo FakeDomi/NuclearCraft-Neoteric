@@ -182,7 +182,7 @@ public class FusionCoreContainer extends AbstractContainerMenu {
     }
 
     public boolean hasAmplifiers() {
-        return blockEntity.rfAmplifiersPower > 0;
+        return blockEntity.amplifiers > 0;
     }
 
     public int getCharge() {

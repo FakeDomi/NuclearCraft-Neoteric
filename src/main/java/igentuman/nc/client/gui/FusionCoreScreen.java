@@ -138,6 +138,7 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
             checklist.addTooltip(Component.translatable("tooltip.nc.reactor.has_energy", container().hasEnoughEnergy() ? "Ok" : "--").withStyle(ChatFormatting.AQUA));
             checklist.addTooltip(Component.translatable("tooltip.nc.reactor.has_fuel", container().hasRecipe() ? "Ok" : "--").withStyle(ChatFormatting.AQUA));
             checklist.addTooltip(Component.translatable("tooltip.nc.reactor.charge", container().getCharge() == 100 ? "Ok" : "--").withStyle(ChatFormatting.AQUA));
+            checklist.addTooltip(Component.translatable("tooltip.nc.reactor.running", container().isRunning() ? "Ok" : "--").withStyle(ChatFormatting.AQUA));
 
             if(!container().getElectromagnetsPower().equals("0")) {
                 checkboxIsFormed.addTooltip(Component.translatable("tooltip.nc.electromagnet.magnetic_field", container().getElectromagnetsField()).withStyle(ChatFormatting.BLUE));
@@ -147,7 +148,7 @@ public class FusionCoreScreen extends AbstractContainerScreen<FusionCoreContaine
                 checkboxIsFormed.addTooltip(Component.translatable("tooltip.nc.electromagnet.not_found").withStyle(ChatFormatting.RED));
             }
             checkboxIsFormed.addTooltip(Component.literal("----------------------"));
-            if(!container().getAmplifierVoltage().equals("0")) {
+            if(!container().hasAmplifiers()) {
                 checkboxIsFormed.addTooltip(Component.translatable("tooltip.nc.rf_amplifier.voltage", container().getAmplifierVoltage()).withStyle(ChatFormatting.BLUE));
                 checkboxIsFormed.addTooltip(Component.translatable("tooltip.nc.rf_amplifier.power", container().getAmplifierPower()).withStyle(ChatFormatting.AQUA));
                 checkboxIsFormed.addTooltip(Component.translatable("tooltip.nc.rf_amplifier.max_temp", container().getAmplifierMaxTemp()).withStyle(ChatFormatting.GOLD));

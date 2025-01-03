@@ -46,7 +46,7 @@ public class FusionReactorMultiblock extends AbstractNCMultiblock {
     }
 
     protected HashMap<BlockPos, ElectromagnetBlock> electromagnets = new HashMap<>();
-    protected HashMap<BlockPos, RFAmplifierBlock> amplifiers = new HashMap<>();
+    public HashMap<BlockPos, RFAmplifierBlock> amplifiers = new HashMap<>();
 
     public FusionReactorMultiblock(FusionCoreBE<?> core) {
         super(
